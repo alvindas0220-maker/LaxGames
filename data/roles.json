@@ -1,0 +1,30 @@
+{
+	"soporte": {
+		"priority": "Baja",
+		"time_scale": 1.25,
+		"reputation_scale": 0.5,
+		"fail_reputation": -2,
+		"warnings": 0
+	},
+	"usuario_comun": {
+		"priority": "Normal",
+		"time_scale": 1.0,
+		"reputation_scale": 1.0,
+		"fail_reputation": -5,
+		"warnings": 1
+	},
+	"jefe_departamento": {
+		"priority": "Alta",
+		"time_scale": 0.8,
+		"reputation_scale": 1.25,
+		"fail_reputation": -10,
+		"warnings": 1
+	},
+	"directiva": {
+		"priority": "Crítica",
+		"time_scale": 0.6,
+		"reputation_scale": 1.5,
+		"fail_reputation": -15,
+		"warnings": 2
+	}
+}

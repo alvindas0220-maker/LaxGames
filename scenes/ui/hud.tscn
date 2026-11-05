@@ -1,0 +1,269 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_hud"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/hud_atlas.png" id="2_atlas"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/hero_clean.png" id="3_sheet"]
+[ext_resource type="FontFile" path="res://assets/fonts/hud_pixel.fnt" id="4_font"]
+[ext_resource type="Script" path="res://scripts/ui/minimap.gd" id="5_minimap"]
+[ext_resource type="Script" path="res://scripts/ui/quick_slots.gd" id="6_quick_slots"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud_slot.tscn" id="7_slot"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/warning_icons.png" id="8_warnings"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/tool_icons.png" id="9_tools"]
+
+[sub_resource type="Theme" id="Theme_hud"]
+default_font = ExtResource("4_font")
+default_font_size = 6
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_warning_on"]
+atlas = ExtResource("8_warnings")
+region = Rect2(8, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_warning_off"]
+atlas = ExtResource("8_warnings")
+region = Rect2(0, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_energy_under"]
+atlas = ExtResource("2_atlas")
+region = Rect2(0, 22, 40, 5)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_energy_fill"]
+atlas = ExtResource("2_atlas")
+region = Rect2(0, 28, 38, 3)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_face"]
+atlas = ExtResource("3_sheet")
+region = Rect2(4, 7, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tool_kit"]
+atlas = ExtResource("9_tools")
+region = Rect2(0, 0, 12, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tool_coffee"]
+atlas = ExtResource("9_tools")
+region = Rect2(12, 0, 12, 12)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tool_usb"]
+atlas = ExtResource("9_tools")
+region = Rect2(24, 0, 12, 12)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_panel"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+texture = ExtResource("2_atlas")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+region_rect = Rect2(0, 10, 9, 9)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_portrait"]
+content_margin_left = 2.0
+content_margin_top = 2.0
+content_margin_right = 2.0
+content_margin_bottom = 2.0
+texture = ExtResource("2_atlas")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+region_rect = Rect2(10, 10, 9, 9)
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_hud")
+warning_on = SubResource("AtlasTexture_warning_on")
+warning_off = SubResource("AtlasTexture_warning_off")
+
+[node name="Root" type="Control" parent="."]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+theme = SubResource("Theme_hud")
+
+[node name="StatusPanel" type="PanelContainer" parent="Root"]
+layout_mode = 1
+offset_left = 4.0
+offset_top = 4.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_panel")
+
+[node name="Row" type="HBoxContainer" parent="Root/StatusPanel"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="PortraitFrame" type="PanelContainer" parent="Root/StatusPanel/Row"]
+layout_mode = 2
+size_flags_vertical = 4
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_portrait")
+
+[node name="Face" type="TextureRect" parent="Root/StatusPanel/Row/PortraitFrame"]
+custom_minimum_size = Vector2(24, 24)
+layout_mode = 2
+mouse_filter = 2
+texture = SubResource("AtlasTexture_face")
+stretch_mode = 3
+
+[node name="Info" type="VBoxContainer" parent="Root/StatusPanel/Row"]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="CareerLabel" type="Label" parent="Root/StatusPanel/Row/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="DayLabel" type="Label" parent="Root/StatusPanel/Row/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.85, 1, 1)
+
+[node name="Warnings" type="HBoxContainer" parent="Root/StatusPanel/Row/Info"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="ReputationRow" type="HBoxContainer" parent="Root/StatusPanel/Row/Info"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="ReputationBar" type="TextureProgressBar" parent="Root/StatusPanel/Row/Info/ReputationRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 5)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+mouse_filter = 2
+texture_under = SubResource("AtlasTexture_energy_under")
+texture_progress = SubResource("AtlasTexture_energy_fill")
+texture_progress_offset = Vector2(1, 1)
+
+[node name="ReputationLabel" type="Label" parent="Root/StatusPanel/Row/Info/ReputationRow"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="MinimapPanel" type="PanelContainer" parent="Root"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -4.0
+offset_top = 4.0
+offset_right = -4.0
+grow_horizontal = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_panel")
+
+[node name="Minimap" type="Control" parent="Root/MinimapPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+mouse_filter = 2
+script = ExtResource("5_minimap")
+
+[node name="QuickSlots" type="PanelContainer" parent="Root"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -4.0
+offset_top = -4.0
+offset_right = -4.0
+offset_bottom = -4.0
+grow_horizontal = 0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_panel")
+script = ExtResource("6_quick_slots")
+
+[node name="Slots" type="HBoxContainer" parent="Root/QuickSlots"]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="Kit" parent="Root/QuickSlots/Slots" instance=ExtResource("7_slot")]
+layout_mode = 2
+icon = SubResource("AtlasTexture_tool_kit")
+key_text = "1"
+
+[node name="Coffee" parent="Root/QuickSlots/Slots" instance=ExtResource("7_slot")]
+layout_mode = 2
+icon = SubResource("AtlasTexture_tool_coffee")
+count = 3
+key_text = "2"
+
+[node name="Usb" parent="Root/QuickSlots/Slots" instance=ExtResource("7_slot")]
+layout_mode = 2
+icon = SubResource("AtlasTexture_tool_usb")
+key_text = "3"
+
+
+[node name="TicketPanel" type="PanelContainer" parent="Root"]
+unique_name_in_owner = true
+layout_mode = 1
+offset_left = 4.0
+offset_top = 52.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_panel")
+
+[node name="TicketLabel" type="Label" parent="Root/TicketPanel"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="DialogPanel" type="PanelContainer" parent="Root"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = -4.0
+offset_bottom = -4.0
+grow_vertical = 0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_panel")
+
+[node name="Row" type="HBoxContainer" parent="Root/DialogPanel"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="SpeakerPortrait" type="TextureRect" parent="Root/DialogPanel/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+mouse_filter = 2
+stretch_mode = 3
+
+[node name="Text" type="VBoxContainer" parent="Root/DialogPanel/Row"]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="SpeakerLabel" type="Label" parent="Root/DialogPanel/Row/Text"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.97, 0.82, 0.28, 1)
+
+[node name="DialogLabel" type="Label" parent="Root/DialogPanel/Row/Text"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(216, 0)
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="PromptLabel" type="Label" parent="Root"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -60.0
+offset_top = -62.0
+offset_right = 60.0
+offset_bottom = -55.0
+grow_horizontal = 2
+grow_vertical = 0
+horizontal_alignment = 1
+

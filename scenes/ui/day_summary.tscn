@@ -1,0 +1,40 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/day_summary.gd" id="1_summary"]
+[ext_resource type="FontFile" path="res://assets/fonts/hud_pixel.fnt" id="2_font"]
+
+[sub_resource type="Theme" id="Theme_summary"]
+default_font = ExtResource("2_font")
+default_font_size = 6
+
+[node name="DaySummary" type="CanvasLayer"]
+process_mode = 3
+layer = 8
+script = ExtResource("1_summary")
+
+[node name="Panel" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_summary")
+color = Color(0.06, 0.08, 0.14, 0.94)
+
+[node name="SummaryLabel" type="Label" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -70.0
+offset_right = 150.0
+offset_bottom = 70.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2

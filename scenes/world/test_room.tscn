@@ -2,8 +2,11 @@
 
 [ext_resource type="TileSet" path="res://resources/tilesets/world_tileset.tres" id="1_3gt1g"]
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_cy37o"]
+[ext_resource type="Script" path="res://scripts/world/test_room.gd" id="3_room"]
+[ext_resource type="PackedScene" path="res://scenes/ui/hud.tscn" id="4_hud"]
 
 [node name="TestRoom" type="Node2D" unique_id=60534441]
+script = ExtResource("3_room")
 
 [node name="FloorLayer" type="TileMapLayer" parent="." unique_id=1173128237]
 texture_filter = 1
@@ -16,3 +19,7 @@ tile_map_data = PackedByteArray("AADs//P/AAACAAAAAADs//T/AAACAAAAAADs//X/AAACAAA
 tile_set = ExtResource("1_3gt1g")
 
 [node name="Player" parent="." unique_id=1367523020 instance=ExtResource("2_cy37o")]
+
+[node name="HUD" parent="." node_paths=PackedStringArray("player", "world_layer") instance=ExtResource("4_hud")]
+player = NodePath("../Player")
+world_layer = NodePath("../WorldLayer")

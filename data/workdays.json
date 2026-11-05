@@ -1,0 +1,14 @@
+{
+	"reputation_pace": 0.12,
+	"days_per_week": 5,
+	"base_quota": 2,
+	"quota_per_week": 1,
+	"max_quota": 6,
+	"chapters": [
+		{"stage": "Junior de Soporte IT", "brief": "Sigue atendiendo tickets y gánate a la oficina."},
+		{"stage": "Técnico de Soporte IT", "brief": "Ya confían en ti. Gerencia empieza a fijarse."},
+		{"stage": "Jefe de IT", "brief": "Dirigir IT era la meta, pero una gran tecnológica te ha visto."},
+		{"stage": "Ingeniero en Gran Tecnológica", "brief": "Vida de Big Tech. ¿Y si fundaras tu propia empresa?"},
+		{"stage": "Fundador de su Empresa", "brief": "Lo lograste: tu propia empresa."}
+	]
+}

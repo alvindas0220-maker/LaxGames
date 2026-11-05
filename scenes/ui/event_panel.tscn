@@ -1,0 +1,73 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/event_panel.gd" id="1_event"]
+[ext_resource type="FontFile" path="res://assets/fonts/hud_pixel.fnt" id="2_font"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/hud_atlas.png" id="3_atlas"]
+
+[sub_resource type="Theme" id="Theme_event"]
+default_font = ExtResource("2_font")
+default_font_size = 6
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_box"]
+content_margin_left = 6.0
+content_margin_top = 5.0
+content_margin_right = 6.0
+content_margin_bottom = 5.0
+texture = ExtResource("3_atlas")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+region_rect = Rect2(0, 10, 9, 9)
+
+[node name="EventPanel" type="CanvasLayer"]
+process_mode = 3
+layer = 5
+script = ExtResource("1_event")
+
+[node name="Panel" type="PanelContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -130.0
+offset_top = -44.0
+offset_right = 130.0
+offset_bottom = 44.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_event")
+theme_override_styles/panel = SubResource("StyleBoxTexture_box")
+
+[node name="Row" type="HBoxContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="EventPortrait" type="TextureRect" parent="Panel/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+stretch_mode = 3
+
+[node name="Text" type="VBoxContainer" parent="Panel/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 3
+
+[node name="EventSpeaker" type="Label" parent="Panel/Row/Text"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.97, 0.82, 0.28, 1)
+
+[node name="EventText" type="Label" parent="Panel/Row/Text"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="EventOptions" type="Label" parent="Panel/Row/Text"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.85, 1, 1)

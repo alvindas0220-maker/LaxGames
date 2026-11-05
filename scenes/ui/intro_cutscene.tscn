@@ -1,0 +1,176 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/intro_cutscene.gd" id="1_intro"]
+[ext_resource type="FontFile" path="res://assets/fonts/hud_pixel.fnt" id="2_font"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/hero_clean.png" id="3_hero"]
+[ext_resource type="Texture2D" path="res://assets/sprites/world/office_tiles.png" id="4_tiles"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/hud_atlas.png" id="5_atlas"]
+[ext_resource type="AudioStream" path="res://assets/audio/office_ambience.wav" id="6_ambience"]
+[ext_resource type="AudioStream" path="res://assets/audio/blip.wav" id="7_blip"]
+[ext_resource type="AudioStream" path="res://assets/audio/office_theme.wav" id="8_theme"]
+
+[sub_resource type="Theme" id="Theme_intro"]
+default_font = ExtResource("2_font")
+default_font_size = 6
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hero"]
+atlas = ExtResource("3_hero")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rack"]
+atlas = ExtResource("4_tiles")
+region = Rect2(96, 0, 16, 16)
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_box"]
+content_margin_left = 6.0
+content_margin_top = 5.0
+content_margin_right = 6.0
+content_margin_bottom = 5.0
+texture = ExtResource("5_atlas")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+region_rect = Rect2(0, 10, 9, 9)
+
+[node name="IntroCutscene" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_intro")
+script = ExtResource("1_intro")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.11, 0.13, 0.18, 1)
+
+[node name="Floor" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 96.0
+offset_bottom = 148.0
+grow_horizontal = 2
+color = Color(0.2, 0.24, 0.3, 1)
+
+[node name="RackA" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 232.0
+offset_top = 60.0
+offset_right = 280.0
+offset_bottom = 108.0
+texture = SubResource("AtlasTexture_rack")
+expand_mode = 1
+
+[node name="RackB" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 284.0
+offset_top = 60.0
+offset_right = 332.0
+offset_bottom = 108.0
+texture = SubResource("AtlasTexture_rack")
+expand_mode = 1
+
+[node name="Hero" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 72.0
+offset_top = 52.0
+offset_right = 136.0
+offset_bottom = 116.0
+texture = SubResource("AtlasTexture_hero")
+expand_mode = 1
+
+[node name="Alert" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.9, 0.12, 0.12, 0.2)
+
+[node name="Blackout" type="ColorRect" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.02, 0.01, 0.03, 0.72)
+
+[node name="TextBox" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -60.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxTexture_box")
+
+[node name="Row" type="HBoxContainer" parent="TextBox"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="SpeakerPortrait" type="TextureRect" parent="TextBox/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_vertical = 0
+stretch_mode = 3
+
+[node name="Text" type="VBoxContainer" parent="TextBox/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 2
+
+[node name="SpeakerName" type="Label" parent="TextBox/Row/Text"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.97, 0.82, 0.28, 1)
+
+[node name="StoryLabel" type="Label" parent="TextBox/Row/Text"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+autowrap_mode = 2
+
+[node name="HintLabel" type="Label" parent="TextBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 8
+text = "E / Enter: continuar   Esc: saltar"
+horizontal_alignment = 2
+
+[node name="Ambience" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("6_ambience")
+volume_db = -14.0
+autoplay = true
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("8_theme")
+volume_db = -10.0
+autoplay = true
+
+[node name="Sfx" type="AudioStreamPlayer" parent="."]
+volume_db = -6.0
+
+[node name="Blip" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_blip")
+volume_db = -16.0

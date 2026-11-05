@@ -1,0 +1,50 @@
+{
+	"npcs": [
+		{
+			"id": "alex",
+			"name": "Alex Rivas",
+			"department": "Soporte IT",
+			"role": "soporte",
+			"portrait": "res://assets/sprites/npc/portraits/alex.png",
+			"sprite_frame": 0,
+			"dialogue": "Soy Alex, de soporte."
+		},
+		{
+			"id": "ana",
+			"name": "Ana Ruiz",
+			"department": "Contabilidad",
+			"role": "usuario_comun",
+			"portrait": "res://assets/sprites/npc/portraits/ana.png",
+			"sprite_frame": 0,
+			"dialogue": "Hola, soy Ana, de Contabilidad."
+		},
+		{
+			"id": "bruno",
+			"name": "Bruno Díaz",
+			"department": "Ventas",
+			"role": "usuario_comun",
+			"portrait": "res://assets/sprites/npc/portraits/bruno.png",
+			"sprite_frame": 1,
+			"dialogue": "¡Por fin alguien de soporte!"
+		},
+		{
+			"id": "clara",
+			"name": "Clara Méndez",
+			"department": "Gerencia",
+			"role": "directiva",
+			"portrait": "res://assets/sprites/npc/portraits/clara.png",
+			"sprite_frame": 2,
+			"dialogue": "Soy Clara, de Gerencia. Aquí el tiempo cuenta."
+		},
+		{
+			"id": "rrhh",
+			"name": "Marta Vega",
+			"department": "Recursos Humanos",
+			"role": "jefe_departamento",
+			"portrait": "res://assets/sprites/npc/portraits/rrhh.png",
+			"sprite_frame": 3,
+			"dialogue": "Bienvenido a Recursos Humanos.",
+			"service": "rrhh"
+		}
+	]
+}

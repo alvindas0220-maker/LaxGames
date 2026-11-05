@@ -1,0 +1,30 @@
+{
+	"tickets": [
+		{"id": "pc_ana", "requester": "ana", "target": "pc_ana", "title": "PC de Ana bloqueado", "request": "Mi PC se quedó congelado. ¿Lo revisas en mi puesto?", "done": "PC reiniciado", "reputation": 10, "time_limit": 60, "repairs": 1, "min_day": 1},
+		{"id": "correo", "requester": "ana", "target": "servidor", "title": "Correo caído", "request": "No entra el correo. Revisa el servidor, por favor.", "done": "Correo restablecido", "reputation": 20, "time_limit": 90, "repairs": 2, "min_day": 1},
+		{"id": "excel", "requester": "ana", "target": "pc_ana", "title": "Hoja de cálculo colgada", "request": "La hoja de cálculo se cierra sola. Llevo una hora sin guardar.", "done": "Hoja recuperada", "reputation": 10, "time_limit": 60, "repairs": 1, "min_day": 2},
+		{"id": "facturas", "requester": "ana", "target": "impresora", "title": "Facturas sin imprimir", "request": "Las facturas no salen y cerramos hoy.", "done": "Facturas impresas", "reputation": 10, "time_limit": 70, "repairs": 2, "min_day": 3},
+		{"id": "vpn", "requester": "ana", "target": "router", "title": "VPN caída", "request": "La VPN del banco no conecta. Mira el router.", "done": "VPN conectada", "reputation": 15, "time_limit": 75, "repairs": 2, "min_day": 5},
+		{"id": "disco", "requester": "ana", "target": "pc_ana", "title": "Disco lleno", "request": "Mi equipo dice que no queda espacio. ¿Qué borro?", "done": "Disco liberado", "reputation": 15, "time_limit": 75, "repairs": 2, "min_day": 8},
+		{"id": "nomina", "requester": "ana", "target": "servidor", "title": "Cierre de nómina", "request": "La nómina no procesa. Si falla hoy, nadie cobra.", "done": "Nómina procesada", "reputation": 25, "time_limit": 90, "repairs": 3, "min_day": 11},
+		{"id": "cifrado", "requester": "ana", "target": "servidor", "title": "Archivos cifrados", "request": "Mis archivos tienen una extensión rara. Esto da miedo.", "done": "Archivos restaurados", "reputation": 30, "time_limit": 100, "repairs": 4, "min_day": 16},
+
+		{"id": "impresora", "requester": "bruno", "target": "impresora", "title": "Atasco de impresora", "request": "La impresora se atascó otra vez. Es urgente.", "done": "Atasco resuelto", "reputation": 10, "time_limit": 60, "repairs": 1, "min_day": 1},
+		{"id": "red_ventas", "requester": "bruno", "target": "router", "title": "Ventas sin red", "request": "Nos quedamos sin red. Mira el router.", "done": "Red restablecida", "reputation": 15, "time_limit": 75, "repairs": 2, "min_day": 1},
+		{"id": "wifi", "requester": "bruno", "target": "router", "title": "Wi-Fi intermitente", "request": "El Wi-Fi va y viene justo en mis llamadas.", "done": "Wi-Fi estable", "reputation": 10, "time_limit": 60, "repairs": 1, "min_day": 2},
+		{"id": "escaner", "requester": "bruno", "target": "impresora", "title": "Escáner mudo", "request": "El escáner no envía los contratos.", "done": "Escáner funcionando", "reputation": 10, "time_limit": 70, "repairs": 2, "min_day": 3},
+		{"id": "crm", "requester": "bruno", "target": "servidor", "title": "CRM caído", "request": "No veo a mis clientes en el sistema. Revisa el servidor.", "done": "CRM en línea", "reputation": 20, "time_limit": 90, "repairs": 2, "min_day": 6},
+		{"id": "demo", "requester": "bruno", "target": "proyector", "title": "Demo a un cliente", "request": "Tengo una demo en diez minutos y no hay imagen.", "done": "Demo salvada", "reputation": 15, "time_limit": 60, "repairs": 2, "min_day": 9},
+		{"id": "toner", "requester": "bruno", "target": "impresora", "title": "Tóner derramado", "request": "Se derramó el tóner. Esto parece una escena del crimen.", "done": "Impresora limpia", "reputation": 15, "time_limit": 75, "repairs": 3, "min_day": 12},
+		{"id": "firewall", "requester": "bruno", "target": "router", "title": "Cortafuegos bloqueando", "request": "El cortafuegos bloquea la web de pedidos.", "done": "Acceso restablecido", "reputation": 25, "time_limit": 90, "repairs": 3, "min_day": 15},
+
+		{"id": "proyector", "requester": "clara", "target": "proyector", "title": "Proyector sin señal", "request": "Tengo reunión y el proyector no da señal.", "done": "Proyector en marcha", "reputation": 15, "time_limit": 75, "repairs": 1, "min_day": 1},
+		{"id": "copia_seguridad", "requester": "clara", "target": "servidor", "title": "Copia de seguridad", "request": "La copia falló anoche. Lánzala en el servidor.", "done": "Copia completada", "reputation": 20, "time_limit": 90, "repairs": 2, "min_day": 1},
+		{"id": "videollamada", "requester": "clara", "target": "proyector", "title": "Videollamada sin audio", "request": "El consejo me ve, pero no me oye.", "done": "Audio restablecido", "reputation": 15, "time_limit": 75, "repairs": 2, "min_day": 3},
+		{"id": "informe", "requester": "clara", "target": "impresora", "title": "Informe urgente", "request": "Necesito el informe impreso antes de la junta.", "done": "Informe impreso", "reputation": 15, "time_limit": 70, "repairs": 2, "min_day": 4},
+		{"id": "red_direccion", "requester": "clara", "target": "router", "title": "Red de dirección", "request": "La red de dirección va lentísima. Soluciónalo.", "done": "Red acelerada", "reputation": 20, "time_limit": 80, "repairs": 2, "min_day": 7},
+		{"id": "servidor_junta", "requester": "clara", "target": "servidor", "title": "Servidor de la junta", "request": "Los documentos de la junta no abren.", "done": "Documentos disponibles", "reputation": 25, "time_limit": 90, "repairs": 3, "min_day": 10},
+		{"id": "presentacion", "requester": "clara", "target": "proyector", "title": "Presentación anual", "request": "Hoy presentamos resultados. No puede fallar nada.", "done": "Presentación impecable", "reputation": 25, "time_limit": 80, "repairs": 3, "min_day": 13},
+		{"id": "auditoria", "requester": "clara", "target": "servidor", "title": "Auditoría de sistemas", "request": "Los auditores llegan hoy. Deja los sistemas perfectos.", "done": "Auditoría superada", "reputation": 30, "time_limit": 100, "repairs": 4, "min_day": 17}
+	]
+}

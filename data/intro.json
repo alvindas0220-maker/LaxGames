@@ -1,0 +1,20 @@
+{
+	"lines": [
+		{"text": "Lunes, 7:58. Edificio central de LaxCorp.", "sfx": "keyboard", "mood": "calm"},
+		{"text": "Una oficina como tantas: café, pantallas y correos que nadie quiere leer.", "sfx": "keyboard", "mood": "calm"},
+		{"speaker": "alex", "text": "Soy Alex Rivas. Hoy es mi primer día.", "sfx": "", "mood": "calm"},
+		{"speaker": "alex", "text": "Practicante de Soporte IT. El último eslabón de la cadena.", "sfx": "", "mood": "calm"},
+		{"speaker": "rrhh", "text": "Bienvenido, Alex. Soy Marta Vega, de Recursos Humanos.", "sfx": "phone", "mood": "calm"},
+		{"speaker": "rrhh", "text": "Tu trabajo: atiende tickets y repara los equipos con tu kit. Así ganarás reputación.", "sfx": "", "mood": "calm"},
+		{"speaker": "rrhh", "text": "Con la reputación llegan los ascensos. Al 100 % serás Jefe de IT.", "sfx": "", "mood": "calm"},
+		{"speaker": "rrhh", "text": "Y escucha bien, porque aquí hay tres reglas.", "sfx": "", "mood": "calm"},
+		{"speaker": "rrhh", "text": "Primera falta: amonestación verbal.", "sfx": "stamp", "mood": "calm"},
+		{"speaker": "rrhh", "text": "Segunda falta: amonestación escrita.", "sfx": "stamp", "mood": "calm"},
+		{"speaker": "rrhh", "text": "Tercera falta: despido. Sin excepciones.", "sfx": "stamp", "mood": "calm"},
+		{"speaker": "alex", "text": "Entendido. No pienso fallar.", "sfx": "", "mood": "calm"},
+		{"text": "En ese momento, las luces parpadean.", "sfx": "alarm", "mood": "alert"},
+		{"text": "¡ALERTA! El servidor principal acaba de caer.", "sfx": "alarm", "mood": "alert"},
+		{"speaker": "clara", "text": "¿Quién es el de soporte? ¡Lo quiero aquí ahora mismo!", "sfx": "phone", "mood": "alert"},
+		{"speaker": "alex", "text": "Bueno. Parece que mi primer día empieza ya.", "sfx": "keyboard", "mood": "alert"}
+	]
+}

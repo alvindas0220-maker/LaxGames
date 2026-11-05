@@ -1,0 +1,71 @@
+{
+	"chance": 0.6,
+	"min_delay": 4.0,
+	"max_delay": 10.0,
+	"events": [
+		{
+			"id": "reunion_urgente", "type": "reunion", "speaker": "clara",
+			"text": "Reunión sorpresa en cinco minutos. Quiero oír a soporte.",
+			"options": [
+				{"label": "Asistir y presentar datos", "reputation": 3, "reply": "Bien preparado. Sigue así."},
+				{"label": "Excusarte: hay trabajo", "reputation": -2, "reply": "Lo tendré en cuenta."}
+			]
+		},
+		{
+			"id": "presupuesto", "type": "reunion", "speaker": "clara",
+			"text": "Quieren recortar el presupuesto de IT. ¿Qué propones?",
+			"options": [
+				{"label": "Defender el presupuesto", "reputation": 2, "reply": "Argumentos sólidos."},
+				{"label": "Aceptar el recorte", "reputation": -1, "coffee": -1, "reply": "Bien. Empezamos por el café."}
+			]
+		},
+		{
+			"id": "chisme_ascensos", "type": "chisme", "speaker": "bruno",
+			"text": "Dicen que habrá ascensos pronto. ¿Te cuento quién suena?",
+			"options": [
+				{"label": "Escuchar el chisme", "reputation": 1, "reply": "Yo no te dije nada."},
+				{"label": "Volver al trabajo", "coffee": 1, "reply": "Qué serio. Toma, un café."}
+			]
+		},
+		{
+			"id": "chisme_contabilidad", "type": "chisme", "speaker": "ana",
+			"text": "Aquí entre nosotros: en Contabilidad vieron algo raro en la red.",
+			"options": [
+				{"label": "Investigarlo con discreción", "reputation": 2, "reply": "Gracias. Era un virus de oficina."},
+				{"label": "Reenviarlo a todos", "reputation": -3, "reply": "Eso no era buena idea."}
+			]
+		},
+		{
+			"id": "cumple", "type": "chisme", "speaker": "ana",
+			"text": "Hay pastel en la sala de reuniones. ¿Vienes un momento?",
+			"options": [
+				{"label": "Ir a socializar", "reputation": 1, "reply": "¡Qué bueno verte fuera de un ticket!"},
+				{"label": "Seguir en lo tuyo", "reply": "Te guardo un trozo."}
+			]
+		},
+		{
+			"id": "auditoria_puntualidad", "type": "auditoria", "speaker": "rrhh",
+			"text": "Auditoría sorpresa. Enséñame tu registro de tickets.",
+			"options": [
+				{"label": "Entregarlo completo", "reputation": 2, "reply": "Todo en orden."},
+				{"label": "Maquillar los tiempos", "warnings": 1, "reputation": -3, "reply": "Esto consta en tu expediente."}
+			]
+		},
+		{
+			"id": "auditoria_licencias", "type": "auditoria", "speaker": "rrhh",
+			"text": "Revisión de licencias. ¿Instalaste algo sin autorización?",
+			"options": [
+				{"label": "Reconocerlo", "reputation": -1, "reply": "Gracias por tu honestidad."},
+				{"label": "Negarlo todo", "warnings": 1, "reply": "Los registros dicen otra cosa."}
+			]
+		},
+		{
+			"id": "auditoria_seguridad", "type": "auditoria", "speaker": "rrhh",
+			"text": "Encontramos una contraseña en una nota adhesiva. ¿Es tuya?",
+			"options": [
+				{"label": "Proponer un taller de seguridad", "reputation": 3, "reply": "Excelente iniciativa."},
+				{"label": "Culpar a Bruno", "reputation": -2, "reply": "Eso no ayuda al equipo."}
+			]
+		}
+	]
+}
