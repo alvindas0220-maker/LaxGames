@@ -39,26 +39,38 @@ var _locked := false
 
 func _ready() -> void:
 	add_to_group("player")
+	$Sprite2D.texture = load(CareerProfile.sheet_path())
 	_animation_tree.animation_finished.connect(_on_animation_finished)
 	GameState.warned.connect(_on_warning)
 
 
 func _physics_process(delta: float) -> void:
-	if Input.is_action_just_pressed("attack") and ToolBelt.use() and not _locked:
-		_start_attack()
-		_interactor.use_kit()
+	if Input.is_action_just_pressed("attack") and not _locked and not TicketManager.repairing and not GameState.input_locked:
+		_use_tool()
 
-	var direction := Vector2.ZERO if _locked else _get_input_direction()
+	var frozen := _locked or TicketManager.repairing or GameState.input_locked
+	var direction := Vector2.ZERO if frozen else _get_input_direction()
 
 	# Sin entrada y parado no hay nada que calcular ni colisiones que resolver.
 	if direction == Vector2.ZERO and velocity == Vector2.ZERO:
 		return
 
 	var rate := friction if direction == Vector2.ZERO else acceleration
-	var target_speed := run_speed if Input.is_action_pressed("run") else max_speed
+	var target_speed := (run_speed if Input.is_action_pressed("run") else max_speed) * Upgrades.speed_scale()
 	velocity = velocity.move_toward(direction * target_speed, rate * delta)
 	move_and_slide()
 	_update_animation()
+
+
+## El USB sin equipo delante solo diagnostica: no hace falta el gesto de reparar.
+func _use_tool() -> void:
+	if not ToolBelt.use():
+		return
+	var applied := _interactor.use_tool()
+	if not applied:
+		ToolBelt.miss()
+	if applied or ToolBelt.selected != ToolBelt.Tool.USB:
+		_start_attack()
 
 
 ## Elige caminar o parado según la velocidad y orienta ambos según su dirección.

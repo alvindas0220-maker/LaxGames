@@ -45,30 +45,41 @@ func close_ticket(npc_id: String) -> void:
 
 func _ready() -> void:
 	await get_tree().process_frame
+	CareerProfile.use_blank_profile()
 	EventDirector.enabled = false
 	var room: Node = (load("res://scenes/world/office.tscn") as PackedScene).instantiate()
 	get_tree().root.add_child(room)
 	get_tree().current_scene = room
 	await frames(6)
-	check("primera jornada", WorkdayManager.label() == "Semana 1, día 1" and WorkdayManager.quota() == 2, WorkdayManager.label())
+	check("primera jornada", WorkdayManager.label() == "Semana 1, día 1" and WorkdayManager.quota() == 5, WorkdayManager.label())
 	var day_label: Label = room.get_node("HUD").get_node("%DayLabel")
-	check("jornada en HUD", day_label.text.contains("0/2"), day_label.text)
+	check("jornada en HUD", day_label.text.contains("0/5"), day_label.text)
 
 	await close_ticket("ana")
-	check("reputacion con ritmo", GameState.reputation == 1, GameState.reputation)
+	check("reputacion con ritmo", is_equal_approx(GameState.reputation, 0.45), GameState.reputation)
 	check("jornada sigue", not get_tree().paused and WorkdayManager.closed_today == 1)
-	await close_ticket("bruno")
+	for i in 5:
+		await close_ticket("bruno")
+	check("cuota cumplida no corta el dia", WorkdayManager.running and not get_tree().paused, WorkdayManager.closed_today)
+	var rep_end := GameState.reputation
+	WorkdayManager.clock = 9999.0
+	await frames(3)
 	var summary: Control = room.get_node("DaySummary/Panel")
-	check("fin de jornada", summary.visible and get_tree().paused)
+	check("fin de jornada por reloj", summary.visible and get_tree().paused and GameState.warnings == 0)
 	await frames(2)
 	await shot("res://.godot/day_summary.png")
 	await get_tree().create_timer(0.45, true, false, true).timeout
 	await send("ui_accept")
+	await frames(3)
+	check("pasa a la noche", room.get_node("NightMenu/Panel").visible and get_tree().paused and GameState.night)
+	await shot("res://.godot/night_menu.png")
+	room.get_node("NightMenu").sleep()
 	await frames(10)
 	room = get_tree().current_scene
-	check("siguiente jornada", WorkdayManager.day == 2 and WorkdayManager.closed_today == 0 and GameState.reputation == 2 and not get_tree().paused, WorkdayManager.label())
+	check("siguiente jornada", WorkdayManager.day == 2 and WorkdayManager.closed_today == 0 and is_equal_approx(GameState.reputation, rep_end) and not get_tree().paused, WorkdayManager.label())
+	check("el reloj vuelve a empezar", WorkdayManager.running and WorkdayManager.clock < 5.0, WorkdayManager.clock)
 	WorkdayManager.day = 6
-	check("cuota crece", WorkdayManager.quota() == 3 and WorkdayManager.label() == "Semana 2, día 1", WorkdayManager.quota())
+	check("cuota crece", WorkdayManager.quota() == 6 and WorkdayManager.label() == "Semana 2, día 1", WorkdayManager.quota())
 	WorkdayManager.day = 2
 
 	# Evento: panel, elección y efecto.
@@ -87,7 +98,7 @@ func _ready() -> void:
 	await get_tree().create_timer(0.45, true, false, true).timeout
 	await send("ui_accept")
 	await frames(2)
-	check("aplica la opcion", not panel.visible and not get_tree().paused and GameState.reputation == clampi(rep_before + int(option.get("reputation", 0)), 0, 200), option["label"])
+	check("aplica la opcion", not panel.visible and not get_tree().paused and is_equal_approx(GameState.reputation, clampf(rep_before + float(option.get("reputation", 0)) * WorkdayManager.event_pace(), 0.0, 200.0)), option["label"])
 	var dialog: Label = room.get_node("HUD").get_node("%DialogLabel")
 	check("responde el personaje", dialog.text.contains(option["reply"]), dialog.text)
 
@@ -99,11 +110,13 @@ func _ready() -> void:
 		EventDirector.trigger()
 		get_tree().paused = false
 		room.get_node("EventPanel/Panel").hide()
-	check("variedad de eventos", seen.size() == 8, seen.size())
-	for id: String in ["clara", "bruno", "ana", "rrhh"]:
+	check("variedad de eventos", seen.size() == 14, seen.size())
+	for id: String in ["clara", "bruno", "ana", "rrhh", "ivan", "lucia", "diego", "sofia"]:
 		check("orador %s" % id, NpcDatabase.has_npc(id))
 
 	# Retrato genérico para datos incompletos.
+	WorkdayManager.running = false
+	TicketQueue.reset()
 	var entries := [
 		{"id": "sin_campo", "name": "A", "department": "B", "role": "soporte", "sprite_frame": 0, "dialogue": "Hola"},
 		{"id": "ruta_mala", "name": "C", "department": "B", "role": "soporte", "portrait": "res://no/existe.png", "sprite_frame": 0, "dialogue": "Hola"},
@@ -125,7 +138,7 @@ func _ready() -> void:
 	var reward := 0.0
 	var fair := 0
 	for ticket: TicketData in TicketManager.catalog:
-		reward += maxi(1, roundi(ticket.reputation * float(NpcDatabase.rules_of(ticket.requester_id)["reputation_scale"]) * WorkdayManager.reputation_pace))
+		reward += ticket.reputation * float(NpcDatabase.rules_of(ticket.requester_id)["reputation_scale"]) * WorkdayManager.reputation_pace
 		fair += 1
 	var per_ticket := reward / fair
 	var days := [0, 0]
@@ -140,6 +153,7 @@ func _ready() -> void:
 			days[0] = total_days
 	days[1] = total_days
 	print("duracion: %.2f por ticket, 100%% en dia %d, 200%% en dia %d" % [per_ticket, days[0], days[1]])
+	check("arco largo", days[0] >= 12 and days[1] >= 25 and days[1] <= 50, days)
 	WorkdayManager.day = 2
 
 	# Final de la historia.
@@ -153,6 +167,6 @@ func _ready() -> void:
 	await get_tree().create_timer(0.45, true, false, true).timeout
 	await send("ui_accept")
 	await frames(12)
-	check("partida nueva", get_tree().current_scene.name == "IntroCutscene" and GameState.reputation == 0 and WorkdayManager.day == 1, get_tree().current_scene.name)
+	check("partida nueva", get_tree().current_scene.name == "NameEntry" and GameState.reputation == 0 and WorkdayManager.day == 1, get_tree().current_scene.name)
 	print("fallos: ", fails)
 	get_tree().quit(1 if fails > 0 else 0)

@@ -19,6 +19,7 @@ func tick(n: int) -> void:
 
 
 func _ready() -> void:
+	CareerProfile.use_blank_profile()
 	WorkdayManager.enabled = false
 	EventDirector.enabled = false
 	await get_tree().process_frame
@@ -56,6 +57,7 @@ func _ready() -> void:
 	check("conserva su aspecto", sheet_look == 1, sheet_look)
 
 	# Al hablarle se detiene y mira al jugador.
+	bruno.position = home
 	player.global_position = bruno.global_position + Vector2(-18, 0)
 	await tick(3)
 	bruno.interact()
@@ -65,7 +67,7 @@ func _ready() -> void:
 	await tick(120)
 	check("espera mientras hablas", bruno.position == stopped_at, bruno.position)
 	var interactor: Interactor = player.get_node("Interactor")
-	check("se puede hablar con el", interactor._target != null and interactor._target.prompt == "Hablar")
+	check("se puede hablar con el", interactor._target != null and interactor._target.prompt == "Hablar", interactor._target)
 	await RenderingServer.frame_post_draw
 	var img := get_tree().root.get_texture().get_image()
 	img.resize(img.get_width() * 3, img.get_height() * 3, Image.INTERPOLATE_NEAREST)

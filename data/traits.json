@@ -1,0 +1,10 @@
+{
+	"max_traits": 2,
+	"traits": [
+		{"id": "temple", "name": "Temple de acero", "text": "El estrés sube un 10% menos.", "effect": "stress", "value": 0.1},
+		{"id": "agil", "name": "Paso ligero", "text": "Caminas un 8% más rápido.", "effect": "speed", "value": 0.08},
+		{"id": "manitas", "name": "Manos expertas", "text": "Zona verde un 12% más ancha.", "effect": "zone", "value": 0.12},
+		{"id": "cafetero", "name": "Amante del café", "text": "Un café más cada mañana.", "effect": "coffee", "value": 1},
+		{"id": "don_gentes", "name": "Don de gentes", "text": "La gente espera un 10% más.", "effect": "patience", "value": 0.1}
+	]
+}

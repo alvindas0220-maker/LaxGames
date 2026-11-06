@@ -41,7 +41,9 @@ func strike() -> void:
 
 
 func _ready() -> void:
+	CareerProfile.use_blank_profile()
 	WorkdayManager.enabled = false
+	TicketManager.skip_minigame = true
 	EventDirector.enabled = false
 	WorkdayManager.reputation_pace = 1.0
 	await get_tree().process_frame
@@ -53,7 +55,7 @@ func _ready() -> void:
 
 	# Catálogo.
 	var catalog: Array = TicketManager.catalog
-	check("24 tickets", catalog.size() == 24, catalog.size())
+	check("51 tickets", catalog.size() == 51, catalog.size())
 	var ids := {}
 	var valid := true
 	var targets := {}
@@ -70,8 +72,9 @@ func _ready() -> void:
 	for ticket: TicketData in catalog:
 		if ticket.min_day <= 1:
 			early += 1
-	check("empieza con pocos", early == 6, early)
+	check("empieza con pocos", early == 9, early)
 	check("primer ticket de Ana", TicketManager.next_for("ana").id == "pc_ana")
+	check("procedimiento completo", TicketManager.catalog.filter(func(t: TicketData) -> bool: return t.id == "nomina")[0].repairs == 4)
 	WorkdayManager.day = 20
 	var seen := {}
 	for i in 8:
@@ -110,7 +113,8 @@ func _ready() -> void:
 	await strike()
 	check("equipo equivocado no cuenta", TicketManager.repairs_done == 0, dialog.text)
 
-	# Varios golpes.
+	# Varios golpes, con la herramienta que pide el servidor.
+	await press("slot_3")
 	await go_to(room.get_node("Entities/Terminal_servidor"))
 	await strike()
 	check("primer golpe", TicketManager.active != null and TicketManager.repairs_done == 1, dialog.text)

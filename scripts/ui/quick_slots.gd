@@ -1,6 +1,6 @@
 class_name QuickSlots
 extends PanelContainer
-## Selección rápida de herramientas: slot_1, slot_2... eligen cada casilla.
+## Selección rápida de herramientas: las teclas 1 a 4 eligen, y solo se ve la activa.
 
 signal slot_selected(index: int)
 
@@ -28,6 +28,7 @@ func select(index: int) -> void:
 	ToolBelt.selected = index as ToolBelt.Tool
 	for i in _slots.size():
 		_slots[i].set_selected(i == index)
+		_slots[i].visible = i == index
 	slot_selected.emit(index)
 
 

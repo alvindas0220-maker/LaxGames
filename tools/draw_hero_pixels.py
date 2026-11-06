@@ -6,7 +6,7 @@ Uso:
     python tools/draw_hero_pixels.py [--preview RUTA.png]
 
 Salida: assets/sprites/player/hero_clean.png
-Hoja de 6 columnas x 8 filas, 32x32 por fotograma; el personaje mide 20 px.
+Hoja de 6 columnas x 8 filas, 32x32 por fotograma; el personaje mide 26 px.
   Filas 0-3 (abajo, derecha, arriba, izquierda): idle, parpadeo, paso A,
   pies juntos, paso B, pies juntos.
   Filas 4-7 (mismas direcciones): preparar, golpe, seguir, recuperar.
@@ -22,7 +22,8 @@ H = 32
 COLS = 6
 ROWS = 8
 OFFSET_X = 8
-OFFSET_Y = 10
+POSE_HEIGHT = 26
+OFFSET_Y = 4
 OUTPUT = Path(__file__).resolve().parent.parent / "assets/sprites/player/hero_clean.png"
 
 
@@ -38,6 +39,9 @@ PALETTE = {
     "s": rgb("cc8e6a"),  # piel en sombra
     "e": rgb("16161f"),  # ojo
     "T": rgb("24386e"),  # traje
+    "V": rgb("3a5494"),  # luz del traje
+    "P": rgb("56485a"),  # brillo del zapato
+    "n": rgb("e0e0ec"),  # sombra de la camisa
     "t": rgb("18264e"),  # traje en sombra
     "W": rgb("f4f4f8"),  # camisa
     "L": rgb("1c2c58"),  # pantalón
@@ -49,167 +53,311 @@ PALETTE = {
 }
 
 CROWN = [
-    ".....KK.KK.K....",
-    "....KjHKjHKjK...",
-    "...KHjHHjHHjHK..",
-    "...KjHHjHHjHHK..",
-    "...KHjHHjHHHjK..",
+    ".....KKKKKK.....",
+    "....KHjHHjHK....",
+    "....KHHjHHjK....",
+    "....KjHHjHHK....",
 ]
 FACE = [
-    "...KSHjSSHjSSK..",
-    "...KSSSSSSSSSK..",
-    "...KSSeSSSeSSK..",
-    "....KSSSSSSSK...",
-    ".....KKSSSKK....",
+    "....KHSHHSHK....",
+    "....KSSSSSSK....",
+    "....KSeSSeSK....",
+    "....KsSSSSsK....",
+    ".....KsSSsK.....",
+    "......KSsK......",
 ]
-FACE_BLINK = [
-    "...KSHjSSHjSSK..",
-    "...KSSSSSSSSSK..",
-    "...KSSsSSSsSSK..",
-    "....KSSSSSSSK...",
-    ".....KKSSSKK....",
-]
+FACE_BLINK = FACE[:2] + ["....KSsSSsSK...."] + FACE[3:]
 BACK_HEAD = [
-    "...KHjHHjHHjHK..",
-    "...KjHHjHHjHHK..",
-    "...KHHjHHjHHHK..",
-    "....KHHHHHHHK...",
-    ".....KKSSSKK....",
+    "....KHjHHjHK....",
+    "....KHHjHHHK....",
+    "....KjHHjHHK....",
+    "....KHHHHHHK....",
+    ".....KHHHHK.....",
+    "......KSsK......",
 ]
-BODY_FRONT = [
-    "....KTTWWWTTK...",
-    "...KTTTtWtTTTK..",
-    "...KTKTTtTTKTK..",
-    "...KTKTTtTTKTK..",
-    "...KSKTTtTTKSK..",
-    "...KKKTTtTTKKK..",
+SHOULDERS = [
+    "....KVTWWTTK....",
+    "...KVTTWnTTTK...",
+    "...KVKTWnTKTK...",
+    "...KVKTTtTKTK...",
+    "...KVKTTtTKtK...",
 ]
-BODY_FRONT_A = [
-    "....KTTWWWTTK...",
-    "...KTTTtWtTTTK..",
-    "...KTKTTtTTKTK..",
-    "...KSKTTtTTKTK..",
-    "...KKKTTtTTKSK..",
-    ".....KTTtTTKKK..",
+BODY_FRONT = SHOULDERS + [
+    "...KTKTTtTKtK...",
+    "...KSKTTtTKSK...",
+    "...KKKLLLLKKK...",
 ]
-BODY_FRONT_B = [
-    "....KTTWWWTTK...",
-    "...KTTTtWtTTTK..",
-    "...KTKTTtTTKTK..",
-    "...KTKTTtTTKSK..",
-    "...KSKTTtTTKKK..",
-    "...KKKTTtTTK....",
+BODY_FRONT_A = SHOULDERS + [
+    "...KSKTTtTKtK...",
+    "...KKKTTtTKSK...",
+    ".....KLLLLKKK...",
 ]
-BODY_BACK = [
-    "....KTTTTTTTK...",
-    "...KTTTTTTTTTK..",
-    "...KTKTTtTTKTK..",
-    "...KTKTTtTTKTK..",
-    "...KSKTTtTTKSK..",
-    "...KKKTTtTTKKK..",
+BODY_FRONT_B = SHOULDERS + [
+    "...KTKTTtTKSK...",
+    "...KSKTTtTKKK...",
+    "...KKKLLLLK.....",
 ]
-BODY_BACK_A = [
-    "....KTTTTTTTK...",
-    "...KTTTTTTTTTK..",
-    "...KTKTTtTTKTK..",
-    "...KSKTTtTTKTK..",
-    "...KKKTTtTTKSK..",
-    ".....KTTtTTKKK..",
+BACK_TOP = [
+    "....KVTTTTTK....",
+    "...KVTTTTTTTK...",
+    "...KVKTTtTKTK...",
 ]
-BODY_BACK_B = [
-    "....KTTTTTTTK...",
-    "...KTTTTTTTTTK..",
-    "...KTKTTtTTKTK..",
-    "...KTKTTtTTKSK..",
-    "...KSKTTtTTKKK..",
-    "...KKKTTtTTK....",
-]
+BODY_BACK = BACK_TOP + BODY_FRONT[3:]
+BODY_BACK_A = BACK_TOP + BODY_FRONT_A[3:]
+BODY_BACK_B = BACK_TOP + BODY_FRONT_B[3:]
 LEGS_STAND = [
-    "....KLLKKLLK....",
-    "....KLLKKLLK....",
-    "....KOOKKOOK....",
+    ".....KLLLLK.....",
+    "....KLlKKLlK....",
+    "....KLlKKLlK....",
+    "....KLlKKLlK....",
+    "....KLlKKLlK....",
+    "....KLlKKLlK....",
+    "....KPOKKPOK....",
     "....KKKKKKKK....",
 ]
 LEGS_A = [
-    "....KLLKKLLK....",
-    "....KLLKKOOK....",
-    "....KOOKKKKK....",
+    ".....KLLLLK.....",
+    "....KLlKKLlK....",
+    "....KLlKKLlK....",
+    "....KLlKKLlK....",
+    "....KLlKKPOK....",
+    "....KLlKKKKK....",
+    "....KPOK........",
     "....KKKK........",
 ]
 LEGS_B = [
-    "....KLLKKLLK....",
-    "....KOOKKLLK....",
-    "....KKKKKOOK....",
+    ".....KLLLLK.....",
+    "....KLlKKLlK....",
+    "....KLlKKLlK....",
+    "....KLlKKLlK....",
+    "....KPOKKLlK....",
+    "....KKKKKLlK....",
+    "........KPOK....",
     "........KKKK....",
 ]
 LEGS_TOGETHER = [
     ".....KLLLLK.....",
+    ".....KLllLK.....",
+    ".....KLKKLK.....",
+    ".....KLKKLK.....",
+    ".....KLKKLK.....",
     ".....KLKKLK.....",
     ".....KOKKOK.....",
     ".....KKKKKK.....",
 ]
 
 SIDE_HEAD = [
-    ".....KK.KK......",
-    "....KjHKjHKK....",
-    "...KHjHHjHHjK...",
-    "...KjHHjHHjHK...",
-    "...KHjHHHjHSK...",
-    "...KHHjSSHjSK...",
-    "...KHHSSSSSSK...",
-    "....KHSSSeSSK...",
-    ".....KSSSSSSK...",
-    "......KSSSK.....",
+    ".....KKKKK......",
+    "....KHjHHjK.....",
+    "....KHHjHHHK....",
+    "....KjHHjHHK....",
+    "....KHHjHSSK....",
+    "....KHHSSSSK....",
+    "....KHSSSeSK....",
+    ".....KSSSSSK....",
+    "......KsSSK.....",
+    "......KSsK......",
 ]
-SIDE_HEAD_BLINK = SIDE_HEAD[:7] + ["....KHSSSsSSK...", ] + SIDE_HEAD[8:]
-SIDE_BODY = [
-    ".....KTTWWK.....",
-    ".....KTtTWK.....",
-    ".....KTtTWK.....",
+SIDE_HEAD_BLINK = SIDE_HEAD[:6] + ["....KHSSSsSK...."] + SIDE_HEAD[7:]
+SIDE_TOP = [
+    ".....KVTWWK.....",
+    ".....KVTTWK.....",
+    ".....KVtTTK.....",
+    ".....KVtTTK.....",
+    ".....KVtTTK.....",
+]
+SIDE_BODY = SIDE_TOP + [
     ".....KTtTTK.....",
     ".....KTSTTK.....",
-    ".....KTTTTK.....",
+    ".....KLLLLK.....",
 ]
-SIDE_BODY_FORWARD = [
-    ".....KTTWWK.....",
-    ".....KTTtWK.....",
-    ".....KTTtWK.....",
+SIDE_BODY_FORWARD = SIDE_TOP + [
     ".....KTTtTK.....",
     ".....KTTTSK.....",
-    ".....KTTTTK.....",
+    ".....KLLLLK.....",
 ]
-SIDE_BODY_BACK = [
-    ".....KTTWWK.....",
-    ".....KTTTWK.....",
-    ".....KTTTWK.....",
+SIDE_BODY_BACK = SIDE_TOP + [
     "....KKTTTTK.....",
     "....KSKTTTK.....",
-    ".....KTTTTK.....",
+    ".....KLLLLK.....",
 ]
 SIDE_LEGS_STAND = [
-    ".....KLLLLK.....",
-    ".....KLLLLK.....",
-    ".....KOOOOOK....",
+    ".....KLLLlK.....",
+    ".....KLLLlK.....",
+    ".....KLLLlK.....",
+    ".....KLLLlK.....",
+    ".....KLLLlK.....",
+    ".....KLLLlK.....",
+    ".....KOOOPPK....",
     ".....KKKKKKK....",
 ]
 SIDE_LEGS_A = [
     ".....KLLLLK.....",
+    "....KlLKKLLK....",
     "....KllKKLLK....",
-    "...KooK..KOOOK..",
-    "...KKK...KKKKK..",
+    "...KllK..KLLK...",
+    "...KllK..KLLK...",
+    "...KllK..KLLLK..",
+    "..KooK...KOPPK..",
+    "..KKKK...KKKKK..",
 ]
 SIDE_LEGS_B = [
     ".....KLLLLK.....",
+    "....KLLKKlLK....",
     "....KLLKKllK....",
-    "...KOOK..KoooK..",
-    "...KKK...KKKKK..",
+    "...KLLK..KllK...",
+    "...KLLK..KllK...",
+    "...KLLK..KlllK..",
+    "..KOPK...KoooK..",
+    "..KKKK...KKKKK..",
 ]
 SIDE_LEGS_TOGETHER = [
-    ".....KLLLLK.....",
+    ".....KLLLlK.....",
+    ".....KLLLlK.....",
+    ".....KLLLlK.....",
     "......KLLK......",
-    "......KOOOK.....",
+    "......KLLK......",
+    "......KLLK......",
+    "......KOPPK.....",
     "......KKKKK.....",
 ]
+
+CROWN_F = [
+    ".....KKKKKK.....",
+    "....KHHHHHHK....",
+    "...KHjjHHHHHK...",
+    "...KHjHHHHHHK...",
+]
+FACE_F = [
+    "...KHHSHHSHHK...",
+    "...KHSSSSSSHK...",
+    "...KHSeSSeSHK...",
+    "...KHsSSSSsHK...",
+    "...KHHsSSsHHK...",
+    "...KHHKSsKHHK...",
+]
+FACE_F_BLINK = FACE_F[:2] + ["...KHSsSSsSHK..."] + FACE_F[3:]
+BACK_HEAD_F = [
+    "...KHjHHHHjHK...",
+    "...KHHHHHHHHK...",
+    "...KHjHHHHjHK...",
+    "...KHHHHHHHHK...",
+    "...KHHHHHHHHK...",
+    "...KHjHHHHjHK...",
+]
+SHOULDERS_F = [
+    "...KHKVWWTKHK...",
+    "...KVTTWnTTTK...",
+    "...KVKTWnTKTK...",
+    "...KVKTTtTKTK...",
+    "...KVKTTtTKtK...",
+]
+BODY_FRONT_F = SHOULDERS_F + [
+    "...KTKTTtTKtK...",
+    "...KSKTTtTKSK...",
+    "...KKKTTTTKKK...",
+]
+BODY_FRONT_F_A = SHOULDERS_F + [
+    "...KSKTTtTKtK...",
+    "...KKKTTtTKSK...",
+    ".....KTTTTKKK...",
+]
+BODY_FRONT_F_B = SHOULDERS_F + [
+    "...KTKTTtTKSK...",
+    "...KSKTTtTKKK...",
+    "...KKKTTTTK.....",
+]
+BACK_TOP_F = [
+    "...KHHHHHHHHK...",
+    "...KVHHHHHHTK...",
+    "...KVKHHHHKTK...",
+]
+BODY_BACK_F = BACK_TOP_F + BODY_FRONT_F[3:]
+BODY_BACK_F_A = BACK_TOP_F + BODY_FRONT_F_A[3:]
+BODY_BACK_F_B = BACK_TOP_F + BODY_FRONT_F_B[3:]
+SKIRT_F = [
+    "....KTTTttTK....",
+    "....KTTTttTK....",
+    "....KTTttTTK....",
+]
+LEGS_STAND_F = SKIRT_F + [
+    ".....KSKKsK.....",
+    ".....KSKKsK.....",
+    ".....KSKKsK.....",
+    ".....KPKKPK.....",
+    ".....KKKKKK.....",
+]
+LEGS_A_F = SKIRT_F + [
+    "....KSsKKsSK....",
+    "....KSsKKPOK....",
+    "....KSsKKKKK....",
+    "....KPOK........",
+    "....KKKK........",
+]
+LEGS_B_F = SKIRT_F + [
+    "....KsSKKSsK....",
+    "....KPOKKSsK....",
+    "....KKKKKSsK....",
+    "........KPOK....",
+    "........KKKK....",
+]
+LEGS_TOGETHER_F = [
+    ".....KTTttK.....",
+    ".....KTTttK.....",
+    ".....KTTttK.....",
+    ".....KSKKsK.....",
+    ".....KSKKsK.....",
+    ".....KSKKsK.....",
+    ".....KPKKPK.....",
+    ".....KKKKKK.....",
+]
+SIDE_HEAD_F = [
+    ".....KKKKK......",
+    "....KHHHHHK.....",
+    "...KHjjHHHHK....",
+    "...KHjHHHHHK....",
+    "...KHHHHHSSK....",
+    "...KHHHHSSSK....",
+    "...KHHHSSeSK....",
+    "...KHHHSSSSK....",
+    "...KHHHKsSK.....",
+    "...KHHHKSsK.....",
+]
+SIDE_HEAD_F_BLINK = SIDE_HEAD_F[:6] + ["...KHHHSSsSK...."] + SIDE_HEAD_F[7:]
+SIDE_TOP_F = [
+    "...KHHKVWWK.....",
+    "...KHHKTTWK.....",
+] + SIDE_TOP[2:]
+SIDE_BODY_F = SIDE_TOP_F + SIDE_BODY[5:7] + [".....KTTTTK....."]
+SIDE_BODY_F_FORWARD = SIDE_TOP_F + SIDE_BODY_FORWARD[5:7] + [".....KTTTTK....."]
+SIDE_BODY_F_BACK = SIDE_TOP_F + SIDE_BODY_BACK[5:7] + [".....KTTTTK....."]
+SIDE_SKIRT_F = [
+    ".....KTTTtK.....",
+    ".....KTTTtK.....",
+    ".....KTTTtK.....",
+]
+SIDE_LEGS_STAND_F = SIDE_SKIRT_F + [
+    "......KSsK......",
+    "......KSsK......",
+    "......KSsK......",
+    "......KPOOK.....",
+    "......KKKKK.....",
+]
+SIDE_LEGS_A_F = SIDE_SKIRT_F + [
+    "....KssKKSsK....",
+    "...KssK..KSsK...",
+    "...KssK..KSSsK..",
+    "..KooK...KPOOK..",
+    "..KKKK...KKKKK..",
+]
+SIDE_LEGS_B_F = SIDE_SKIRT_F + [
+    "....KSsKKssK....",
+    "...KSsK..KssK...",
+    "...KSsK..KsssK..",
+    "..KPOK...KoooK..",
+    "..KKKK...KKKKK..",
+]
+SIDE_LEGS_TOGETHER_F = SIDE_LEGS_STAND_F
 
 # Mano y dirección del destornillador en coordenadas del fotograma, por fase.
 SWORD_POSES = {
@@ -222,7 +370,7 @@ SWORD_POSES = {
 def frame(*parts, lift=0):
     """Une las partes de una pose en una rejilla; lift sube el cuerpo sin mover los pies."""
     rows = [row for part in parts for row in part]
-    assert len(rows) == 20, f"pose de {len(rows)} filas"
+    assert len(rows) == POSE_HEIGHT, f"pose de {len(rows)} filas"
     grid = [[(0, 0, 0, 0)] * W for _ in range(H)]
     feet = len(rows) - 4
     for y, line in enumerate(rows):
@@ -259,7 +407,9 @@ def mirrored(grid):
     return [list(reversed(row)) for row in grid]
 
 
-def movement(view):
+def movement(view, female=False):
+    if female:
+        return movement_female(view)
     if view == "right":
         return [
             frame(SIDE_HEAD, SIDE_BODY, SIDE_LEGS_STAND),
@@ -289,12 +439,47 @@ def movement(view):
     ]
 
 
-def attack(view, phase):
-    base = movement(view)[0]
+def movement_female(view):
+    if view == "right":
+        return [
+            frame(SIDE_HEAD_F, SIDE_BODY_F, SIDE_LEGS_STAND_F),
+            frame(SIDE_HEAD_F_BLINK, SIDE_BODY_F, SIDE_LEGS_STAND_F),
+            frame(SIDE_HEAD_F, SIDE_BODY_F_BACK, SIDE_LEGS_A_F),
+            frame(SIDE_HEAD_F, SIDE_BODY_F, SIDE_LEGS_TOGETHER_F, lift=1),
+            frame(SIDE_HEAD_F, SIDE_BODY_F_FORWARD, SIDE_LEGS_B_F),
+            frame(SIDE_HEAD_F, SIDE_BODY_F, SIDE_LEGS_TOGETHER_F, lift=1),
+        ]
+    if view == "up":
+        head = [CROWN_F, BACK_HEAD_F]
+        return [
+            frame(*head, BODY_BACK_F, LEGS_STAND_F),
+            frame(*head, BODY_BACK_F, LEGS_STAND_F),
+            frame(*head, BODY_BACK_F_A, LEGS_A_F),
+            frame(*head, BODY_BACK_F, LEGS_TOGETHER_F, lift=1),
+            frame(*head, BODY_BACK_F_B, LEGS_B_F),
+            frame(*head, BODY_BACK_F, LEGS_TOGETHER_F, lift=1),
+        ]
+    return [
+        frame(CROWN_F, FACE_F, BODY_FRONT_F, LEGS_STAND_F),
+        frame(CROWN_F, FACE_F_BLINK, BODY_FRONT_F, LEGS_STAND_F),
+        frame(CROWN_F, FACE_F, BODY_FRONT_F_A, LEGS_A_F),
+        frame(CROWN_F, FACE_F, BODY_FRONT_F, LEGS_TOGETHER_F, lift=1),
+        frame(CROWN_F, FACE_F, BODY_FRONT_F_B, LEGS_B_F),
+        frame(CROWN_F, FACE_F, BODY_FRONT_F, LEGS_TOGETHER_F, lift=1),
+    ]
+
+
+def attack(view, phase, female=False):
+    base = movement(view, female)[0]
     grid = [row[:] for row in base]
     hand, tip = SWORD_POSES[view][phase]
     screwdriver(grid, hand, tip)
     return grid
+
+
+# La protagonista lleva el mismo traje; solo cambia su pelo.
+FEMALE_COLORS = {PALETTE["H"]: rgb("3a2430"), PALETTE["j"]: rgb("643e50")}
+OUTPUT_FEMALE = OUTPUT.with_name("hero_female.png")
 
 
 def write_png(path, pixels):
@@ -318,8 +503,13 @@ def write_png(path, pixels):
     )
 
 
-def build_sheet():
+def recolor(grid, swap):
+    return [[swap.get(p, p) for p in row] for row in grid]
+
+
+def build_sheet(female=False):
     sheet = [[(0, 0, 0, 0)] * (W * COLS) for _ in range(H * ROWS)]
+    swap = FEMALE_COLORS if female else {}
 
     def blit(pixels, col, row):
         for y in range(H):
@@ -327,10 +517,11 @@ def build_sheet():
 
     for row, direction in enumerate(("down", "right", "up", "left")):
         view = "right" if direction == "left" else direction
-        for col, grid in enumerate(movement(view)):
+        for col, grid in enumerate(movement(view, female)):
+            grid = recolor(grid, swap)
             blit(mirrored(grid) if direction == "left" else grid, col, row)
         for phase in range(4):
-            grid = attack(view, phase)
+            grid = recolor(attack(view, phase, female), swap)
             blit(mirrored(grid) if direction == "left" else grid, phase, 4 + row)
     return sheet
 
@@ -352,6 +543,7 @@ def main():
     args = parser.parse_args()
     sheet = build_sheet()
     write_png(OUTPUT, sheet)
+    write_png(OUTPUT_FEMALE, build_sheet(True))
     colors = {p for row in sheet for p in row if p[3] == 255}
     print(f"guardado: {OUTPUT} ({W * COLS}x{H * ROWS}) Hframes={COLS} Vframes={ROWS} colores={len(colors)}")
     if args.preview:

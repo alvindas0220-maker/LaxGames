@@ -1,14 +1,25 @@
 {
-	"reputation_pace": 0.12,
+	"day_seconds": 300,
+	"reputation_pace": 0.045,
+	"event_pace": 0.4,
 	"days_per_week": 5,
-	"base_quota": 2,
+	"base_quota": 5,
 	"quota_per_week": 1,
-	"max_quota": 6,
+	"max_quota": 12,
+	"ticket_interval": 34,
+	"interval_step": 3,
+	"min_interval": 16,
+	"max_pending": 6,
+	"queue_stress": 0.12,
+	"overnight_rest": 30,
+	"daily_coffee": 1,
+	"extra_ticket_pay": 15,
 	"chapters": [
-		{"stage": "Junior de Soporte IT", "brief": "Sigue atendiendo tickets y gánate a la oficina."},
-		{"stage": "Técnico de Soporte IT", "brief": "Ya confían en ti. Gerencia empieza a fijarse."},
-		{"stage": "Jefe de IT", "brief": "Dirigir IT era la meta, pero una gran tecnológica te ha visto."},
-		{"stage": "Ingeniero en Gran Tecnológica", "brief": "Vida de Big Tech. ¿Y si fundaras tu propia empresa?"},
-		{"stage": "Fundador de su Empresa", "brief": "Lo lograste: tu propia empresa."}
+		{"stage": "Practicante de Soporte IT", "phase": "Semana de Practicante", "brief": "Aprende dónde está todo y que nadie se quede esperando.", "salary": 40},
+		{"stage": "Junior de Soporte IT", "phase": "Semana de Junior", "brief": "Ya tienes contrato. Sigue atendiendo tickets y gánate a la oficina.", "salary": 60},
+		{"stage": "Técnico de Soporte IT", "phase": "Semana de Técnico", "brief": "Ya confían en ti. Jefatura empieza a fijarse.", "salary": 80},
+		{"stage": "Jefe de IT", "phase": "Semana de Jefatura", "brief": "Dirigir IT era la meta, pero una gran tecnológica te ha visto.", "salary": 120},
+		{"stage": "Ingeniero en Gran Tecnológica", "phase": "Semana de Big Tech", "brief": "Vida de Big Tech. ¿Y si fundaras tu propia empresa?", "salary": 160},
+		{"stage": "Fundador de su Empresa", "phase": "Semana de Empresa Propia", "brief": "Lo lograste: tu propia empresa.", "salary": 200}
 	]
 }

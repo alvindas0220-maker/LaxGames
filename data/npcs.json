@@ -43,8 +43,60 @@
 			"role": "jefe_departamento",
 			"portrait": "res://assets/sprites/npc/portraits/rrhh.png",
 			"sprite_frame": 3,
-			"dialogue": "Bienvenido a Recursos Humanos.",
+			"dialogue": "{bienvenido} a Recursos Humanos, {player}.",
 			"service": "rrhh"
-		}
+		},
+		{
+			"id": "diego",
+			"name": "Diego Paredes",
+			"department": "Helpdesk",
+			"role": "soporte",
+			"portrait": "res://assets/sprites/npc/portraits/diego.png",
+			"sprite_frame": 4,
+			"dialogue": "Helpdesk, dime. Bueno, ayúdame: tengo cuarenta llamadas."
+		},
+		{
+			"id": "ivan",
+			"name": "Iván Soto",
+			"department": "Infraestructura y Redes",
+			"role": "jefe_departamento",
+			"portrait": "res://assets/sprites/npc/portraits/ivan.png",
+			"sprite_frame": 5,
+			"dialogue": "Si parpadea en rojo, es asunto mío. Y ahora tuyo."
+		},
+		{
+			"id": "lucia",
+			"name": "Lucía Ferrer",
+			"department": "Desarrollo",
+			"role": "usuario_comun",
+			"portrait": "res://assets/sprites/npc/portraits/lucia.png",
+			"sprite_frame": 6,
+			"dialogue": "En mi máquina funciona. Ese es justo el problema."
+		},
+		{
+			"id": "tomas",
+			"name": "Tomás Lindo",
+			"department": "Desarrollo",
+			"role": "usuario_comun",
+			"portrait": "res://assets/sprites/npc/portraits/tomas.png",
+			"sprite_frame": 7,
+			"dialogue": "Hice un cambio pequeñito. Pequeñito de verdad."
+		},
+		{
+			"id": "sofia",
+			"name": "Sofía Reyes",
+			"department": "Jefatura de IT",
+			"role": "directiva",
+			"portrait": "res://assets/sprites/npc/portraits/sofia.png",
+			"sprite_frame": 8,
+			"dialogue": "Soy Sofía, directora de IT. Sé breve, {player}, y resuélvelo."
+		},
+		{"id": "ramon", "name": "Ramón Ortiz", "department": "Seguridad", "role": "usuario_comun", "portrait": "res://assets/sprites/npc/portraits/ramon.png", "sprite_frame": 9, "dialogue": "Hago mi ronda, {player}. Aquí no se mueve ni una grapa sin que yo lo sepa."},
+		{"id": "elena", "name": "Elena Cruz", "department": "Limpieza", "role": "usuario_comun", "portrait": "res://assets/sprites/npc/portraits/elena.png", "sprite_frame": 10, "dialogue": "Cuidado, recién trapeado. Y deja de tirar cables por el pasillo."},
+		{"id": "pablo", "name": "Pablo Mora", "department": "Mensajería", "role": "usuario_comun", "portrait": "res://assets/sprites/npc/portraits/pablo.png", "sprite_frame": 11, "dialogue": "Traigo paquetes para todos. Para ti, facturas de proveedores."},
+		{"id": "nadia", "name": "Nadia Campos", "department": "Estación central", "role": "usuario_comun", "portrait": "res://assets/sprites/npc/portraits/nadia.png", "sprite_frame": 12, "dialogue": "Estación central, ¿en qué te ayudo?", "service": "recepcion", "still": true},
+		{"id": "carla", "name": "Carla Núñez", "department": "Cafetería", "role": "usuario_comun", "portrait": "res://assets/sprites/npc/portraits/carla.png", "sprite_frame": 13, "dialogue": "{bienvenido} a la cafetería.", "service": "cafe", "still": true},
+		{"id": "hugo", "name": "Hugo Salas", "department": "Gerencia General", "role": "directiva", "portrait": "res://assets/sprites/npc/portraits/hugo.png", "sprite_frame": 14, "dialogue": "Soy Hugo Salas, gerente general. Traiga soluciones, no problemas."},
+		{"id": "ines", "name": "Inés Duarte", "department": "Cliente clave", "role": "directiva", "portrait": "res://assets/sprites/npc/portraits/ines.png", "sprite_frame": 15, "dialogue": "Vengo a revisar el contrato. Espero que todo funcione."}
 	]
 }

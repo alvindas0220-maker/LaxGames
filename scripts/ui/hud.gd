@@ -1,10 +1,19 @@
 class_name HUD
 extends CanvasLayer
-## Muestra la carrera del jugador: amonestaciones, reputación, ticket y avisos.
+## Muestra la carrera del jugador: reloj, estrés, amonestaciones, reputación, ticket y avisos.
 
 ## Alto lógico de la interfaz: se escala a múltiplos enteros para mantener el píxel.
 const BASE_HEIGHT := 216
-const NOTICE_SECONDS := 5.0
+const NOTICE_SECONDS := 6.0
+## A partir de este estrés la etiqueta se pone en rojo.
+const STRESS_ALERT := 70.0
+const STRESS_ALERT_COLOR := Color(1.0, 0.35, 0.3)
+const STRESS_TENSE := 40.0
+const STRESS_TENSE_COLOR := Color(1.0, 0.8, 0.35)
+## Estrés a partir del cual la pantalla late en rojo.
+const STRESS_CRITICAL := 90.0
+const PULSE_SPEED := 0.008
+const PULSE_ALPHA := 0.16
 
 @export var player: Node2D
 @export var world_layer: TileMapLayer
@@ -15,10 +24,10 @@ var _notice_left := 0.0
 
 @onready var _root: Control = $Root
 @onready var _warnings: HBoxContainer = %Warnings
-@onready var _reputation_bar: TextureProgressBar = %ReputationBar
-@onready var _reputation_label: Label = %ReputationLabel
-@onready var _career_label: Label = %CareerLabel
 @onready var _day_label: Label = %DayLabel
+@onready var _stress_bar: TextureProgressBar = %StressBar
+@onready var _stress_vignette: ColorRect = %StressVignette
+@onready var _phone_button: HudSlot = %PhoneButton
 @onready var _minimap: Minimap = %Minimap
 @onready var _ticket_panel: Control = %TicketPanel
 @onready var _ticket_label: Label = %TicketLabel
@@ -37,22 +46,27 @@ func _ready() -> void:
 	_build_warnings()
 	_dialog_panel.hide()
 	_ticket_panel.hide()
+	_phone_button.gui_input.connect(_on_phone_button_input)
+	TicketQueue.changed.connect(_refresh_phone_badge)
+	_refresh_phone_badge()
 	_prompt_label.text = ""
 	GameState.warnings_changed.connect(_on_warnings_changed)
-	GameState.reputation_changed.connect(_on_reputation_changed)
-	GameState.stage_changed.connect(_on_stage_changed)
+	GameState.stress_changed.connect(_on_stress_changed)
 	GameState.notice.connect(_on_notice)
 	DialogueManager.line_shown.connect(_on_line_shown)
 	GameState.prompt_changed.connect(_on_prompt_changed)
 	TicketManager.ticket_accepted.connect(_on_ticket_accepted)
 	TicketManager.ticket_closed.connect(_ticket_panel.hide)
 	_on_warnings_changed(GameState.warnings)
-	_on_reputation_changed(GameState.reputation)
-	_on_stage_changed(GameState.stage_title())
+	_on_stress_changed(GameState.stress)
 
 
 func _process(delta: float) -> void:
-	_day_label.text = "%s  Tickets %d/%d" % [WorkdayManager.label(), WorkdayManager.closed_today, WorkdayManager.quota()]
+	_day_label.text = "%s  %d/%d" % [WorkdayManager.clock_text(), WorkdayManager.closed_today, WorkdayManager.quota()]
+	_prompt_label.visible = not TicketManager.repairing
+	_stress_vignette.visible = GameState.stress >= STRESS_CRITICAL
+	if _stress_vignette.visible:
+		_stress_vignette.color.a = PULSE_ALPHA * (0.5 + 0.5 * sin(Time.get_ticks_msec() * PULSE_SPEED))
 	if _dialog_panel.visible:
 		_notice_left -= delta
 		if _notice_left <= 0.0:
@@ -60,7 +74,8 @@ func _process(delta: float) -> void:
 	if TicketManager.active != null:
 		var ticket := TicketManager.active
 		var progress := " %d/%d" % [TicketManager.repairs_done, ticket.repairs] if ticket.repairs > 1 else ""
-		_ticket_label.text = "[%s] %s%s  %ds" % [TicketManager.priority(), ticket.title, progress, ceili(TicketManager.time_left)]
+		var step := " paso %d/%d" % [TicketManager.stage + 1, ticket.chain.size() + 1] if not ticket.chain.is_empty() else ""
+		_ticket_label.text = "[%s] %s%s%s  %ds\n%s - %s" % [TicketManager.priority(), ticket.title, step, progress, ceili(TicketManager.time_left), TicketManager.current_step(), ToolBelt.TOOL_SHORT[TicketManager.current_tool()]]
 
 
 func _fit_to_viewport() -> void:
@@ -83,14 +98,18 @@ func _on_warnings_changed(count: int) -> void:
 		icon.texture = warning_on if i < count else warning_off
 
 
-func _on_reputation_changed(value: int) -> void:
-	_reputation_bar.max_value = GameState.MAX_REPUTATION
-	_reputation_bar.value = value
-	_reputation_label.text = "%d%%" % value
+func _on_stress_changed(value: float) -> void:
+	_stress_bar.value = value
 
 
-func _on_stage_changed(title: String) -> void:
-	_career_label.text = title
+## El número del botón avisa de cuántos tickets esperan.
+func _refresh_phone_badge() -> void:
+	_phone_button.set_count(TicketQueue.pending.size())
+
+
+func _on_phone_button_input(event: InputEvent) -> void:
+	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+		get_tree().call_group("phone", "toggle")
 
 
 func _on_notice(text: String) -> void:

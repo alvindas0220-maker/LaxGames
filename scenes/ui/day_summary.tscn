@@ -5,7 +5,7 @@
 
 [sub_resource type="Theme" id="Theme_summary"]
 default_font = ExtResource("2_font")
-default_font_size = 6
+default_font_size = 8
 
 [node name="DaySummary" type="CanvasLayer"]
 process_mode = 3
@@ -29,10 +29,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -150.0
-offset_top = -70.0
-offset_right = 150.0
-offset_bottom = 70.0
+offset_left = -180.0
+offset_top = -104.0
+offset_right = 180.0
+offset_bottom = 104.0
 grow_horizontal = 2
 grow_vertical = 2
 horizontal_alignment = 1

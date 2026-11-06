@@ -40,6 +40,7 @@ func clean() -> void:
 
 
 func _ready() -> void:
+	CareerProfile.use_blank_profile()
 	WorkdayManager.enabled = false
 	EventDirector.enabled = false
 	WorkdayManager.reputation_pace = 1.0

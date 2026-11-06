@@ -46,21 +46,34 @@ func shot(path: String) -> void:
 
 
 func _ready() -> void:
+	CareerProfile.use_blank_profile()
 	WorkdayManager.enabled = false
+	TicketManager.skip_minigame = true
 	EventDirector.enabled = false
 	WorkdayManager.reputation_pace = 1.0
-	check("escena principal", ProjectSettings.get_setting("application/run/main_scene") == "res://scenes/ui/intro_cutscene.tscn")
+	check("escena principal", ProjectSettings.get_setting("application/run/main_scene") == "res://scenes/ui/name_entry.tscn")
 	await get_tree().process_frame
 	var intro: Node = (load("res://scenes/ui/intro_cutscene.tscn") as PackedScene).instantiate()
 	get_tree().root.add_child(intro)
 	get_tree().current_scene = intro
 	await frames(30)
+	check("musica desde la intro", AudioDirector.is_music_playing())
 	var story: Label = intro.get_node("%StoryLabel")
 	var typed := story.visible_characters
 	check("escribe letra a letra", typed > 0 and typed < story.text.length(), "%d/%d" % [typed, story.text.length()])
 	check("sonido de oficina", intro.get_node("Sfx").playing and intro.get_node("Ambience").playing)
+	await get_tree().create_timer(0.35).timeout
 	await send("ui_accept")
 	check("completa la linea", story.visible_characters >= story.text.length())
+	var seen := [intro._index]
+	while seen.size() < 6:
+		await send("ui_accept")
+		if intro._index != seen.back():
+			seen.append(intro._index)
+	var steps_ok := true
+	for i in seen.size() - 1:
+		steps_ok = steps_ok and seen[i + 1] == seen[i] + 1
+	check("no salta lineas con pulsaciones rapidas", steps_ok, seen)
 	await send("ui_accept")
 	await send("ui_accept")
 	await send("ui_accept")
@@ -88,17 +101,19 @@ func _ready() -> void:
 
 	# Herramientas.
 	var slots: QuickSlots = office.get_node("HUD/Root/QuickSlots")
-	check("tres ranuras", slots.get_node("Slots").get_child_count() == 3)
+	check("cuatro ranuras", slots.get_node("Slots").get_child_count() == 4)
 	await key(KEY_SPACE)
 	await frames(30)
+	check("barra limpia", slots.get_node("Slots").get_children().filter(func(s: Control) -> bool: return s.visible).size() == 1)
 	await key(KEY_2)
 	check("ranura de cafe", ToolBelt.selected == ToolBelt.Tool.COFFEE and slots.selected == 1)
+	check("se ve la herramienta activa", slots.get_node("Slots").get_child(1).visible and not slots.get_node("Slots").get_child(0).visible)
 	await key(KEY_SPACE)
-	check("cafe sin amonestaciones", ToolBelt.coffee == 3)
-	GameState.add_warning("prueba")
+	check("cafe sin estres", ToolBelt.coffee == 3)
+	GameState.add_stress(50.0)
 	await frames(30)
 	await key(KEY_SPACE)
-	check("cafe retira amonestacion", GameState.warnings == 0 and ToolBelt.coffee == 2, ToolBelt.coffee)
+	check("cafe baja el estres", is_equal_approx(GameState.stress, 15.0) and ToolBelt.coffee == 2, GameState.stress)
 	var count: Label = slots.get_node("Slots").get_child(1).get_node("CountLabel")
 	check("contador de cafe", count.text == "2", count.text)
 	await key(KEY_3)

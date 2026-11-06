@@ -35,6 +35,7 @@ func walk_until_blocked(player: CharacterBody2D, key: int, frames: int) -> Vecto
 
 
 func _ready() -> void:
+	CareerProfile.use_blank_profile()
 	await get_tree().process_frame
 	var room := (load("res://scenes/world/test_room.tscn") as PackedScene).instantiate()
 	get_tree().root.add_child(room)
@@ -66,7 +67,6 @@ func _ready() -> void:
 		if h.texture == hud.warning_on:
 			full += 1
 	check("amonestacion en HUD", full == 1, full)
-	var face: TextureRect = hud.get_node("Root/StatusPanel/Row/PortraitFrame/Face")
-	check("retrato", face.texture.atlas == sprite.texture, face.texture.region)
+	check("panel grande eliminado", hud.get_node_or_null("Root/StatusPanel/Stack/Row") == null)
 	print("fallos: ", fails)
 	get_tree().quit(1 if fails > 0 else 0)

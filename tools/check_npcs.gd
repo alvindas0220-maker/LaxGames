@@ -19,11 +19,12 @@ func frames(n: int) -> void:
 
 
 func _ready() -> void:
+	CareerProfile.use_blank_profile()
 	WorkdayManager.enabled = false
 	EventDirector.enabled = false
 	WorkdayManager.reputation_pace = 1.0
 	await get_tree().process_frame
-	check("datos cargados", NpcDatabase.ids().size() == 5, NpcDatabase.ids())
+	check("datos cargados", NpcDatabase.ids().size() == 17, NpcDatabase.ids())
 	check("rol", NpcDatabase.role_of("clara") == "directiva", NpcDatabase.role_of("clara"))
 	check("retrato", NpcDatabase.portrait_of("ana") != null)
 
@@ -99,6 +100,6 @@ func _ready() -> void:
 	file.close()
 	check("descarta datos erroneos", NpcDatabase.load_from(path) == 2 and NpcDatabase.has_npc("bien") and NpcDatabase.has_npc("foto"), NpcDatabase.ids())
 	DirAccess.remove_absolute(ProjectSettings.globalize_path(path))
-	check("recupera los datos reales", NpcDatabase.load_from(NpcDatabase.DATA_PATH) == 5)
+	check("recupera los datos reales", NpcDatabase.load_from(NpcDatabase.DATA_PATH) == 17)
 	print("fallos: ", fails)
 	get_tree().quit(1 if fails > 0 else 0)

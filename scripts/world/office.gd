@@ -12,7 +12,9 @@ func _ready() -> void:
 	_camera.limit_top = used.position.y * tile.y
 	_camera.limit_right = used.end.x * tile.x
 	_camera.limit_bottom = used.end.y * tile.y
-	if WorkdayManager.day == 1 and GameState.reputation == 0:
-		GameState.notice.emit("Ana te busca en la oficina: habla con ella (E) para tu primer ticket.")
+	AudioDirector.play_music()
+	WorkdayManager.start_day()
+	if WorkdayManager.day == 1:
+		GameState.notice.emit("Ana te busca en Helpdesk: habla con ella (E). Un \"!\" marca a quien espera ayuda. Tab abre tu celular.")
 	else:
-		GameState.notice.emit("%s. %s" % [WorkdayManager.label(), WorkdayManager.chapter_brief()])
+		GameState.notice.emit("%s. %s %s" % [WorkdayManager.label(), WorkdayManager.chapter_brief(), WorkdayManager.morning_note])

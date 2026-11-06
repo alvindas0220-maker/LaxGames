@@ -46,7 +46,9 @@ func actor(name: String) -> Node2D:
 
 
 func _ready() -> void:
+	CareerProfile.use_blank_profile()
 	WorkdayManager.enabled = false
+	TicketManager.skip_minigame = true
 	EventDirector.enabled = false
 	WorkdayManager.reputation_pace = 1.0
 	await get_tree().process_frame
@@ -56,7 +58,7 @@ func _ready() -> void:
 	player = room.get_node("Entities/Player")
 	await tick(8)
 	check("sin amonestaciones", GameState.warnings == 0, GameState.warning_name())
-	check("puesto inicial", GameState.stage_title() == "Junior de Soporte IT", GameState.stage_title())
+	check("puesto inicial", GameState.stage_title() == "Practicante de Soporte IT", GameState.stage_title())
 
 	# Ticket completo: pedirlo, equivocarse de equipo y resolverlo.
 	await use(actor("Npc_ana"))
@@ -109,6 +111,6 @@ func _ready() -> void:
 	Input.flush_buffered_events()
 	for i in 12:
 		await get_tree().process_frame
-	check("reinicio", GameState.warnings == 0 and GameState.reputation == 0 and not get_tree().paused and TicketManager.active == null, "avisos=%d rep=%d" % [GameState.warnings, GameState.reputation])
+	check("reinicio con liquidacion", GameState.warnings == 0 and GameState.reputation == 5.0 and ToolBelt.coffee == 4 and not get_tree().paused and TicketManager.active == null, "avisos=%d rep=%d" % [GameState.warnings, GameState.reputation])
 	print("fallos: ", fails)
 	get_tree().quit(1 if fails > 0 else 0)

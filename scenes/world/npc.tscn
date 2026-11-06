@@ -19,7 +19,7 @@ texture_filter = 1
 position = Vector2(0, -5)
 texture = ExtResource("3_npcs")
 hframes = 6
-vframes = 16
+vframes = 64
 
 [node name="Body" type="CollisionShape2D" parent="."]
 position = Vector2(0, 4)

@@ -1,0 +1,76 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/repair_bar.gd" id="1_bar"]
+[ext_resource type="FontFile" path="res://assets/fonts/hud_pixel.fnt" id="2_font"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/hud_atlas.png" id="3_atlas"]
+
+[sub_resource type="Theme" id="Theme_bar"]
+default_font = ExtResource("2_font")
+default_font_size = 8
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_panel"]
+content_margin_left = 6.0
+content_margin_top = 5.0
+content_margin_right = 6.0
+content_margin_bottom = 5.0
+texture = ExtResource("3_atlas")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+region_rect = Rect2(0, 10, 9, 9)
+
+[node name="RepairBar" type="CanvasLayer"]
+layer = 5
+script = ExtResource("1_bar")
+
+[node name="Panel" type="PanelContainer" parent="."]
+texture_filter = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -105.0
+offset_top = 14.0
+offset_right = 105.0
+offset_bottom = 88.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_bar")
+theme_override_styles/panel = SubResource("StyleBoxTexture_panel")
+
+[node name="Rows" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="Top" type="HBoxContainer" parent="Panel/Rows"]
+layout_mode = 2
+alignment = 1
+theme_override_constants/separation = 4
+
+[node name="RepairIcon" type="TextureRect" parent="Panel/Rows/Top"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+
+[node name="RepairTitle" type="Label" parent="Panel/Rows/Top"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.97, 0.82, 0.28, 1)
+
+[node name="RepairStep" type="Label" parent="Panel/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.6, 0.85, 1, 1)
+horizontal_alignment = 1
+
+[node name="RepairGauge" type="Control" parent="Panel/Rows"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(190, 20)
+layout_mode = 2
+
+[node name="RepairHint" type="Label" parent="Panel/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_alignment = 1

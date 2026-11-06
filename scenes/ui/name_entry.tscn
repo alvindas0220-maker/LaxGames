@@ -1,0 +1,169 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/name_entry.gd" id="1_entry"]
+[ext_resource type="FontFile" path="res://assets/fonts/hud_pixel.fnt" id="2_font"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/hud_atlas.png" id="3_atlas"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npc/portraits/alex.png" id="4_alex"]
+
+[sub_resource type="Theme" id="Theme_entry"]
+default_font = ExtResource("2_font")
+default_font_size = 8
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_panel"]
+content_margin_left = 8.0
+content_margin_top = 7.0
+content_margin_right = 8.0
+content_margin_bottom = 7.0
+texture = ExtResource("3_atlas")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+region_rect = Rect2(0, 10, 9, 9)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_input"]
+content_margin_left = 4.0
+content_margin_top = 3.0
+content_margin_right = 4.0
+content_margin_bottom = 3.0
+bg_color = Color(0.1, 0.08, 0.13, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.97, 0.82, 0.28, 1)
+
+[node name="NameEntry" type="Control"]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_entry")
+script = ExtResource("1_entry")
+
+[node name="Back" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.09, 0.12, 0.19, 1)
+
+[node name="Panel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -125.0
+offset_top = -52.0
+offset_right = 125.0
+offset_bottom = 52.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_panel")
+
+[node name="Rows" type="VBoxContainer" parent="Panel"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="Title" type="Label" parent="Panel/Rows"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.97, 0.82, 0.28, 1)
+text = "LAXCORP - ALTA DE EMPLEADO"
+horizontal_alignment = 1
+
+[node name="Row" type="HBoxContainer" parent="Panel/Rows"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Photo" type="TextureRect" parent="Panel/Rows/Row"]
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+texture = ExtResource("4_alex")
+stretch_mode = 3
+
+[node name="Fields" type="VBoxContainer" parent="Panel/Rows/Row"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 3
+
+[node name="Prompt" type="Label" parent="Panel/Rows/Row/Fields"]
+layout_mode = 2
+text = "Escribe tu nombre:"
+
+[node name="NameInput" type="LineEdit" parent="Panel/Rows/Row/Fields"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_input")
+theme_override_styles/focus = SubResource("StyleBoxFlat_input")
+placeholder_text = "Alex"
+caret_blink = true
+
+[node name="PerksLabel" type="Label" parent="Panel/Rows"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.88, 0.5, 1)
+autowrap_mode = 2
+
+[node name="Hint" type="Label" parent="Panel/Rows"]
+layout_mode = 2
+text = "Pulsa Enter para firmar el contrato"
+horizontal_alignment = 1
+
+[node name="Setup" type="PanelContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -92.0
+offset_right = 150.0
+offset_bottom = 92.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_panel")
+
+[node name="Rows" type="VBoxContainer" parent="Setup"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="Title" type="Label" parent="Setup/Rows"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.97, 0.82, 0.28, 1)
+text = "FICHA DEL PERSONAJE"
+horizontal_alignment = 1
+
+[node name="Row" type="HBoxContainer" parent="Setup/Rows"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SetupPhoto" type="TextureRect" parent="Setup/Rows/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+size_flags_vertical = 0
+stretch_mode = 3
+
+[node name="SetupList" type="Label" parent="Setup/Rows/Row"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+
+[node name="SetupDetail" type="Label" parent="Setup/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.88, 0.5, 1)
+
+[node name="Hint" type="Label" parent="Setup/Rows"]
+layout_mode = 2
+text = "Flechas: moverse   Enter: elegir"
+horizontal_alignment = 1

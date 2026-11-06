@@ -11,27 +11,29 @@ func _physics_process(_delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("interact") and _target != null:
+	if event.is_action_pressed("interact") and _target != null and not GameState.input_locked:
 		_target.interact()
 		get_viewport().set_input_as_handled()
 
 
-## Aplica el kit al equipo cercano; tiene prioridad el del ticket activo.
-func use_kit() -> void:
+## Aplica la herramienta al equipo cercano; tiene prioridad el del ticket activo.
+## Devuelve false si no hay ninguno al alcance.
+func use_tool() -> bool:
 	var nearest: Terminal
 	var best := INF
 	for area in get_overlapping_areas():
 		if not area is Terminal:
 			continue
-		if TicketManager.active != null and TicketManager.active.target_id == area.target_id:
+		if TicketManager.current_target() == area.target_id:
 			area.repair()
-			return
+			return true
 		var distance := global_position.distance_squared_to(area.global_position)
 		if distance < best:
 			best = distance
 			nearest = area
 	if nearest != null:
 		nearest.repair()
+	return nearest != null
 
 
 func _update_target() -> void:

@@ -3,9 +3,12 @@ extends Control
 ## E, Enter o Espacio completan la línea o avanzan. Escape la salta.
 
 const DATA_PATH := "res://data/intro.json"
+const PLAYER_ID := "alex"
 const NEXT_SCENE := "res://scenes/world/office.tscn"
 const CHARS_PER_SECOND := 34.0
 const BLIP_EVERY := 3
+## Ignora la tecla con la que se llegó a esta pantalla.
+const INPUT_GUARD_MS := 300
 const SOUNDS := {
 	"keyboard": preload("res://assets/audio/keyboard.wav"),
 	"phone": preload("res://assets/audio/phone.wav"),
@@ -18,6 +21,7 @@ var _index := -1
 var _shown := 0.0
 var _last_blip := 0
 var _leaving := false
+var _opened_at := 0
 
 @onready var _label: Label = %StoryLabel
 @onready var _hint: Label = %HintLabel
@@ -27,13 +31,18 @@ var _leaving := false
 @onready var _blackout: ColorRect = $Blackout
 @onready var _sfx: AudioStreamPlayer = $Sfx
 @onready var _blip: AudioStreamPlayer = $Blip
-@onready var _music: AudioStreamPlayer = $Music
 
 
 func _ready() -> void:
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(DATA_PATH))
 	_lines = parsed["lines"] if parsed is Dictionary else []
-	_music.finished.connect(_music.play)
+	AudioDirector.play_music()
+	_opened_at = Time.get_ticks_msec()
+	var hero: TextureRect = $Hero
+	if hero.texture is AtlasTexture:
+		var frame: AtlasTexture = hero.texture.duplicate()
+		frame.atlas = load(CareerProfile.sheet_path())
+		hero.texture = frame
 	_next_line()
 
 
@@ -44,7 +53,7 @@ func _process(delta: float) -> void:
 		# Parpadeo irregular de las luces durante la caída del servidor.
 		_blackout.visible = sin(Time.get_ticks_msec() * 0.031) > 0.82
 	var total := _label.text.length()
-	if _label.visible_characters >= total:
+	if _label.visible_characters < 0 or _label.visible_characters >= total:
 		_hint.visible = true
 		return
 	_shown += delta * CHARS_PER_SECOND
@@ -55,6 +64,8 @@ func _process(delta: float) -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _leaving or Time.get_ticks_msec() - _opened_at < INPUT_GUARD_MS:
+		return
 	if event.is_action_pressed("ui_cancel"):
 		_finish()
 	elif event.is_action_pressed("ui_accept") or event.is_action_pressed("interact"):
@@ -70,7 +81,7 @@ func _next_line() -> void:
 		_finish()
 		return
 	var line: Dictionary = _lines[_index]
-	_label.text = line["text"]
+	_label.text = CareerProfile.format(line["text"])
 	_label.visible_characters = 0
 	_shown = 0.0
 	_last_blip = 0
@@ -92,7 +103,7 @@ func _show_speaker(npc_id: String) -> void:
 	_speaker.visible = has_speaker
 	if has_speaker:
 		_portrait.texture = NpcDatabase.portrait_of(npc_id)
-		_speaker.text = NpcDatabase.get_npc(npc_id).get("name", "")
+		_speaker.text = CareerProfile.player_name if npc_id == PLAYER_ID else NpcDatabase.get_npc(npc_id).get("name", "")
 
 
 func _finish() -> void:

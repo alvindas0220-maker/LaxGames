@@ -42,7 +42,8 @@ func trigger() -> void:
 ## Aplica la opción elegida y devuelve la respuesta del personaje.
 func choose(event: Dictionary, index: int) -> String:
 	var option: Dictionary = event["options"][index]
-	GameState.add_reputation(int(option.get("reputation", 0)))
+	GameState.add_reputation(float(option.get("reputation", 0)) * WorkdayManager.event_pace())
+	GameState.add_stress(float(option.get("stress", 0)))
 	ToolBelt.add_coffee(int(option.get("coffee", 0)))
 	var warnings := int(option.get("warnings", 0))
 	if warnings > 0:

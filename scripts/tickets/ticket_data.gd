@@ -13,8 +13,14 @@ var done_text := ""
 var reputation := 10
 ## Segundos para resolverlo antes de la penalización de su rol.
 var time_limit := 60
-## Golpes de kit necesarios para repararlo.
+## Aciertos del minijuego necesarios en cada paso.
 var repairs := 1
+## Avería técnica en data/faults.json.
+var fault := ""
+## Herramienta obligatoria: "kit", "usb" o "tester".
+var tool := "kit"
+## Pasos posteriores, cada uno con "target", "fault" y "tool".
+var chain: Array = []
 ## Primera jornada en la que puede aparecer.
 var min_day := 1
 
@@ -30,5 +36,8 @@ static func from_dict(data: Dictionary) -> TicketData:
 	ticket.reputation = int(data["reputation"])
 	ticket.time_limit = int(data["time_limit"])
 	ticket.repairs = int(data["repairs"])
+	ticket.fault = data.get("fault", "")
+	ticket.tool = data.get("tool", "kit")
+	ticket.chain = data.get("chain", [])
 	ticket.min_day = int(data["min_day"])
 	return ticket

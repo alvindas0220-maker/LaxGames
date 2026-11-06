@@ -13,7 +13,7 @@ func speak(npc_id: String, text := "") -> void:
 		_greeted[npc_id] = true
 		var intro: String = NpcDatabase.get_npc(npc_id).get("dialogue", "")
 		line = "%s %s" % [intro, text] if not text.is_empty() else intro
-	line_shown.emit(npc_id, line)
+	line_shown.emit(npc_id, CareerProfile.format(line))
 
 
 func reset() -> void:

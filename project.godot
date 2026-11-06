@@ -11,19 +11,24 @@ config_version=5
 [application]
 
 config/name="LaxGames"
-run/main_scene="res://scenes/ui/intro_cutscene.tscn"
+run/main_scene="res://scenes/ui/name_entry.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
+CareerProfile="*res://scripts/autoload/career_profile.gd"
+Upgrades="*res://scripts/autoload/upgrades.gd"
 GameState="*res://scripts/autoload/game_state.gd"
 TicketManager="*res://scripts/autoload/ticket_manager.gd"
+TicketQueue="*res://scripts/autoload/ticket_queue.gd"
 ToolBelt="*res://scripts/autoload/tool_belt.gd"
 NpcDatabase="*res://scripts/autoload/npc_database.gd"
 DialogueManager="*res://scripts/autoload/dialogue_manager.gd"
 WorkdayManager="*res://scripts/autoload/workday_manager.gd"
 EventDirector="*res://scripts/autoload/event_director.gd"
+DayStats="*res://scripts/autoload/day_stats.gd"
+AudioDirector="*res://scripts/autoload/audio_director.gd"
 
 [display]
 

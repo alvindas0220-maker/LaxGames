@@ -1,0 +1,101 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/phone.gd" id="1_phone"]
+[ext_resource type="FontFile" path="res://assets/fonts/hud_pixel.fnt" id="2_font"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/phone_frame.png" id="3_frame"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/hud_atlas.png" id="4_atlas"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/stress_fill.png" id="5_stress"]
+
+[sub_resource type="Theme" id="Theme_phone"]
+default_font = ExtResource("2_font")
+default_font_size = 8
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_under"]
+atlas = ExtResource("4_atlas")
+region = Rect2(0, 22, 40, 5)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fill"]
+atlas = ExtResource("4_atlas")
+region = Rect2(0, 28, 38, 3)
+
+[node name="Phone" type="CanvasLayer"]
+process_mode = 3
+layer = 12
+script = ExtResource("1_phone")
+
+[node name="Body" type="Control" parent="."]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -168.0
+offset_top = 6.0
+offset_right = -4.0
+offset_bottom = 210.0
+grow_horizontal = 0
+theme = SubResource("Theme_phone")
+
+[node name="Frame" type="TextureRect" parent="Body"]
+layout_mode = 0
+offset_right = 164.0
+offset_bottom = 204.0
+texture = ExtResource("3_frame")
+
+[node name="Screen" type="VBoxContainer" parent="Body"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 14.0
+offset_right = 156.0
+offset_bottom = 188.0
+theme_override_constants/separation = 2
+
+[node name="TabsLabel" type="Label" parent="Body/Screen"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.97, 0.82, 0.28, 1)
+
+[node name="PhoneHeader" type="HBoxContainer" parent="Body/Screen"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="PhonePortrait" type="TextureRect" parent="Body/Screen/PhoneHeader"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 40)
+layout_mode = 2
+stretch_mode = 3
+
+[node name="IdentityLabel" type="Label" parent="Body/Screen/PhoneHeader"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(104, 0)
+layout_mode = 2
+size_flags_vertical = 4
+autowrap_mode = 2
+
+[node name="PhoneGauges" type="HBoxContainer" parent="Body/Screen"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="PhoneReputation" type="TextureProgressBar" parent="Body/Screen/PhoneGauges"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 5)
+layout_mode = 2
+texture_under = SubResource("AtlasTexture_under")
+texture_progress = SubResource("AtlasTexture_fill")
+texture_progress_offset = Vector2(1, 1)
+
+[node name="PhoneStress" type="TextureProgressBar" parent="Body/Screen/PhoneGauges"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(40, 5)
+layout_mode = 2
+texture_under = SubResource("AtlasTexture_under")
+texture_progress = ExtResource("5_stress")
+texture_progress_offset = Vector2(1, 1)
+
+[node name="ScreenText" type="Label" parent="Body/Screen"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(148, 0)
+layout_mode = 2
+autowrap_mode = 2

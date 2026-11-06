@@ -1,5 +1,5 @@
 {
-	"chance": 0.6,
+	"chance": 0.3,
 	"min_delay": 4.0,
 	"max_delay": 10.0,
 	"events": [
@@ -66,6 +66,12 @@
 				{"label": "Proponer un taller de seguridad", "reputation": 3, "reply": "Excelente iniciativa."},
 				{"label": "Culpar a Bruno", "reputation": -2, "reply": "Eso no ayuda al equipo."}
 			]
-		}
+		},
+		{"id": "guardia", "type": "reunion", "speaker": "ivan", "text": "Necesito a alguien de guardia este fin de semana.", "options": [{"label": "Aceptar la guardia", "reputation": 3, "stress": 12, "reply": "Te debo una. Bueno, dos."}, {"label": "Negarte con educación", "reputation": -1, "stress": -8, "reply": "Se lo pediré a otro."}]},
+		{"id": "viernes", "type": "chisme", "speaker": "lucia", "text": "Tomás quiere desplegar a las cinco de la tarde. ¿Lo paras?", "options": [{"label": "Pararlo", "reputation": 2, "stress": 4, "reply": "Gracias. Le he quitado el teclado."}, {"label": "No es asunto tuyo", "stress": -4, "reply": "Luego no vengas a llorar."}]},
+		{"id": "mentor", "type": "reunion", "speaker": "sofia", "text": "Quiero que formes a los nuevos de Helpdesk.", "options": [{"label": "Dar la formación", "reputation": 3, "stress": 8, "reply": "Eso es liderazgo."}, {"label": "Pedir más tiempo", "reputation": -1, "coffee": 1, "reply": "Bien. Café y a trabajar."}]},
+		{"id": "sobrecarga", "type": "chisme", "speaker": "diego", "text": "Me voy a comer. ¿Me cubres el teléfono diez minutos?", "options": [{"label": "Cubrirle", "reputation": 2, "stress": 10, "reply": "Eres lo mejor de este edificio."}, {"label": "Decirle que no", "reputation": -1, "reply": "Ya comeré mañana."}]},
+		{"id": "descanso", "type": "chisme", "speaker": "ana", "text": "Sal cinco minutos a tomar el aire, tienes mala cara.", "options": [{"label": "Tomarte un respiro", "stress": -20, "reply": "Eso es. Vuelve con otra cara."}, {"label": "Seguir trabajando", "reputation": 1, "stress": 5, "reply": "Como quieras."}]},
+		{"id": "ascenso_rrhh", "type": "reunion", "speaker": "rrhh", "text": "Revisamos tu evaluación. ¿Algo que añadir?", "options": [{"label": "Presentar tus logros", "reputation": 2, "reply": "Queda anotado en tu expediente."}, {"label": "Pedir un aumento", "reputation": -1, "stress": -5, "reply": "Valiente. Lo estudiaremos en 2030."}]}
 	]
 }

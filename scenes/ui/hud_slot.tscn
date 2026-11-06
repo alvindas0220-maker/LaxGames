@@ -41,7 +41,7 @@ normal_style = SubResource("StyleBoxTexture_normal")
 selected_style = SubResource("StyleBoxTexture_selected")
 
 [node name="Icon" type="TextureRect" parent="."]
-custom_minimum_size = Vector2(12, 12)
+custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 mouse_filter = 2
 stretch_mode = 3
@@ -51,10 +51,8 @@ layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
 theme_override_colors/font_color = Color(0.75, 0.8, 0.85, 1)
-theme_override_styles/normal = SubResource("StyleBoxFlat_label")
 
 [node name="CountLabel" type="Label" parent="."]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
-theme_override_styles/normal = SubResource("StyleBoxFlat_label")

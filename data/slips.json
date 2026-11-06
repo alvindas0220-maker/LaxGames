@@ -1,0 +1,8 @@
+{
+	"slips": [
+		{"target": "clara", "line": "Le gritas a Clara Méndez que su reunión urgente podía haber sido un correo, y que ella también."},
+		{"target": "sofia", "line": "Delante de todo IT, le dices a Sofía Reyes que dirige el departamento como una impresora atascada."},
+		{"target": "hugo", "line": "Llamas incompetente al gerente Hugo Salas en plena junta, con el micrófono abierto."},
+		{"target": "ines", "line": "Le dices a Inés Duarte, la clienta más importante de LaxCorp, que su contrato no vale ni el tóner."}
+	]
+}

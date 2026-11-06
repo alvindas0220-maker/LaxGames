@@ -4,6 +4,9 @@ extends CharacterBody2D
 ## Sus datos salen de data/npcs.json según npc_id.
 
 const SPEED := 28.0
+const PATROL_SPEED := 40.0
+## Distancia a la que un punto de ruta se da por alcanzado.
+const ROUTE_REACH := 3.0
 const WANDER_RADIUS := 36.0
 const NEAR_PLAYER := 30.0
 const STEP_TIME := 0.16
@@ -12,8 +15,16 @@ const COLS := 6
 const FRAMES_PER_LOOK := 24
 const WALK_COLS := [2, 3, 4, 5]
 const DIRECTIONS := [Vector2.DOWN, Vector2.RIGHT, Vector2.UP, Vector2.LEFT]
+## Aviso "!" sobre la cabeza de quien tiene un ticket en cola.
+const MARK_TOP := -27.0
+const MARK_INK := Color8(26, 20, 32)
+const MARK_CALM := Color8(248, 216, 120)
+const MARK_URGENT := Color8(232, 72, 60)
+const URGENT_FROM := 0.66
 
 @export var npc_id := ""
+## Puntos que recorre en bucle; vacío si solo pasea junto a su puesto.
+@export var route := PackedVector2Array()
 
 var _home := Vector2.ZERO
 var _look := 0
@@ -21,6 +32,8 @@ var _row := 0
 var _direction := Vector2.ZERO
 var _timer := 0.0
 var _anim := 0.0
+var _waypoint := 0
+var _still := false
 
 @onready var _sprite: Sprite2D = $Sprite2D
 
@@ -28,13 +41,36 @@ var _anim := 0.0
 func _ready() -> void:
 	_home = position
 	_look = int(NpcDatabase.get_npc(npc_id).get("sprite_frame", 0))
+	_still = bool(NpcDatabase.get_npc(npc_id).get("still", false))
 	_timer = randf_range(0.5, 3.0)
 	$Reach.interacted.connect(interact)
+	add_to_group("npcs")
+	TicketQueue.changed.connect(queue_redraw)
 	_show_frame(0)
+
+
+func _process(_delta: float) -> void:
+	if TicketQueue.pending.has(npc_id):
+		queue_redraw()
+
+
+func _draw() -> void:
+	if not TicketQueue.pending.has(npc_id):
+		return
+	var color := MARK_URGENT if TicketQueue.urgency(npc_id) > URGENT_FROM else MARK_CALM
+	var top := MARK_TOP - (Time.get_ticks_msec() / 250 % 2)
+	draw_rect(Rect2(-2, top, 4, 10), MARK_INK)
+	draw_rect(Rect2(-1, top + 1, 2, 5), color)
+	draw_rect(Rect2(-1, top + 7, 2, 2), color)
 
 
 func _physics_process(delta: float) -> void:
 	_timer -= delta
+	if _still:
+		return
+	if not route.is_empty():
+		_patrol(delta)
+		return
 	if _direction == Vector2.ZERO:
 		if _timer <= 0.0:
 			_start_walking()
@@ -50,20 +86,36 @@ func _physics_process(delta: float) -> void:
 func interact() -> void:
 	_rest(LISTEN_TIME)
 	_face_player()
-	var npc := NpcDatabase.get_npc(npc_id)
-	if npc.get("service", "") == "rrhh":
-		DialogueManager.speak(npc_id, "Tu expediente: %s. Puesto: %s." % [GameState.warning_name(), GameState.stage_title()])
+	if NpcServices.handle(npc_id, NpcDatabase.get_npc(npc_id).get("service", "")):
 		return
 	var active := TicketManager.active
 	if active != null:
 		DialogueManager.speak(npc_id, "Sigo esperando: %s." % active.title if active.requester_id == npc_id else "Primero termina tu ticket actual.")
 		return
-	var ticket := TicketManager.next_for(npc_id)
+	var ticket := TicketQueue.take(npc_id) if WorkdayManager.running else TicketManager.next_for(npc_id)
 	if ticket == null:
 		DialogueManager.speak(npc_id)
 		return
 	TicketManager.accept(ticket)
 	DialogueManager.speak(npc_id, ticket.request)
+
+
+## Camina hacia el siguiente punto, primero por el eje más largo para no cortar esquinas.
+func _patrol(delta: float) -> void:
+	if _timer > 0.0:
+		return
+	var away := route[_waypoint] - position
+	if away.length() <= ROUTE_REACH:
+		_waypoint = (_waypoint + 1) % route.size()
+		_rest(randf_range(0.5, 2.5))
+		return
+	var axis := Vector2(away.x, 0.0) if absf(away.x) > ROUTE_REACH else Vector2(0.0, away.y)
+	_direction = axis.normalized()
+	_row = _row_for(axis)
+	velocity = _direction * PATROL_SPEED
+	move_and_slide()
+	_anim += delta
+	_show_frame(WALK_COLS[int(_anim / STEP_TIME) % WALK_COLS.size()])
 
 
 func _start_walking() -> void:

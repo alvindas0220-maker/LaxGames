@@ -1,0 +1,15 @@
+{
+	"max_per_night": 2,
+	"offers": 3,
+	"miss_penalty": 0.15,
+	"gigs": [
+		{"id": "vecino_laptop", "client": "Tu vecino", "name": "Laptop con la bisagra rota", "tool": "kit", "rounds": 2, "pay": 90, "stress": 6},
+		{"id": "abuela_virus", "client": "La señora del tercero", "name": "PC lleno de barras de búsqueda", "tool": "usb", "rounds": 2, "pay": 80, "stress": 5},
+		{"id": "tienda_red", "client": "La tienda de la esquina", "name": "Terminal de cobro sin red", "tool": "tester", "rounds": 2, "pay": 110, "stress": 7},
+		{"id": "cafe_wifi", "client": "La cafetería del barrio", "name": "Router que se reinicia solo", "tool": "tester", "rounds": 3, "pay": 150, "stress": 9},
+		{"id": "estudio_fotos", "client": "Un estudio de fotos", "name": "Disco dañado con una boda dentro", "tool": "usb", "rounds": 3, "pay": 180, "stress": 11},
+		{"id": "consola_primo", "client": "Tu primo", "name": "Consola que se sobrecalienta", "tool": "kit", "rounds": 3, "pay": 130, "stress": 8},
+		{"id": "taller_pc", "client": "Un taller mecánico", "name": "Equipo con la fuente quemada", "tool": "kit", "rounds": 2, "pay": 100, "stress": 6},
+		{"id": "dentista", "client": "Un consultorio dental", "name": "Base de datos de pacientes dañada", "tool": "usb", "rounds": 4, "pay": 240, "stress": 14}
+	]
+}

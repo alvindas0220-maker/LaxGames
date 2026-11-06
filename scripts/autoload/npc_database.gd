@@ -3,6 +3,7 @@ extends Node
 
 const DATA_PATH := "res://data/npcs.json"
 const ROLES_PATH := "res://data/roles.json"
+const PLAYER_ID := "alex"
 const GENERIC_PORTRAIT := "res://assets/sprites/npc/portraits/generic.png"
 const REQUIRED_FIELDS := ["id", "name", "department", "role", "sprite_frame", "dialogue"]
 
@@ -54,6 +55,8 @@ func rules_of(npc_id: String) -> Dictionary:
 
 ## Retrato del NPC, o el genérico si no tiene uno válido.
 func portrait_of(npc_id: String) -> Texture2D:
+	if npc_id == PLAYER_ID:
+		return load(CareerProfile.portrait_path()) as Texture2D
 	var path: String = get_npc(npc_id).get("portrait", "")
 	return load(path if ResourceLoader.exists(path) else GENERIC_PORTRAIT) as Texture2D
 

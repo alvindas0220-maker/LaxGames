@@ -7,11 +7,10 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/ui/hud_atlas.png" id="5_atlas"]
 [ext_resource type="AudioStream" path="res://assets/audio/office_ambience.wav" id="6_ambience"]
 [ext_resource type="AudioStream" path="res://assets/audio/blip.wav" id="7_blip"]
-[ext_resource type="AudioStream" path="res://assets/audio/office_theme.wav" id="8_theme"]
 
 [sub_resource type="Theme" id="Theme_intro"]
 default_font = ExtResource("2_font")
-default_font_size = 6
+default_font_size = 8
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hero"]
 atlas = ExtResource("3_hero")
@@ -130,7 +129,7 @@ theme_override_constants/separation = 6
 
 [node name="SpeakerPortrait" type="TextureRect" parent="TextBox/Row"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(32, 32)
+custom_minimum_size = Vector2(40, 40)
 layout_mode = 2
 size_flags_vertical = 0
 stretch_mode = 3
@@ -161,11 +160,6 @@ horizontal_alignment = 2
 [node name="Ambience" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("6_ambience")
 volume_db = -14.0
-autoplay = true
-
-[node name="Music" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("8_theme")
-volume_db = -10.0
 autoplay = true
 
 [node name="Sfx" type="AudioStreamPlayer" parent="."]

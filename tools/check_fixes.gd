@@ -36,7 +36,9 @@ func wait_real(seconds: float) -> void:
 
 
 func _ready() -> void:
+	CareerProfile.use_blank_profile()
 	WorkdayManager.enabled = false
+	TicketManager.skip_minigame = true
 	EventDirector.enabled = false
 	await get_tree().process_frame
 	room = (load("res://scenes/world/office.tscn") as PackedScene).instantiate()
