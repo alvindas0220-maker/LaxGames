@@ -47,7 +47,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if active == null:
+	if active == null or WorkdayManager.in_lunch():
 		return
 	time_left -= delta
 	if time_left <= 0.0:
@@ -110,7 +110,7 @@ func try_repair(target_id: String, tool_id: String) -> bool:
 	if active == null or current_target() != target_id:
 		return false
 	if tool_id != current_tool():
-		GameState.add_stress(WRONG_TOOL_STRESS)
+		GameState.add_stress(WRONG_TOOL_STRESS * DayEvents.mod("tool_error", 1.0))
 		tool_error.emit()
 		GameState.notice.emit("Herramienta equivocada para %s: usa %s." % [current_fault().get("name", "esta avería"), ToolBelt.tool_label(current_tool())])
 		return true
@@ -153,10 +153,12 @@ func resolve(target_id: String) -> bool:
 		return false
 	var ticket := active
 	last_solve_seconds = _limit - time_left
-	var reward: float = ticket.reputation * float(_rules(ticket)["reputation_scale"]) * WorkdayManager.reputation_pace
+	var reward: float = ticket.reputation * float(_rules(ticket)["reputation_scale"]) * WorkdayManager.reputation_pace * Factions.reward_scale(ticket.requester_id) * DayEvents.mod("reward", 1.0)
 	_close(ticket)
 	GameState.notice.emit("%s (+%.1f%%)" % [ticket.done_text, reward])
 	GameState.add_reputation(reward)
+	Friends.change(ticket.requester_id, Friends.TICKET_POINTS)
+	StoryDirector.discover(ticket.clue)
 	ticket_solved.emit()
 	return true
 

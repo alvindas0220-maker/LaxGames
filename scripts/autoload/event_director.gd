@@ -33,7 +33,8 @@ func _process(delta: float) -> void:
 
 
 func trigger() -> void:
-	var events: Array = _config["events"].filter(func(e: Dictionary) -> bool: return e["id"] != _last_id)
+	var events: Array = _config["events"].filter(func(e: Dictionary) -> bool:
+		return e["id"] != _last_id and StoryDirector.is_available(e.get("requires", {})))
 	var event: Dictionary = events[rng.randi_range(0, events.size() - 1)]
 	_last_id = event["id"]
 	event_started.emit(event)
@@ -45,6 +46,10 @@ func choose(event: Dictionary, index: int) -> String:
 	GameState.add_reputation(float(option.get("reputation", 0)) * WorkdayManager.event_pace())
 	GameState.add_stress(float(option.get("stress", 0)))
 	ToolBelt.add_coffee(int(option.get("coffee", 0)))
+	StoryDirector.apply_option(option)
+	if option.has("friend"):
+		Friends.change(option.get("friend_id", event["speaker"]), int(option["friend"]))
+		Friends.mark_social()
 	var warnings := int(option.get("warnings", 0))
 	if warnings > 0:
 		GameState.add_warning(option["label"], warnings)

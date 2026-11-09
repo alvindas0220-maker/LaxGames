@@ -7,6 +7,8 @@ extends Interactable
 @export var clock_cost := 12.0
 @export var cooldown := 45.0
 @export var rest_text := "Respiras hondo."
+## Lugar para las charlas de pausa: "descanso" para los sofás.
+@export var talk_place := ""
 
 var _ready_at := 0
 
@@ -20,4 +22,9 @@ func interact() -> void:
 	GameState.add_stress(-relief)
 	if WorkdayManager.running:
 		WorkdayManager.clock += clock_cost
-	GameState.notice.emit("%s Estrés al %d%%." % [rest_text, GameState.stress])
+	var talk := StoryDirector.break_talk(talk_place) if WorkdayManager.in_lunch() and not talk_place.is_empty() else {}
+	if talk.is_empty():
+		GameState.notice.emit("%s Estrés al %d%%." % [rest_text, GameState.stress])
+	else:
+		Friends.mark_social()
+		EventDirector.event_started.emit(talk)

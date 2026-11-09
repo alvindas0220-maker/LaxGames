@@ -24,6 +24,12 @@ const TARGET_PLACES := {
 	"build_server": "Desarrollo, al fondo",
 	"pc_jefatura": "la oficina de Jefatura de IT",
 	"pc_gerencia": "Gerencia, en el ala sur",
+	"rack_raid": "el rack RAID, en Infraestructura",
+	"biometrico": "el lector de asistencia, en el pasillo norte",
+	"laptop_ejecutiva": "el portátil ejecutivo, en Gerencia",
+	"hvac": "la climatización, en Infraestructura",
+	"camara": "la cámara del pasillo sur",
+	"estacion_trabajo": "la estación de trabajo de Desarrollo",
 }
 
 var selected := Tool.KIT

@@ -19,7 +19,7 @@ prompt = "Revisar equipo"
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
 texture = ExtResource("2_props")
-hframes = 6
+hframes = 12
 
 [node name="Reach" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_reach")

@@ -7,7 +7,7 @@ const FAULT_LIGHT := Color8(255, 72, 60)
 
 @export var target_id := ""
 ## Fotograma de office_props.png.
-@export_range(0, 5) var look := 0
+@export_range(0, 11) var look := 0
 
 @onready var _sprite: Sprite2D = $Sprite2D
 

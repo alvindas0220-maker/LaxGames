@@ -238,6 +238,18 @@ func _make_action(kind: String) -> RepairAction:
 			return WiresAction.new()
 		"ports":
 			return PortsAction.new()
+		"raid":
+			return RaidAction.new()
+		"fingerprint":
+			return FingerprintAction.new()
+		"cipher":
+			return CipherAction.new()
+		"thermostat":
+			return ThermostatAction.new()
+		"camera":
+			return CameraAction.new()
+		"beep":
+			return BeepAction.new()
 	return null
 
 

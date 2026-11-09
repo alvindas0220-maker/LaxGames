@@ -1,0 +1,71 @@
+{
+	"acts": [
+		{
+			"act": 1, "title": "El presupuesto fantasma", "cap": 99.9, "ready": 75, "needed": 5,
+			"goal": "Alguien cobra servicios de IT que nunca existieron. Reúne pruebas.",
+			"clues": ["factura_nexo", "pagos_ana", "licencias_ivan", "cunado_bruno", "archivo_rrhh", "log_camara", "duda_sofia"],
+			"decision": "decision_acto1"
+		},
+		{
+			"act": 2, "title": "Las manos de Gerencia", "cap": 109.9, "ready": 100, "needed": 4,
+			"goal": "El dinero lleva a Gerencia, y alguien borra el rastro de los servidores.",
+			"clues": ["raid_borrado", "script_lucia", "ruido_tomas", "laptop_hugo", "agenda_nadia"],
+			"decision": "decision_acto2"
+		},
+		{
+			"act": 3, "title": "La fuga", "cap": 199.9, "ready": 160, "needed": 4,
+			"goal": "Los datos de clientes salen de LaxCorp. Descubre adónde van.",
+			"clues": ["disco_ducto", "huella_fantasma", "oferta_ines", "guardia_ramon", "cafe_carla"],
+			"decision": "decision_acto3"
+		}
+	],
+	"clues": {
+		"factura_nexo": {"title": "Factura de Nexo Consultores", "text": "Mantenimiento de IT por 40 000: ese trabajo nunca se hizo."},
+		"pagos_ana": {"title": "Pagos duplicados", "text": "Ana vio cada factura de Nexo pagada dos veces."},
+		"licencias_ivan": {"title": "Licencias inexistentes", "text": "Iván nunca recibió las licencias que Compras pagó."},
+		"cunado_bruno": {"title": "El cuñado de Nexo", "text": "El vendedor de Nexo es cuñado de alguien de Gerencia."},
+		"archivo_rrhh": {"title": "Expediente traspapelado", "text": "Un archivador de RR. HH. guarda un aviso de auditoría que nadie atendió."},
+		"log_camara": {"title": "Registro de la cámara", "text": "Alguien de Gerencia entró a servidores a las 3 de la mañana."},
+		"duda_sofia": {"title": "La duda de Sofía", "text": "Sofía sospecha que le recortan el presupuesto para tapar un agujero."},
+		"raid_borrado": {"title": "Borrado en el RAID", "text": "El fallo del RAID ocultaba carpetas de contabilidad borradas a mano."},
+		"script_lucia": {"title": "Un script extraño", "text": "Lucía halló en el repositorio un script que copia datos cada noche."},
+		"ruido_tomas": {"title": "El commit anónimo", "text": "Tomás vio que ese script se subió con la cuenta de Gerencia."},
+		"laptop_hugo": {"title": "El portátil de Hugo", "text": "Tras la contraseña, una carpeta llamada Nexo con contratos firmados."},
+		"agenda_nadia": {"title": "La agenda de la Estación", "text": "Nadia anota visitas nocturnas que nadie autorizó."},
+		"disco_ducto": {"title": "Disco en el ducto", "text": "Dentro de la climatización había un disco con datos de clientes."},
+		"huella_fantasma": {"title": "Huella fantasma", "text": "El lector registra entradas de un empleado despedido hace un año."},
+		"oferta_ines": {"title": "La oferta de Inés", "text": "Inés sabe más de lo que dice: su empresa compra esos datos."},
+		"guardia_ramon": {"title": "La ronda de Ramón", "text": "A Ramón le ordenaron no vigilar el pasillo sur de noche."},
+		"cafe_carla": {"title": "Conversaciones de cafetería", "text": "Carla oyó a Hugo y a Inés cerrar un precio."}
+	},
+	"decisions": {
+		"decision_acto1": {
+			"id": "decision_acto1", "type": "historia", "speaker": "sofia",
+			"text": "Dices tener pruebas del desfalco, {player}. ¿Qué piensas hacer con ellas?",
+			"options": [
+				{"label": "Entregárselas a Sofía", "flag": "confia_sofia", "advance": true, "factions": {"direccion": 10, "tecnicos": 5}, "reply": "Valiente. Desde hoy diriges IT conmigo."},
+				{"label": "Enviarlas anónimas a la junta", "flag": "anonimo", "advance": true, "factions": {"direccion": -10, "administracion": 8}, "reply": "Alguien ha filtrado algo. Ten cuidado, {player}."}
+			]
+		},
+		"decision_acto2": {
+			"id": "decision_acto2", "type": "historia", "speaker": "hugo",
+			"text": "Sé lo que has encontrado. Puedo ofrecerte mucho si esto queda entre nosotros.",
+			"options": [
+				{"label": "Denunciarlo ante el consejo", "flag": "ruta_honesta", "advance": true, "factions": {"direccion": -20, "tecnicos": 15, "administracion": 10}, "reply": "Te vas a arrepentir, {player}."},
+				{"label": "Aceptar el trato", "flag": "ruta_trato", "advance": true, "money": 600, "factions": {"direccion": 15, "tecnicos": -15}, "reply": "Sabía que lo entenderías."}
+			]
+		},
+		"decision_acto3": {
+			"id": "decision_acto3", "type": "historia", "speaker": "ines",
+			"text": "Tu investigación vale una fortuna. Trabaja para mí, o sigue tu propio camino.",
+			"options": [
+				{"label": "Destapar la fuga y fundar tu empresa", "flag": "final_propio", "advance": true, "ending": "propio", "factions": {"tecnicos": 15, "desarrollo": 15}, "reply": "Entonces nos veremos como rivales."},
+				{"label": "Vender lo que sabes y fundar tu empresa", "flag": "final_oscuro", "advance": true, "ending": "oscuro", "money": 1500, "factions": {"tecnicos": -20, "desarrollo": -20}, "reply": "{bienvenido} al lado rentable."}
+			]
+		}
+	},
+	"endings": {
+		"propio": "Destapaste la red de Nexo y levantaste tu empresa con el equipo que te respetó.",
+		"oscuro": "Tu empresa nace rica y sola. En LaxCorp nadie pronuncia ya tu nombre."
+	}
+}

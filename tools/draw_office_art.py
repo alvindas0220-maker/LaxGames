@@ -4,7 +4,7 @@ Uso: python tools/draw_office_art.py
 
 Salidas:
   assets/sprites/world/office_tiles.png  48 tiles de 16x16 en 3 filas
-  assets/sprites/world/office_props.png  6 equipos de 16x16 en fila
+  assets/sprites/world/office_props.png  12 equipos de 16x16 en fila
   assets/sprites/npc/npcs.png            16 NPC de 32x32: 6 columnas y 4 filas cada uno
   assets/sprites/ui/warning_icons.png    2 iconos de 8x8 en fila
   assets/sprites/ui/tool_icons.png       4 iconos de 12x12 en fila
@@ -424,7 +424,7 @@ def office_tiles():
 
 
 def office_props():
-    props = canvas(16 * 6, 16)
+    props = canvas(16 * 12, 16)
     # 0 PC
     rect(props, 2, 3, 12, 9, INK)
     rect(props, 3, 4, 10, 7, rgb("6ec8f0"))
@@ -468,7 +468,52 @@ def office_props():
     rect(props, 85, 10, 6, 1, rgb("4c5462"))
     props[12][86] = rgb("e8483c")
     props[12][88] = rgb("e8b048")
-    for index in range(6):
+    # 6 rack RAID con bahías de disco
+    rect(props, 97, 0, 14, 15, INK)
+    rect(props, 98, 1, 12, 13, rgb("2c3038"))
+    for y in (2, 5, 8, 11):
+        for x in (99, 104):
+            rect(props, x, y, 4, 2, rgb("566274"))
+        props[y][102] = rgb("50e080")
+    props[5][107] = rgb("e8b048")
+    # 7 lector biométrico en pedestal
+    rect(props, 116, 1, 8, 9, INK)
+    rect(props, 117, 2, 6, 7, rgb("3c4656"))
+    rect(props, 118, 3, 4, 2, rgb("6ec8f0"))
+    rect(props, 118, 6, 4, 2, rgb("c8d4e0"))
+    props[6][119] = rgb("566274")
+    rect(props, 119, 10, 2, 4, INK)
+    rect(props, 116, 14, 8, 1, INK)
+    # 8 portátil ejecutivo
+    rect(props, 131, 3, 10, 7, INK)
+    rect(props, 132, 4, 8, 5, rgb("183c5c"))
+    rect(props, 133, 5, 3, 1, rgb("e8b048"))
+    rect(props, 130, 10, 12, 3, INK)
+    rect(props, 131, 11, 10, 1, rgb("a8a8b4"))
+    # 9 climatización
+    rect(props, 145, 2, 14, 12, INK)
+    rect(props, 146, 3, 12, 10, rgb("c8ccd4"))
+    for y in (5, 7, 9):
+        rect(props, 147, y, 10, 1, rgb("8c94a0"))
+    rect(props, 148, 11, 3, 1, rgb("50e080"))
+    rect(props, 154, 11, 2, 1, rgb("e8483c"))
+    # 10 cámara de seguridad en poste
+    rect(props, 163, 3, 10, 6, INK)
+    rect(props, 164, 4, 8, 4, rgb("d8d8e0"))
+    rect(props, 170, 5, 2, 2, rgb("183c5c"))
+    props[4][165] = rgb("e8483c")
+    rect(props, 167, 9, 2, 5, INK)
+    rect(props, 164, 14, 8, 1, INK)
+    # 11 estación de trabajo: torre grande y monitor ancho
+    rect(props, 177, 3, 8, 8, INK)
+    rect(props, 178, 4, 6, 6, rgb("6ec8f0"))
+    rect(props, 179, 5, 3, 1, rgb("f4f4f8"))
+    rect(props, 180, 11, 2, 2, INK)
+    rect(props, 186, 2, 6, 13, INK)
+    rect(props, 187, 3, 4, 11, rgb("3c4656"))
+    props[4][188] = rgb("50e080")
+    rect(props, 188, 7, 2, 1, rgb("8c94a0"))
+    for index in range(12):
         polish(props, index * 16, 0)
     hero.write_png(ROOT / "assets/sprites/world/office_props.png", props)
 

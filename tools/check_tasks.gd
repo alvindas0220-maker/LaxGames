@@ -3,7 +3,7 @@ extends Node
 ##
 ## Uso:  godot --path . res://tools/check_tasks.tscn
 
-const VALID := ["timing", "hold", "pairs", "type", "screws", "pull", "wires", "ports"]
+const VALID := ["timing", "hold", "pairs", "type", "screws", "pull", "wires", "ports", "raid", "fingerprint", "cipher", "thermostat", "camera", "beep"]
 
 var fails := 0
 
@@ -75,7 +75,7 @@ func _ready() -> void:
 					valid = valid and "abcdefghijklmnopqrstuvwxyz0123456789 .-".contains(character)
 		combos[" / ".join(signature)] = key
 	check("cada paso con maniobra valida", valid)
-	check("averias con receta propia", combos.size() >= 24, "%d de %d" % [combos.size(), TicketManager.faults.size()])
+	check("averias con receta propia", combos.size() >= 30, "%d de %d" % [combos.size(), TicketManager.faults.size()])
 	check("consola en las averias de software", typed_usb >= 25, typed_usb)
 	var types := {}
 	for fault: Dictionary in TicketManager.faults.values():

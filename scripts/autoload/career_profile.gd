@@ -147,6 +147,7 @@ func fired_for_cause() -> void:
 ## Para las pruebas: perfil limpio que no lee ni escribe la partida del jugador.
 func use_blank_profile() -> void:
 	persist = false
+	StoryDirector.enabled = false
 	player_name = DEFAULT_NAME
 	severance_level = 0
 	gender = GENDERS[0]

@@ -18,3 +18,8 @@ func speak(npc_id: String, text := "") -> void:
 
 func reset() -> void:
 	_greeted.clear()
+
+
+## Frase oída de fondo: sin saludo inicial y marcada como conversación ajena.
+func overheard(npc_id: String, text: String) -> void:
+	line_shown.emit(npc_id, CareerProfile.format("(De fondo) " + text))

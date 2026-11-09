@@ -10,6 +10,7 @@ const SOUNDS := {
 	"stamp": preload("res://assets/audio/stamp.wav"),
 	"alarm": preload("res://assets/audio/alarm.wav"),
 	"keys": preload("res://assets/audio/keyboard.wav"),
+	"stinger": preload("res://assets/audio/stinger.wav"),
 }
 
 var _music := AudioStreamPlayer.new()
@@ -32,6 +33,7 @@ func _ready() -> void:
 	GameState.stress_crisis.connect(play.bind("alarm"))
 	TicketQueue.ticket_added.connect(func(_id: String) -> void: play("phone"))
 	TicketManager.ticket_solved.connect(play.bind("keys"))
+	StoryDirector.clue_found.connect(func(_id: String) -> void: play("stinger"))
 
 
 func _process(_delta: float) -> void:

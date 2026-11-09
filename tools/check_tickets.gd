@@ -55,7 +55,7 @@ func _ready() -> void:
 
 	# Catálogo.
 	var catalog: Array = TicketManager.catalog
-	check("51 tickets", catalog.size() == 51, catalog.size())
+	check("65 tickets", catalog.size() == 65, catalog.size())
 	var ids := {}
 	var valid := true
 	var targets := {}

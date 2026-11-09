@@ -42,6 +42,7 @@ func _on_day_ended(summary: Dictionary) -> void:
 		"Estrés %d%%, con pico de %d%%" % [summary["stress"], summary["stress_peak"]],
 		"Reputación %d%% (%+.1f)" % [summary["reputation"], summary["gain"]],
 		"Expediente: %s" % summary["warning"],
+		"Vida social: %d charlas" % summary["social"],
 		"Puesto: %s" % summary["title"],
 		"Sueldo $%d + extras $%d = ahorros $%d" % [summary["salary"], summary["extra"], summary["money"]],
 		"",

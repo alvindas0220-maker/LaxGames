@@ -65,7 +65,7 @@ func _ready() -> void:
 
 	# Reloj, fase y música.
 	check("reloj en marcha", WorkdayManager.running and WorkdayManager.clock_text() == "09:00", WorkdayManager.clock_text())
-	WorkdayManager.clock = 150.0
+	WorkdayManager.clock = 165.0
 	check("mediodia", WorkdayManager.clock_text() == "13:30", WorkdayManager.clock_text())
 	WorkdayManager.clock = 0.0
 	check("fase inicial", WorkdayManager.phase() == "Semana de Practicante", WorkdayManager.phase())
@@ -237,6 +237,7 @@ func _ready() -> void:
 	room.get_node("DaySummary/Panel").hide()
 	var coffee := ToolBelt.coffee
 	GameState.stress = 50.0
+	Friends.social_today = 0
 	WorkdayManager.next_day()
 	check("descanso y cafe", is_equal_approx(GameState.stress, 20.0) and ToolBelt.coffee == coffee + 1, GameState.stress)
 	WorkdayManager._warned_this_week = false

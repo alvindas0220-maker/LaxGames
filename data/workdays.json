@@ -1,5 +1,5 @@
 {
-	"day_seconds": 300,
+	"day_seconds": 330,
 	"reputation_pace": 0.045,
 	"event_pace": 0.4,
 	"days_per_week": 5,
@@ -14,6 +14,8 @@
 	"overnight_rest": 30,
 	"daily_coffee": 1,
 	"extra_ticket_pay": 15,
+	"lunch_start": 0.444,
+	"lunch_end": 0.53,
 	"chapters": [
 		{"stage": "Practicante de Soporte IT", "phase": "Semana de Practicante", "brief": "Aprende dónde está todo y que nadie se quede esperando.", "salary": 40},
 		{"stage": "Junior de Soporte IT", "phase": "Semana de Junior", "brief": "Ya tienes contrato. Sigue atendiendo tickets y gánate a la oficina.", "salary": 60},

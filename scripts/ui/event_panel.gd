@@ -39,7 +39,7 @@ func _on_event_started(event: Dictionary) -> void:
 	var npc := NpcDatabase.get_npc(event["speaker"])
 	_portrait.texture = NpcDatabase.portrait_of(event["speaker"])
 	_speaker.text = "%s - %s" % [npc.get("name", ""), npc.get("department", "")]
-	_text.text = event["text"]
+	_text.text = CareerProfile.format(event["text"])
 	_select(0)
 	_panel.show()
 	_opened_at = Time.get_ticks_msec()
@@ -55,7 +55,11 @@ func _select(index: int) -> void:
 
 
 func _confirm() -> void:
+	var option: Dictionary = _event["options"][_choice]
+	var reply := EventDirector.choose(_event, _choice)
+	if option.has("next"):
+		_on_event_started(StoryDirector.gossip_nodes()[option["next"]])
+		return
 	_panel.hide()
 	get_tree().paused = false
-	var reply := EventDirector.choose(_event, _choice)
 	DialogueManager.speak(_event["speaker"], reply)

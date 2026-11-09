@@ -1,0 +1,153 @@
+{
+	"themed_days": [
+		{
+			"day": 1, "id": "bienvenida", "title": "Día de bienvenida",
+			"intro": "Marta te enseña la oficina. Hoy la cola va más despacio.",
+			"mods": {"interval": 1.35, "quota": -1},
+			"beats": [
+				{"at": 0.05, "notice": "Marta: la cafetera está en la cafetería, y el sofá en la sala de descanso. Úsalos."},
+				{"at": 0.7, "event": {"id": "bienvenida_cierre", "type": "vida", "speaker": "rrhh", "text": "¿Qué tal tu primer día, {player}? Sé sincero.", "options": [
+					{"label": "Mejor de lo que esperaba", "friend": 6, "stress": -5, "reply": "Me alegro. Mañana será más duro."},
+					{"label": "Agotador, la verdad", "friend": 8, "stress": -8, "reply": "Gracias por la honestidad. Descansa esta noche."}
+				]}}
+			]
+		},
+		{
+			"day": 2, "id": "auditoria", "title": "Auditoría sorpresa",
+			"intro": "Llegan auditores externos. Los errores cuentan el doble y los aciertos valen más.",
+			"mods": {"tool_error": 2.0, "reward": 1.25, "stress": 1.15},
+			"beats": [
+				{"at": 0.15, "notice": "Los auditores recorren la planta con una carpeta. Nadie se ríe."},
+				{"at": 0.55, "event": {"id": "auditor_pregunta", "type": "auditoria", "speaker": "rrhh", "text": "El auditor pregunta por qué el servidor no tiene copias recientes.", "options": [
+					{"label": "Explicar el problema con datos", "reputation": 3, "factions": {"administracion": 5}, "reply": "El auditor asiente y apunta algo."},
+					{"label": "Echarle la culpa a Infraestructura", "factions": {"tecnicos": -12}, "reply": "Iván te mira desde el fondo. No sonríe."},
+					{"label": "Prometer que se arreglará hoy", "stress": 8, "reply": "Pues a cumplir la promesa."}
+				]}}
+			]
+		},
+		{
+			"day": 3, "id": "caida_desarrollo", "title": "Caída del servidor de desarrollo",
+			"intro": "A media mañana cae el entorno de Desarrollo. Todos te buscarán a la vez.",
+			"mods": {"interval": 0.85},
+			"beats": [
+				{"at": 0.25, "notice": "¡ALERTA! El servidor de compilación se ha caído. Desarrollo está parado."},
+				{"at": 0.26, "tickets": ["build_roto", "estacion_render"]},
+				{"at": 0.3, "stress": 6}
+			]
+		},
+		{
+			"day": 4, "id": "cumpleanos", "title": "Cumpleaños de Ana",
+			"intro": "Hay pastel en la cafetería a la hora del almuerzo. Y donde hay pastel, hay chismes.",
+			"mods": {"lunch": 1.6},
+			"lunch": {"id": "cumpleanos_ana", "type": "vida", "speaker": "ana", "text": "¡Viniste! Toma pastel, {player}. Por cierto, ¿te enteraste de lo de Gerencia?", "options": [
+				{"label": "Cuéntame, que no se entera nadie", "friend_id": "ana", "friend": 10, "stress": -18, "clue": "pagos_ana", "reply": "Facturas pagadas dos veces. Feliz cumpleaños a mí."},
+				{"label": "Hoy no se habla de trabajo", "friend_id": "ana", "friend": 14, "stress": -24, "reply": "Tienes razón. ¡Más pastel!"},
+				{"label": "Brindar y volver a tu puesto", "stress": -10, "reply": "Gracias por pasar."}
+			]},
+			"beats": [{"at": 0.4, "notice": "Huele a pastel desde la cafetería. Será a la hora del almuerzo."}]
+		},
+		{
+			"day": 5, "id": "cierre_semana", "title": "Viernes de cierre",
+			"intro": "Último día de la semana: todos quieren dejar sus problemas resueltos antes de irse.",
+			"mods": {"interval": 0.9, "reward": 1.1},
+			"beats": [{"at": 0.85, "notice": "Bruno pasa diciendo que hay cervezas en el bar de enfrente. Tú aún no puedes irte."}]
+		},
+		{
+			"day": 6, "id": "formacion", "title": "Formación obligatoria",
+			"intro": "Recursos Humanos organiza un curso de ciberseguridad a primera hora.",
+			"mods": {"stress": 0.85},
+			"beats": [{"at": 0.08, "event": {"id": "curso_phishing", "type": "reunion", "speaker": "rrhh", "text": "Pregunta del curso: llega un correo de \"Nexo Consultores\" con un enlace. ¿Qué haces?", "options": [
+				{"label": "Reportarlo a seguridad", "reputation": 2, "factions": {"administracion": 4}, "reply": "Correcto. Curioso nombre para un ejemplo, por cierto."},
+				{"label": "Abrirlo para ver qué es", "stress": 6, "reply": "Acabas de infectar el portátil de prácticas."}
+			]}}]
+		},
+		{
+			"day": 7, "id": "visita_clienta", "title": "Visita de la clienta",
+			"intro": "Inés Duarte recorre la oficina. Lo que vea hoy decidirá un contrato.",
+			"mods": {"reward": 1.15, "stress": 1.1},
+			"beats": [
+				{"at": 0.3, "notice": "Inés Duarte pasa por los pasillos con Hugo. Todos fingen trabajar el doble."},
+				{"at": 0.32, "tickets": ["laptop_ines"]}
+			]
+		},
+		{
+			"day": 8, "id": "simulacro", "title": "Simulacro de incendio",
+			"intro": "A mediodía suena la alarma de simulacro. La cola se detiene y todos salen al pasillo.",
+			"mods": {"interval": 1.1},
+			"beats": [{"at": 0.35, "event": {"id": "simulacro_pasillo", "type": "vida", "speaker": "ramon", "text": "¡Simulacro! Todo el mundo al pasillo. Bueno, ya que estamos aquí...", "options": [
+				{"label": "Charlar con Ramón mientras tanto", "friend": 8, "stress": -10, "reply": "Veinte años de simulacros. El fuego de verdad nunca llega."},
+				{"label": "Aprovechar para revisar tu correo", "stress": -4, "reply": "Ramón te mira con desaprobación profesional."}
+			]}}]
+		},
+		{
+			"day": 9, "id": "huelga_cafe", "title": "La cafetera ha muerto",
+			"intro": "La cafetera está rota. La oficina entera está de mal humor.",
+			"mods": {"stress": 1.2},
+			"flags": ["sin_cafe"],
+			"beats": [{"at": 0.2, "notice": "Sin café, Desarrollo amenaza con ponerse en huelga. Medio en broma."}]
+		},
+		{
+			"day": 10, "id": "junta", "title": "Junta trimestral",
+			"intro": "Gerencia presenta resultados. Si algo falla en la sala de juntas, será tu culpa.",
+			"mods": {"reward": 1.2},
+			"beats": [
+				{"at": 0.2, "tickets": ["comite"]},
+				{"at": 0.6, "notice": "La junta termina con aplausos tibios. Hugo sale sin despedirse."}
+			]
+		}
+	],
+	"weekday_themes": [
+		{"id": "lunes", "title": "Lunes de reuniones", "intro": "Todos vuelven del fin de semana con correos sin leer.", "mods": {"interval": 1.1}, "beats": []},
+		{"id": "martes", "title": "Martes de despliegues", "intro": "Desarrollo despliega hoy. Algo se romperá.", "mods": {"interval": 0.95}, "beats": [{"at": 0.4, "tickets": ["contenedores"]}]},
+		{"id": "miercoles", "title": "Miércoles de rumores", "intro": "Mitad de semana: los pasillos hablan más que nunca.", "mods": {}, "beats": []},
+		{"id": "jueves", "title": "Jueves de presión", "intro": "Gerencia quiere cifras antes del viernes.", "mods": {"interval": 0.9, "reward": 1.1}, "beats": []},
+		{"id": "viernes", "title": "Viernes de cierre", "intro": "Último esfuerzo antes del fin de semana.", "mods": {"interval": 0.9, "reward": 1.1}, "beats": []}
+	],
+	"break_talks": [
+		{"id": "cafe_diego_turno", "place": "cafe", "speaker": "diego", "text": "¿También vienes a esconderte detrás de la cafetera? Bienvenido al club.", "options": [
+			{"label": "Es el mejor sitio de la oficina", "friend": 8, "stress": -6, "reply": "Desde aquí se ve venir a los jefes."},
+			{"label": "Solo vengo por el café", "friend": 3, "reply": "Ya. Eso decimos todos."}
+		]},
+		{"id": "cafe_lucia_maquina", "place": "cafe", "speaker": "lucia", "text": "Esta cafetera tiene más tiempo activo que nuestros servidores.", "options": [
+			{"label": "Deberíamos ponerla en producción", "friend": 8, "stress": -6, "reply": "Con alta disponibilidad y todo."},
+			{"label": "No le cuentes eso a Iván", "friend": 6, "reply": "Demasiado tarde."}
+		]},
+		{"id": "cafe_bruno_chiste", "place": "cafe", "speaker": "bruno", "text": "¿Por qué el informático no sale nunca? Porque no encuentra la puerta de enlace. Ya me voy.", "options": [
+			{"label": "Reírte por compromiso", "friend": 5, "stress": -4, "reply": "¡Lo sabía! Tengo cien más."},
+			{"label": "Contarle uno peor", "friend": 10, "stress": -8, "reply": "Eso ha sido horrible. Me encanta."}
+		]},
+		{"id": "cafe_carla_receta", "place": "cafe", "speaker": "carla", "text": "Para ti, un café con canela. Receta de mi abuela, no se lo digas a nadie.", "options": [
+			{"label": "Está buenísimo", "friend": 10, "stress": -8, "reply": "Ya verás cuando tenga mi propia cafetería."}
+		]},
+		{"id": "cafe_tomas_noche", "place": "cafe", "speaker": "tomas", "text": "Llevo tres noches soñando con errores de compilación. ¿Es normal?", "options": [
+			{"label": "Totalmente, yo sueño con impresoras", "friend": 10, "stress": -6, "reply": "Menos mal. Pensaba que era solo yo."},
+			{"label": "Deberías desconectar más", "friend": 6, "stress": -3, "reply": "Desconectar... ¿qué es eso?"}
+		]},
+		{"id": "descanso_ana_foto", "place": "descanso", "speaker": "ana", "text": "Mira, la foto de Sara en su primer concurso de robótica.", "options": [
+			{"label": "¡Qué orgullo! Se parece a ti", "friend": 10, "stress": -8, "reply": "Dice que de mayor quiere arreglar servidores como tú."},
+			{"label": "Muy bonita", "friend": 4, "stress": -3, "reply": "Gracias."}
+		]},
+		{"id": "descanso_ivan_mar", "place": "descanso", "speaker": "ivan", "text": "Ven, siéntate. Cinco minutos sin pensar en racks. Mira el mar en mi móvil.", "options": [
+			{"label": "Ese será tu barco algún día", "friend": 10, "stress": -10, "reply": "Algún día. Con wifi apagado."}
+		]},
+		{"id": "descanso_nadia_ensayo", "place": "descanso", "speaker": "nadia", "text": "¿Me escuchas un monólogo? Lo estreno el sábado.", "options": [
+			{"label": "Adelante, soy tu público", "friend": 10, "stress": -8, "reply": "Gracias. Llorarás en el final, ya verás."},
+			{"label": "Hoy necesito silencio", "friend": -2, "stress": -4, "reply": "Lo entiendo. Otro día."}
+		]},
+		{"id": "descanso_elena_pausa", "place": "descanso", "speaker": "elena", "text": "Es mi único rato sentada en todo el día. Siéntate, que hay sitio.", "options": [
+			{"label": "Gracias, Elena. ¿Cómo va tu hijo?", "friend": 10, "stress": -8, "reply": "Ya hace prácticas en el hospital. Imagínate."}
+		]}
+	],
+	"overheard": [
+		{"id": "oye_banos_hugo", "zone": "banos", "requires": {"min_day": 2}, "lines": [["bruno", "¿Viste a Hugo salir del despacho de Clara con esa cara?"], ["diego", "Dicen que discutieron por unas facturas."], ["bruno", "Facturas de Nexo. Otra vez ese nombre."]]},
+		{"id": "oye_cafe_sofia", "zone": "cafetera", "requires": {"min_day": 3}, "lines": [["lucia", "Sofía pidió más presupuesto y se lo negaron otra vez."], ["tomas", "Pues Gerencia estrena coches cada año."], ["lucia", "Ahí hay algo raro, te lo digo yo."]]},
+		{"id": "oye_infra_rivalidad", "zone": "infra", "requires": {"min_day": 2}, "lines": [["ivan", "Si Desarrollo vuelve a tocar mis switches, los bloqueo a todos."], ["diego", "Tranquilo, Iván. Respira."], ["ivan", "Respiro cuando dejen de romperme la red."]]},
+		{"id": "oye_gerencia_puerta", "zone": "gerencia", "requires": {"act": 1, "min_day": 5}, "clue": "cunado_bruno", "lines": [["hugo", "Mi cuñado cobra este mes, como siempre. Que nadie haga preguntas."], ["clara", "Baja la voz, Hugo. Las paredes oyen."]]},
+		{"id": "oye_banos_ramon", "zone": "banos", "requires": {"act": 3}, "clue": "guardia_ramon", "lines": [["ramon", "Me han prohibido hacer la ronda del pasillo sur de noche."], ["pablo", "¿Y eso por qué?"], ["ramon", "Orden de Gerencia. No pregunto."]]},
+		{"id": "oye_cafe_ines", "zone": "cafetera", "requires": {"act": 3}, "lines": [["carla", "La señora Duarte otra vez con Hugo en la mesa del fondo."], ["nadia", "Esos dos no hablan de café, te lo aseguro."]]},
+		{"id": "oye_gerencia_junta", "zone": "gerencia", "requires": {"act": 2}, "lines": [["clara", "La junta quiere un culpable para lo de los servidores."], ["hugo", "Pues que sea alguien de soporte. Siempre es soporte."]]},
+		{"id": "oye_infra_disco", "zone": "infra", "requires": {"act": 3}, "lines": [["ivan", "La climatización hace un ruido raro, como si algo golpeara dentro."], ["diego", "Será un pájaro. O un secreto."]]},
+		{"id": "oye_banos_cumple", "zone": "banos", "requires": {"min_day": 3}, "lines": [["elena", "Mañana es el cumpleaños de Ana. Carla prepara pastel."], ["nadia", "¡Pues no lo cuentes, que es sorpresa!"]]},
+		{"id": "oye_cafe_lucia_oferta", "zone": "cafetera", "requires": {"min_day": 6}, "lines": [["tomas", "¿Es verdad que Lucía tiene una oferta de otra empresa?"], ["bruno", "Yo no he dicho nada, pero sí."]]}
+	]
+}

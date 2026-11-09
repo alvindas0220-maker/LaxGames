@@ -96,6 +96,28 @@ const TERMINALS := [
 	["build_server", 5, Vector2i(60, 9)],
 	["pc_jefatura", 0, Vector2i(59, 24)],
 	["pc_gerencia", 0, Vector2i(62, 42)],
+	["rack_raid", 6, Vector2i(38, 7)],
+	["biometrico", 7, Vector2i(14, 13)],
+	["laptop_ejecutiva", 8, Vector2i(55, 37)],
+	["hvac", 9, Vector2i(30, 10)],
+	["camara", 10, Vector2i(40, 28)],
+	["estacion_trabajo", 11, Vector2i(53, 10)],
+]
+const LUNCH_CELL := Vector2i(11, 39)
+const COFFEE_CELL := Vector2i(4, 36)
+## Zonas donde se oyen conversaciones de pasillo.
+const OVERHEAR := [
+	["banos", Vector2i(30, 32)],
+	["cafetera", Vector2i(6, 37)],
+	["gerencia", Vector2i(51, 32)],
+	["infra", Vector2i(31, 14)],
+]
+## Secretos de la trama: pista, celda y texto al volver a examinarlo.
+const CLUE_SPOTS := [
+	["factura_nexo", Vector2i(53, 43), "La papelera de Gerencia ya no guarda nada útil."],
+	["archivo_rrhh", Vector2i(41, 18), "Solo quedan formularios de vacaciones."],
+	["disco_ducto", Vector2i(32, 11), "El ducto de ventilación está vacío."],
+	["huella_fantasma", Vector2i(10, 13), "El registro de asistencia parece normal."],
 ]
 
 
@@ -310,12 +332,22 @@ func _initialize() -> void:
 			for cell: Vector2i in ROUTES[n[0]]:
 				points.append(center(cell))
 			npc.route = points
+	spawn("res://scenes/world/lunch_table.tscn", entities, root_node, LUNCH_CELL, "LunchTable")
+	spawn("res://scenes/world/coffee_machine.tscn", entities, root_node, COFFEE_CELL, "CoffeeMachine")
+	for z: Array in OVERHEAR:
+		var zone: Node = spawn("res://scenes/world/overhear_zone.tscn", entities, root_node, z[1], "Overhear_" + z[0])
+		zone.zone = z[0]
+	for c: Array in CLUE_SPOTS:
+		var clue: Node = spawn("res://scenes/world/clue_spot.tscn", entities, root_node, c[1], "Clue_" + c[0])
+		clue.clue_id = c[0]
+		clue.empty_text = c[2]
 	for a: Array in AMENITIES:
 		var amenity: Node = spawn("res://scenes/world/amenity.tscn", entities, root_node, a[4], "Amenity_%d_%d" % [a[4].x, a[4].y])
 		amenity.prompt = a[0]
 		amenity.rest_text = a[1]
 		amenity.relief = a[2]
 		amenity.clock_cost = a[3]
+		amenity.talk_place = "descanso" if a[0] == "Sentarte un rato" else ""
 	var player: Node = spawn("res://scenes/player/player.tscn", entities, root_node, SPAWN, "Player")
 
 	var hud: Node = (load("res://scenes/ui/hud.tscn") as PackedScene).instantiate(PackedScene.GEN_EDIT_STATE_INSTANCE)
@@ -324,7 +356,7 @@ func _initialize() -> void:
 	hud.world_layer = world_layer
 	var over: Node = (load("res://scenes/ui/game_over.tscn") as PackedScene).instantiate(PackedScene.GEN_EDIT_STATE_INSTANCE)
 	add_owned(root_node, over, root_node)
-	for path: String in ["res://scenes/ui/repair_bar.tscn", "res://scenes/ui/event_panel.tscn", "res://scenes/ui/day_summary.tscn", "res://scenes/ui/night_menu.tscn", "res://scenes/ui/phone.tscn"]:
+	for path: String in ["res://scenes/ui/repair_bar.tscn", "res://scenes/ui/event_panel.tscn", "res://scenes/ui/day_summary.tscn", "res://scenes/ui/night_menu.tscn", "res://scenes/ui/phone.tscn", "res://scenes/ui/episode_card.tscn"]:
 		add_owned(root_node, (load(path) as PackedScene).instantiate(PackedScene.GEN_EDIT_STATE_INSTANCE), root_node)
 
 	var packed := PackedScene.new()

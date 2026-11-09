@@ -3,8 +3,10 @@ extends CanvasLayer
 ## Celular del jugador: se abre con Tab o con el botón de la HUD.
 ## La jornada sigue corriendo mientras se mira la pantalla.
 
-const TABS := ["Estado", "Tickets", "Trabajo", "Tienda"]
+const TABS := ["Estado", "Tickets", "Trabajo", "Tienda", "Caso", "Amigos"]
 const SHOP_TAB := 3
+const CASE_TAB := 4
+const FRIENDS_TAB := 5
 const PRIORITY_ORDER := {"Crítica": 0, "Alta": 1, "Normal": 2, "Baja": 3}
 const REFRESH_SECONDS := 0.25
 const CLOSED_X := 8.0
@@ -140,10 +142,7 @@ func sorted_tickets() -> Array:
 
 
 func refresh() -> void:
-	var titles := PackedStringArray()
-	for i in TABS.size():
-		titles.append("[%s]" % TABS[i] if i == tab else TABS[i].left(3))
-	_tabs.text = " ".join(titles)
+	_tabs.text = "< %s %d/%d >" % [TABS[tab], tab + 1, TABS.size()]
 	_header.visible = tab == 0
 	_gauges.visible = tab == 0
 	match tab:
@@ -155,6 +154,10 @@ func refresh() -> void:
 			_show_work()
 		SHOP_TAB:
 			_show_shop()
+		CASE_TAB:
+			_text.text = "\n".join(StoryDirector.case_lines())
+		FRIENDS_TAB:
+			_show_friends()
 
 
 func _show_status() -> void:
@@ -183,7 +186,8 @@ func _show_tickets() -> void:
 
 func _show_work() -> void:
 	var quota := WorkdayManager.quota()
-	_text.text = "Cuota: %d de %d\nPerdidos hoy: %d\nPrecisión: %d%%\nFalta para ascenso: %s\nSueldo diario: $%d\nAhorros: $%d\n\nTeclas: 1 Kit  2 Café\n3 USB  4 Tester  Espacio: usar" % [
+	var theme := "Hoy: %s\n" % DayEvents.title() if not DayEvents.title().is_empty() else ""
+	_text.text = theme + "Cuota: %d de %d\nPerdidos hoy: %d\nPrecisión: %d%%\nFalta para ascenso: %s\nSueldo diario: $%d\nAhorros: $%d\n\nTeclas: 1 Kit  2 Café\n3 USB  4 Tester  Espacio: usar" % [
 		WorkdayManager.closed_today, quota, DayStats.lost, DayStats.accuracy(), _next_promotion(), WorkdayManager.salary(), GameState.money,
 	]
 
@@ -195,6 +199,19 @@ func _show_shop() -> void:
 		var cost := "MAX" if Upgrades.is_maxed(entry) else "$%d" % Upgrades.price_of(entry)
 		lines.append("%s%s %d %s" % ["> " if i == _shop_choice else "", entry["name"], Upgrades.level_of(entry["id"]), cost])
 	lines.append(Upgrades.catalog[_shop_choice]["text"])
+	_text.text = "\n".join(lines)
+
+
+func _show_friends() -> void:
+	var known: Array = Friends.points.keys().filter(func(id: String) -> bool: return Friends.value_of(id) > 0)
+	known.sort_custom(func(a: String, b: String) -> bool: return Friends.value_of(a) > Friends.value_of(b))
+	if known.is_empty():
+		_text.text = "Aún no conoces a nadie. Habla con la gente."
+		return
+	var lines := PackedStringArray()
+	for npc_id: String in known.slice(0, 8):
+		lines.append("%s: %s" % [NpcDatabase.get_npc(npc_id).get("name", "").get_slice(" ", 0), Friends.tier_name(npc_id)])
+	lines.append("Charlas hoy: %d" % Friends.social_today)
 	_text.text = "\n".join(lines)
 
 

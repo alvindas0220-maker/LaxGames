@@ -1,0 +1,100 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/episode_card.gd" id="1_card"]
+[ext_resource type="FontFile" path="res://assets/fonts/hud_pixel.fnt" id="2_font"]
+
+[sub_resource type="Theme" id="Theme_card"]
+default_font = ExtResource("2_font")
+default_font_size = 8
+
+[node name="EpisodeCard" type="CanvasLayer"]
+process_mode = 3
+layer = 7
+script = ExtResource("1_card")
+
+[node name="Panel" type="ColorRect" parent="."]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_card")
+color = Color(0.09, 0.05, 0.1, 0.97)
+
+[node name="BarTop" type="ColorRect" parent="Panel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 12.0
+grow_horizontal = 2
+color = Color(0.55, 0.12, 0.2, 1)
+
+[node name="BarBottom" type="ColorRect" parent="Panel"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -12.0
+grow_horizontal = 2
+grow_vertical = 0
+color = Color(0.55, 0.12, 0.2, 1)
+
+[node name="Rows" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 30.0
+offset_top = 24.0
+offset_right = -30.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 5
+alignment = 1
+
+[node name="EpisodeNumber" type="Label" parent="Panel/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.97, 0.82, 0.28, 1)
+horizontal_alignment = 1
+
+[node name="EpisodeTitle" type="Label" parent="Panel/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_alignment = 1
+
+[node name="EpisodeTheme" type="Label" parent="Panel/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.6, 0.5, 1)
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="EpisodeRecap" type="Label" parent="Panel/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.72, 0.9, 1, 1)
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="EpisodeRumor" type="Label" parent="Panel/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.5, 0.88, 0.5, 1)
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="EpisodeTeaser" type="Label" parent="Panel/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Hint" type="Label" parent="Panel/Rows"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.8, 0.85, 1)
+text = "Pulsa Enter para empezar la jornada"
+horizontal_alignment = 1

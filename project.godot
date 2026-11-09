@@ -28,6 +28,12 @@ DialogueManager="*res://scripts/autoload/dialogue_manager.gd"
 WorkdayManager="*res://scripts/autoload/workday_manager.gd"
 EventDirector="*res://scripts/autoload/event_director.gd"
 DayStats="*res://scripts/autoload/day_stats.gd"
+Factions="*res://scripts/autoload/factions.gd"
+Friends="*res://scripts/autoload/friends.gd"
+DayEvents="*res://scripts/autoload/day_events.gd"
+Overheard="*res://scripts/autoload/overheard.gd"
+StoryDirector="*res://scripts/autoload/story_director.gd"
+QaBot="*res://scripts/debug/qa_bot.gd"
 AudioDirector="*res://scripts/autoload/audio_director.gd"
 
 [display]

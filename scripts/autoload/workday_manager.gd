@@ -19,6 +19,8 @@ var closed_today := 0
 var reputation_pace := 1.0
 ## Mensaje para el jugador al empezar la jornada siguiente.
 var morning_note := ""
+var lunch_taken := false
+var _lunch_announced := false
 var _config := {}
 var _reputation_at_start := 0.0
 var _warned_this_week := false
@@ -39,6 +41,9 @@ func _process(delta: float) -> void:
 	if not running:
 		return
 	clock += delta
+	if in_lunch() and not _lunch_announced:
+		_lunch_announced = true
+		GameState.notice.emit("Hora del almuerzo: la cola se detiene. Ve a la cafetería o charla con alguien.")
 	if clock >= float(_config["day_seconds"]):
 		_end_day()
 
@@ -49,8 +54,16 @@ func start_day() -> void:
 		return
 	running = true
 	clock = 0.0
+	lunch_taken = false
+	_lunch_announced = false
+	DayEvents.start_day()
 	DayStats.reset()
 	TicketQueue.start_day()
+
+
+## Pausa del almuerzo: no llegan tickets ni corren los plazos.
+func in_lunch() -> bool:
+	return running and day_progress() >= float(_config["lunch_start"]) and day_progress() < float(_config["lunch_end"])
 
 
 ## Avance de la jornada de 0 a 1.
@@ -68,12 +81,14 @@ func week() -> int:
 
 func quota() -> int:
 	var relief := CareerProfile.quota_relief() if week() == 0 else 0
-	return mini(int(_config["base_quota"]) + week() * int(_config["quota_per_week"]), int(_config["max_quota"])) - relief
+	var themed := roundi(DayEvents.mod("quota", 0.0))
+	return maxi(1, mini(int(_config["base_quota"]) + week() * int(_config["quota_per_week"]), int(_config["max_quota"])) - relief + themed)
 
 
 ## Segundos entre tickets: cada semana llegan más seguidos.
 func spawn_interval() -> float:
-	return maxf(float(_config["ticket_interval"]) - week() * float(_config["interval_step"]), float(_config["min_interval"]))
+	var base := maxf(float(_config["ticket_interval"]) - week() * float(_config["interval_step"]), float(_config["min_interval"]))
+	return base * DayEvents.mod("interval", 1.0)
 
 
 func max_pending() -> int:
@@ -118,9 +133,10 @@ func next_day() -> void:
 	closed_today = 0
 	clock = 0.0
 	_reputation_at_start = GameState.reputation
-	GameState.add_stress(-float(_config["overnight_rest"]))
+	var rest_bonus := Friends.rest_bonus()
+	GameState.add_stress(-float(_config["overnight_rest"]) - rest_bonus)
 	ToolBelt.add_coffee(int(_config["daily_coffee"]) + Upgrades.daily_coffee())
-	morning_note = ""
+	morning_note = "La soledad pesa: llevas días sin hablar con nadie." if Friends.is_lonely() else ""
 	if (day - 1) % int(_config["days_per_week"]) == 0:
 		if not _warned_this_week and GameState.warnings > 0:
 			GameState.remove_warning()
@@ -137,6 +153,9 @@ func new_game() -> void:
 	EventDirector.reset()
 	TicketQueue.reset()
 	Upgrades.reset()
+	StoryDirector.reset()
+	DayEvents.reset()
+	Overheard.reset()
 	running = false
 	clock = 0.0
 	day = 1
@@ -172,6 +191,7 @@ func _end_day() -> void:
 	var extra := maxi(closed_today - quota(), 0) * int(_config["extra_ticket_pay"])
 	GameState.add_money(salary() + extra)
 	day_ended.emit({
+		"social": Friends.social_today,
 		"grade": DayStats.grade(quota()),
 		"lost": DayStats.lost,
 		"average": DayStats.average_seconds(),
@@ -191,6 +211,6 @@ func _end_day() -> void:
 		"warning": GameState.warning_name(),
 		"title": GameState.stage_label(),
 		"employee": CareerProfile.player_name,
-		"brief": chapter_brief(),
+		"brief": StoryDirector.ending_text() if GameState.reputation >= GameState.MAX_REPUTATION and not StoryDirector.ending_text().is_empty() else chapter_brief(),
 		"finished": GameState.reputation >= GameState.MAX_REPUTATION,
 	})

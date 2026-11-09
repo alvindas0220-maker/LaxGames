@@ -1,0 +1,103 @@
+{
+	"talks": [
+		{"id": "ana_hija", "speaker": "ana", "requires": {"friend_min": 0, "min_day": 2}, "text": "Perdona la cara. Mi hija tiene fiebre y anoche no dormí.", "options": [
+			{"label": "¿Cómo sigue? ¿Necesitas salir antes?", "friend": 12, "stress": -3, "next": "ana_hija_2", "reply": ""},
+			{"label": "Ánimo, ya se le pasará", "friend": 4, "reply": "Sí. Gracias."},
+			{"label": "Aquí todos dormimos poco", "friend": -6, "reply": "Claro."}
+		]},
+		{"id": "ana_hija_2", "speaker": "ana", "followup": true, "text": "Eres la primera persona que pregunta aquí. Se llama Sara y quiere ser ingeniera.", "options": [
+			{"label": "Pues que venga un día a ver los servidores", "friend": 8, "reply": "Le va a encantar. Gracias de verdad."},
+			{"label": "Dile que estudie otra cosa", "friend": 2, "reply": "Ja, tú sí sabes."}
+		]},
+		{"id": "ana_confidente", "speaker": "ana", "requires": {"friend_min": 50}, "text": "Te voy a contar algo que no le he dicho a nadie: tengo miedo de lo que vi en las cuentas.", "options": [
+			{"label": "Confía en mí, no estás sola", "friend": 15, "clue": "pagos_ana", "reply": "Si esto sale mal, cuida de que Sara no se entere."},
+			{"label": "Mejor no me lo cuentes", "friend": -10, "reply": "Entiendo."}
+		]},
+		{"id": "bruno_banda", "speaker": "bruno", "requires": {"friend_min": 0, "min_day": 3}, "text": "¿Sabías que toco el bajo? Mi banda actúa el viernes. Somos malísimos.", "options": [
+			{"label": "Allí estaré", "friend": 12, "stress": -4, "reply": "¡Eso! Trae tapones."},
+			{"label": "¿Cómo se llama la banda?", "friend": 8, "reply": "Los Sin Señal. Sí, es por el Wi-Fi."},
+			{"label": "No tengo tiempo para eso", "friend": -5, "reply": "Bueno, otro será."}
+		]},
+		{"id": "bruno_divorcio", "speaker": "bruno", "requires": {"friend_min": 25}, "text": "Hoy firmo el divorcio. Vendo mucho, pero esto no se lo vendo a nadie.", "options": [
+			{"label": "Vamos por un café y me cuentas", "friend": 15, "stress": -6, "reply": "Eres buena gente, de verdad."},
+			{"label": "Lo siento mucho", "friend": 6, "reply": "Gracias. A seguir."}
+		]},
+		{"id": "lucia_startup", "speaker": "lucia", "requires": {"friend_min": 0, "min_day": 4}, "text": "Si te digo algo, ¿no lo cuentas? Me han ofrecido irme a una startup.", "options": [
+			{"label": "Tu secreto está a salvo", "friend": 12, "flag": "secreto_lucia", "reply": "Gracias. Aún no lo he decidido."},
+			{"label": "¿Y por qué sigues aquí?", "friend": 6, "reply": "Porque aquí algo se está rompiendo y quiero ver qué es."},
+			{"label": "Eso debería saberlo Sofía", "friend": -12, "reply": "Olvida lo que dije."}
+		]},
+		{"id": "lucia_madre", "speaker": "lucia", "requires": {"friend_min": 30}, "text": "Programo por mi madre. Reparaba radios en casa y me enseñó a no tener miedo a abrir nada.", "options": [
+			{"label": "Eso explica por qué eres tan buena", "friend": 12, "reply": "No se lo digas a Tomás, que se lo cree."},
+			{"label": "A mí me pasó igual con las consolas", "friend": 14, "stress": -4, "reply": "Sabía que había algo en ti."}
+		]},
+		{"id": "tomas_cafe", "speaker": "tomas", "requires": {"friend_min": 0, "min_day": 2}, "text": "Llevo tres cafés y sigo roto. Rompí producción y nadie lo sabe. Aún.", "options": [
+			{"label": "Te ayudo a arreglarlo", "friend": 12, "stress": 3, "reply": "Te debo la vida. Y un café."},
+			{"label": "Díselo a Lucía ahora", "friend": 4, "reply": "Tienes razón. Qué miedo."},
+			{"label": "Ya lo sabré yo cuando caiga", "friend": -6, "reply": "Gracias por nada."}
+		]},
+		{"id": "diego_nocturna", "speaker": "diego", "requires": {"friend_min": 0, "min_day": 3}, "text": "Estudio Derecho de noche. Quiero salir de los auriculares antes de los treinta.", "options": [
+			{"label": "Admirable. ¿Te ayudo con algo?", "friend": 12, "reply": "Cúbreme un turno un día y te hago un altar."},
+			{"label": "¿Derecho? Te vendrá bien aquí", "friend": 8, "reply": "Ni te imaginas. Las cosas que escucho."}
+		]},
+		{"id": "diego_llamada", "speaker": "diego", "requires": {"friend_min": 30}, "text": "Hoy un usuario me gritó media hora. Necesitaba contárselo a alguien.", "options": [
+			{"label": "Cuéntamelo todo, y que se note", "friend": 12, "stress": -6, "reply": "Gracias. Ya respiro mejor. Tú igual, ¿eh?"},
+			{"label": "Es parte del trabajo", "friend": -4, "reply": "Ya."}
+		]},
+		{"id": "ivan_barco", "speaker": "ivan", "requires": {"friend_min": 15}, "text": "Cuando esto acabe me compro un barco. Sin cables, sin alarmas, sin nadie.", "options": [
+			{"label": "¿Me llevas de técnico?", "friend": 12, "stress": -3, "reply": "Solo si traes tu destornillador."},
+			{"label": "Tú sin un servidor te mueres", "friend": 8, "reply": "Probablemente."}
+		]},
+		{"id": "carla_sueno", "speaker": "carla", "requires": {"friend_min": 10}, "text": "Ahorro para abrir mi propia cafetería. Con el café bueno, no este.", "options": [
+			{"label": "Seré tu primer cliente", "friend": 12, "stress": -4, "reply": "Te guardo la mesa de la ventana."},
+			{"label": "Con tu café, seguro que triunfas", "friend": 8, "reply": "Eso díselo a mi banco."}
+		]},
+		{"id": "elena_hijo", "speaker": "elena", "requires": {"friend_min": 10}, "text": "Mi hijo acaba Medicina este año. Limpiar estos pasillos le pagó la carrera.", "options": [
+			{"label": "Eso es un orgullo enorme", "friend": 14, "stress": -3, "reply": "Gracias. Aquí nadie sabe que tengo hijo."},
+			{"label": "Felicidades", "friend": 6, "reply": "Gracias."}
+		]},
+		{"id": "ramon_retiro", "speaker": "ramon", "requires": {"friend_min": 10}, "text": "Me quedan dos años para jubilarme. No quiero líos, pero tampoco ser cómplice de nada.", "options": [
+			{"label": "Nadie te va a meter en líos por mí", "friend": 12, "reply": "Te tomo la palabra."},
+			{"label": "A veces no hay opción", "friend": 4, "reply": "Eso es lo que me quita el sueño."}
+		]},
+		{"id": "nadia_teatro", "speaker": "nadia", "requires": {"friend_min": 10}, "text": "Por las tardes hago teatro. Aquí ya interpreto a alguien que ama su trabajo.", "options": [
+			{"label": "Ganarías un premio", "friend": 12, "stress": -3, "reply": "Ja. Tú también actúas bien."},
+			{"label": "¿Qué obra preparas?", "friend": 8, "reply": "Un drama de oficina. Inspiración no me falta."}
+		]},
+		{"id": "pablo_ruta", "speaker": "pablo", "requires": {"friend_min": 10}, "text": "Reparto en todas las plantas y nadie sabe mi nombre. Excepto tú, creo.", "options": [
+			{"label": "Claro que lo sé, Pablo", "friend": 12, "reply": "Pues te guardo los paquetes buenos."},
+			{"label": "¿Traes algo para mí?", "friend": -3, "reply": "Nada, como siempre."}
+		]}
+	],
+	"lunch_mates": ["ana", "bruno", "lucia", "tomas", "diego", "ivan", "nadia", "elena"],
+	"episodes": [
+		{"id": "ep_inicio", "requires": {}, "title": "El primer día", "recap": "Una llamada, un servidor caído y alguien nuevo en soporte.", "teaser": "Nadie sabe aún tu nombre. Pronto lo sabrán todos."},
+		{"id": "ep_factura", "requires": {"clue": "factura_nexo"}, "title": "La factura", "recap": "Un papel arrugado en la papelera equivocada.", "teaser": "Alguien echa de menos una hoja. Y mira a su alrededor."},
+		{"id": "ep_rumor", "requires": {"flags": ["rumor_publico"]}, "title": "Las paredes oyen", "recap": "Un rumor ha llegado a la planta de Gerencia.", "teaser": "Hoy nadie te mira a los ojos en el ascensor."},
+		{"id": "ep_traicion", "requires": {"flags": ["traidor_infra"]}, "title": "Fuego amigo", "recap": "Alguien abrió una puerta que Infraestructura cerró.", "teaser": "Iván revisa los registros con una calma que da miedo."},
+		{"id": "ep_sofia", "requires": {"flags": ["confia_sofia"]}, "title": "Un pacto en Jefatura", "recap": "Pusiste las pruebas sobre la mesa de Sofía.", "teaser": "Ahora tienes una aliada. Y un blanco en la espalda."},
+		{"id": "ep_anonimo", "requires": {"flags": ["anonimo"]}, "title": "El sobre sin remitente", "recap": "La junta recibió un sobre que nadie admite haber enviado.", "teaser": "En Gerencia buscan al culpable. Cuidado con tus huellas."},
+		{"id": "ep_trato", "requires": {"flags": ["ruta_trato"]}, "title": "Dinero fácil", "recap": "Le estrechaste la mano a Hugo Salas.", "teaser": "El dinero ya está en tu cuenta. El sueño, no."},
+		{"id": "ep_honesto", "requires": {"flags": ["ruta_honesta"]}, "title": "El consejo", "recap": "Denunciaste a Hugo ante todo el consejo.", "teaser": "Hugo cayó. Pero alguien sigue moviendo los hilos."},
+		{"id": "ep_disco", "requires": {"clue": "disco_ducto"}, "title": "Lo que escondía el aire", "recap": "Un disco oculto en la climatización.", "teaser": "Los datos de los clientes tienen precio, y comprador."},
+		{"id": "ep_lucia", "requires": {"flags": ["amenazo_tomas"]}, "title": "Silencio en Desarrollo", "recap": "Le arrancaste a Tomás lo que sabía.", "teaser": "Hoy nadie te guarda café en Desarrollo."}
+	],
+	"generic_episodes": [
+		{"title": "Lunes de café frío", "recap": "La oficina vuelve a respirar.", "teaser": "Alguien ha cambiado de sitio la cafetera. Nada es casual."},
+		{"title": "Miradas en el pasillo", "recap": "Dos departamentos ya no se hablan.", "teaser": "Hoy habrá reunión a puerta cerrada."},
+		{"title": "El correo de las 8:01", "recap": "Un correo a todos, con copia a nadie.", "teaser": "Hay quien lo borró sin leerlo. Y quien lo leyó dos veces."},
+		{"title": "La silla vacía", "recap": "Hay un puesto vacío y nadie explica por qué.", "teaser": "Alguien sabe a dónde fue. Y no piensa decirlo."},
+		{"title": "Promesas de ascensor", "recap": "Lo que se dice entre plantas no se repite.", "teaser": "Hoy alguien va a repetirlo."},
+		{"title": "Cumpleaños con invitados selectos", "recap": "Hubo pastel, pero no para todos.", "teaser": "La lista de invitados dice más que un organigrama."}
+	],
+	"rumors": [
+		"Dicen que Gerencia cambió las cerraduras del archivo.",
+		"Dicen que Sofía y Hugo ya no se saludan.",
+		"Dicen que Desarrollo prepara una renuncia en grupo.",
+		"Dicen que en Infraestructura hay una apuesta sobre ti.",
+		"Dicen que Nexo Consultores ni siquiera tiene oficina.",
+		"Dicen que Marta guarda todos los correos impresos.",
+		"Dicen que la clienta más importante viene sin avisar.",
+		"Dicen que Carla sabe más que todo Recursos Humanos junta."
+	]
+}

@@ -14,6 +14,8 @@ func _ready() -> void:
 	_camera.limit_bottom = used.end.y * tile.y
 	AudioDirector.play_music()
 	WorkdayManager.start_day()
+	if StoryDirector.enabled:
+		$EpisodeCard.present(StoryDirector.episode_today())
 	if WorkdayManager.day == 1:
 		GameState.notice.emit("Ana te busca en Helpdesk: habla con ella (E). Un \"!\" marca a quien espera ayuda. Tab abre tu celular.")
 	else:

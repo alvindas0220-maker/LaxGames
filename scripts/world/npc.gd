@@ -86,18 +86,29 @@ func _physics_process(delta: float) -> void:
 func interact() -> void:
 	_rest(LISTEN_TIME)
 	_face_player()
-	if NpcServices.handle(npc_id, NpcDatabase.get_npc(npc_id).get("service", "")):
-		return
 	var active := TicketManager.active
-	if active != null:
+	if active != null and NpcDatabase.get_npc(npc_id).get("service", "").is_empty():
 		DialogueManager.speak(npc_id, "Sigo esperando: %s." % active.title if active.requester_id == npc_id else "Primero termina tu ticket actual.")
 		return
-	var ticket := TicketQueue.take(npc_id) if WorkdayManager.running else TicketManager.next_for(npc_id)
-	if ticket == null:
-		DialogueManager.speak(npc_id)
+	var service: String = NpcDatabase.get_npc(npc_id).get("service", "")
+	var ticket: TicketData = null
+	if service.is_empty():
+		ticket = TicketQueue.take(npc_id) if WorkdayManager.running else TicketManager.next_for(npc_id)
+	if ticket != null:
+		TicketManager.accept(ticket)
+		DialogueManager.speak(npc_id, ticket.request)
 		return
-	TicketManager.accept(ticket)
-	DialogueManager.speak(npc_id, ticket.request)
+	var gossip := StoryDirector.next_gossip(npc_id)
+	if not gossip.is_empty():
+		StoryDirector.start_gossip(gossip)
+		return
+	if StoryDirector.enabled and Friends.can_vent(npc_id) and GameState.stress > 0.0 and not StoryDirector.talked_today(npc_id):
+		StoryDirector.mark_talked(npc_id)
+		EventDirector.event_started.emit(Friends.vent_node(npc_id))
+		return
+	Friends.chat(npc_id)
+	if not NpcServices.handle(npc_id, service):
+		DialogueManager.speak(npc_id, Factions.greeting(npc_id))
 
 
 ## Camina hacia el siguiente punto, primero por el eje más largo para no cortar esquinas.

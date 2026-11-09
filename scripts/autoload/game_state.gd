@@ -87,7 +87,10 @@ func remove_warning() -> void:
 
 func add_reputation(amount: float) -> void:
 	var before := stage_title()
-	reputation = clampf(reputation + amount, 0.0, MAX_REPUTATION)
+	var cap := StoryDirector.reputation_cap()
+	reputation = clampf(reputation + amount, 0.0, minf(MAX_REPUTATION, maxf(cap, reputation)))
+	if amount > 0.0 and reputation >= cap:
+		StoryDirector.warn_cap()
 	reputation_changed.emit(reputation)
 	var after := stage_title()
 	if after != before:
@@ -113,7 +116,7 @@ func add_stress(amount: float) -> void:
 	if warnings >= MAX_WARNINGS:
 		return
 	var before := stress_level()
-	var scale_up := CareerProfile.stress_scale() * Upgrades.stress_scale()
+	var scale_up := CareerProfile.stress_scale() * Upgrades.stress_scale() * Friends.stress_scale() * DayEvents.mod("stress", 1.0)
 	stress = clampf(stress + amount * (scale_up if amount > 0.0 else 1.0), 0.0, MAX_STRESS)
 	stress_changed.emit(stress)
 	if stress >= MAX_STRESS:

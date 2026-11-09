@@ -19,6 +19,8 @@ var repairs := 1
 var fault := ""
 ## Herramienta obligatoria: "kit", "usb" o "tester".
 var tool := "kit"
+## Pista de la trama que se descubre al resolverlo.
+var clue := ""
 ## Pasos posteriores, cada uno con "target", "fault" y "tool".
 var chain: Array = []
 ## Primera jornada en la que puede aparecer.
@@ -37,6 +39,7 @@ static func from_dict(data: Dictionary) -> TicketData:
 	ticket.time_limit = int(data["time_limit"])
 	ticket.repairs = int(data["repairs"])
 	ticket.fault = data.get("fault", "")
+	ticket.clue = data.get("clue", "")
 	ticket.tool = data.get("tool", "kit")
 	ticket.chain = data.get("chain", [])
 	ticket.min_day = int(data["min_day"])

@@ -21,7 +21,7 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	if not WorkdayManager.running:
+	if not WorkdayManager.running or WorkdayManager.in_lunch():
 		return
 	_timer -= delta
 	if _timer <= 0.0:
@@ -42,10 +42,22 @@ func start_day() -> void:
 
 
 func add(npc_id: String) -> bool:
-	var ticket := TicketManager.next_for(npc_id)
-	if ticket == null or pending.has(npc_id):
+	return _enqueue(npc_id, TicketManager.next_for(npc_id))
+
+
+## Pone en cola un ticket concreto, como los que provoca un día temático.
+func add_ticket(ticket_id: String) -> bool:
+	for ticket: TicketData in TicketManager.catalog:
+		if ticket.id == ticket_id:
+			return _enqueue(ticket.requester_id, ticket)
+	push_error("Ticket desconocido: %s" % ticket_id)
+	return false
+
+
+func _enqueue(npc_id: String, ticket: TicketData) -> bool:
+	if ticket == null or pending.has(npc_id) or (TicketManager.active != null and TicketManager.active.requester_id == npc_id):
 		return false
-	var limit: float = ticket.time_limit * float(NpcDatabase.rules_of(npc_id)["time_scale"]) * WAIT_SCALE * Upgrades.patience_scale()
+	var limit: float = ticket.time_limit * float(NpcDatabase.rules_of(npc_id)["time_scale"]) * WAIT_SCALE * Upgrades.patience_scale() * Factions.wait_scale(npc_id)
 	pending[npc_id] = {"ticket": ticket, "wait": limit, "limit": limit}
 	ticket_added.emit(npc_id)
 	changed.emit()

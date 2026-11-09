@@ -62,7 +62,8 @@ func _ready() -> void:
 
 
 func _process(delta: float) -> void:
-	_day_label.text = "%s  %d/%d" % [WorkdayManager.clock_text(), WorkdayManager.closed_today, WorkdayManager.quota()]
+	var lunch := " Almuerzo" if WorkdayManager.in_lunch() else ""
+	_day_label.text = "%s  %d/%d%s" % [WorkdayManager.clock_text(), WorkdayManager.closed_today, WorkdayManager.quota(), lunch]
 	_prompt_label.visible = not TicketManager.repairing
 	_stress_vignette.visible = GameState.stress >= STRESS_CRITICAL
 	if _stress_vignette.visible:

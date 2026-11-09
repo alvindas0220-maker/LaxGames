@@ -1,0 +1,127 @@
+{
+	"gossip": [
+		{
+			"id": "ana_facturas", "speaker": "ana", "requires": {"min_day": 2},
+			"text": "¿Puedo contarte algo? Hay facturas de Nexo que no cuadran.",
+			"options": [
+				{"label": "Cuéntame, nadie lo sabrá", "clue": "pagos_ana", "factions": {"administracion": 8}, "reply": "Se pagan dos veces, y siempre con firma de Gerencia."},
+				{"label": "Eso no es asunto de IT", "factions": {"administracion": -6}, "reply": "Entendido. Olvida que hablé."}
+			]
+		},
+		{
+			"id": "ivan_licencias", "speaker": "ivan", "requires": {"min_day": 3},
+			"text": "Desarrollo dice que Infraestructura retrasa todo. ¿Tú qué opinas?",
+			"options": [
+				{"label": "Infraestructura sostiene esta empresa", "factions": {"tecnicos": 10, "desarrollo": -8}, "next": "ivan_licencias_2", "reply": ""},
+				{"label": "Desarrollo tiene algo de razón", "factions": {"tecnicos": -10, "desarrollo": 8}, "reply": "Pues pídeles a ellos que arreglen tus servidores."},
+				{"label": "Prefiero no meterme", "reply": "Prudente. Aburrido, pero prudente."}
+			]
+		},
+		{
+			"id": "ivan_licencias_2", "speaker": "ivan", "followup": true,
+			"text": "Por fin alguien sensato. Te diré algo: pagamos licencias que jamás llegaron.",
+			"options": [
+				{"label": "¿Quién firmó esa compra?", "clue": "licencias_ivan", "factions": {"tecnicos": 5}, "reply": "Nexo Consultores. Busca ese nombre."},
+				{"label": "No quiero saberlo", "reply": "Como quieras."}
+			]
+		},
+		{
+			"id": "bruno_cunado", "speaker": "bruno", "requires": {"min_day": 4},
+			"text": "El de Nexo vino a comer con Gerencia. Dicen que es familia. ¿Lo cuento en Ventas?",
+			"options": [
+				{"label": "Averigua de quién es familia", "clue": "cunado_bruno", "factions": {"administracion": 5}, "reply": "Cuñado de alguien de arriba. Yo no te dije nada."},
+				{"label": "Sí, que lo sepa todo el mundo", "factions": {"administracion": 6, "direccion": -10}, "flag": "rumor_publico", "reply": "Para la tarde lo sabrá hasta el perro del guardia."},
+				{"label": "Deja de inventar", "factions": {"administracion": -5}, "reply": "Qué poco sentido del humor."}
+			]
+		},
+		{
+			"id": "sofia_presupuesto", "speaker": "sofia", "requires": {"min_day": 6, "faction_min": {"direccion": 0}},
+			"text": "Me recortan otra vez el presupuesto, {player}. Algo no huele bien.",
+			"options": [
+				{"label": "¿Sospecha de alguien?", "clue": "duda_sofia", "factions": {"direccion": 6}, "reply": "De los que nunca pisan esta planta."},
+				{"label": "Será la crisis", "factions": {"direccion": -4}, "reply": "Claro. La crisis."}
+			]
+		},
+		{
+			"id": "lucia_rivalidad", "speaker": "lucia", "requires": {"min_day": 3},
+			"text": "Infraestructura nos bloquea el despliegue por gusto. ¿Nos ayudas a saltarnos su control?",
+			"options": [
+				{"label": "Les abro el acceso", "factions": {"desarrollo": 12, "tecnicos": -12}, "stress": 4, "flag": "traidor_infra", "reply": "Cuentas con nosotros."},
+				{"label": "Hablaré con Iván", "factions": {"desarrollo": -4, "tecnicos": 4}, "reply": "Eso no servirá de nada."},
+				{"label": "Seguid el procedimiento", "factions": {"desarrollo": -8, "tecnicos": 8}, "reply": "Qué sorpresa, más burocracia."}
+			]
+		},
+		{
+			"id": "lucia_script", "speaker": "lucia", "requires": {"act": 2, "faction_min": {"desarrollo": -10}},
+			"text": "Hay un script en el repositorio que copia datos cada noche. Nadie admite haberlo escrito.",
+			"options": [
+				{"label": "Enséñamelo", "clue": "script_lucia", "factions": {"desarrollo": 6}, "reply": "Te lo paso, pero tú no lo viste aquí."},
+				{"label": "Bórralo y ya", "factions": {"desarrollo": -6}, "reply": "Eso es justo lo que quiere quien lo puso."}
+			]
+		},
+		{
+			"id": "tomas_commit", "speaker": "tomas", "requires": {"act": 2},
+			"text": "Tengo un secreto: vi quién subió ese commit. Pero si hablo me quedo sin trabajo.",
+			"options": [
+				{"label": "Te protegeré, dímelo", "clue": "ruido_tomas", "factions": {"desarrollo": 8}, "reply": "La cuenta era de Gerencia, a las 3 de la mañana."},
+				{"label": "Si no hablas, te delato", "clue": "ruido_tomas", "factions": {"desarrollo": -15}, "flag": "amenazo_tomas", "reply": "Era la cuenta de Gerencia. No vuelvas a hablarme."}
+			]
+		},
+		{
+			"id": "nadia_agenda", "speaker": "nadia", "requires": {"act": 2, "faction_min": {"servicios": 0}},
+			"text": "Anoto todas las visitas. Hay unas nocturnas que no debería haber visto.",
+			"options": [
+				{"label": "¿Me dejas ver la agenda?", "clue": "agenda_nadia", "factions": {"servicios": 6}, "reply": "Cinco minutos, y no te conozco."},
+				{"label": "Mejor no te metas en líos", "factions": {"servicios": -4}, "reply": "Tarde para eso."}
+			]
+		},
+		{
+			"id": "elena_limpieza", "speaker": "elena", "requires": {"min_day": 2},
+			"text": "Nadie saluda a la de limpieza. Pero yo veo qué tira cada quién a la papelera.",
+			"options": [
+				{"label": "Gracias por tu trabajo, Elena", "factions": {"servicios": 10}, "reply": "Mira la papelera de Gerencia, anda."},
+				{"label": "¿Qué has visto? Suéltalo", "factions": {"servicios": -6}, "reply": "Nada que te incumba."}
+			]
+		},
+		{
+			"id": "ramon_ronda", "speaker": "ramon", "requires": {"act": 3, "faction_min": {"servicios": 0}},
+			"text": "Me ordenaron no pasar por el pasillo sur de noche. Veinte años aquí y es la primera vez.",
+			"options": [
+				{"label": "¿Quién te lo ordenó?", "clue": "guardia_ramon", "factions": {"servicios": 6}, "reply": "Una orden firmada por Gerencia. Yo no vi nada, ¿eh?"},
+				{"label": "Órdenes son órdenes", "factions": {"servicios": -5}, "reply": "Eso mismo me digo yo."}
+			]
+		},
+		{
+			"id": "carla_mesa", "speaker": "carla", "requires": {"act": 3},
+			"text": "Hugo y la señora Duarte se sientan siempre en la mesa del fondo. Y hablan de precios.",
+			"options": [
+				{"label": "¿Qué has oído?", "clue": "cafe_carla", "factions": {"servicios": 5}, "reply": "Un precio por lote de clientes. Yo solo sirvo café."},
+				{"label": "No espíes a los clientes", "factions": {"servicios": -5}, "reply": "Perdón."}
+			]
+		},
+		{
+			"id": "ines_oferta", "speaker": "ines", "requires": {"act": 3},
+			"text": "Me han hablado de ti. Hay sitio en mi empresa para alguien que sabe mirar donde no debe.",
+			"options": [
+				{"label": "¿Qué compra exactamente su empresa?", "clue": "oferta_ines", "reply": "Información. Como todos."},
+				{"label": "No me interesa", "reply": "Ya hablaremos."}
+			]
+		},
+		{
+			"id": "marta_aviso", "speaker": "rrhh", "requires": {"min_day": 5},
+			"text": "{player}, oigo que haces demasiadas preguntas. ¿Debería preocuparme?",
+			"options": [
+				{"label": "Solo cumplo con mi trabajo", "factions": {"administracion": 4}, "reply": "Bien. Sigue así, y cierra bien los archivadores."},
+				{"label": "¿Le incomoda algo a RR. HH.?", "factions": {"administracion": -8, "direccion": -4}, "reply": "Tomo nota de ese tono."}
+			]
+		},
+		{
+			"id": "clara_lealtad", "speaker": "clara", "requires": {"min_day": 7},
+			"text": "En Gerencia valoramos la lealtad. ¿Puedo contar contigo?",
+			"options": [
+				{"label": "Por supuesto", "factions": {"direccion": 10, "tecnicos": -4}, "reply": "Me alegra oírlo."},
+				{"label": "Lealtad a la empresa, sí", "factions": {"direccion": -6, "tecnicos": 4}, "reply": "Qué respuesta tan cuidadosa."}
+			]
+		}
+	]
+}
