@@ -54,6 +54,14 @@ func patience_scale() -> float:
 	return 1.0 + _total("patience")
 
 
+func expense_saving() -> int:
+	return roundi(_total("expenses"))
+
+
+func reward_scale() -> float:
+	return 1.0 + _total("reward")
+
+
 func daily_coffee() -> int:
 	return roundi(_total("coffee"))
 

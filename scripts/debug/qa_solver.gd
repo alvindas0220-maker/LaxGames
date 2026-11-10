@@ -4,8 +4,13 @@ extends RefCounted
 
 const PRESS_SECONDS := 0.07
 const HOLD_GRACE := 6
+## Fracción de los momentos de duda en que se pulsa algo equivocado.
+const BLUNDER_RATE := 0.35
+const BLUNDERS := ["attack", "move_left", "move_right", "move_up", "move_down"]
 const FINGER_MOVES := {Vector2i.LEFT: "move_left", Vector2i.RIGHT: "move_right", Vector2i.UP: "move_up", Vector2i.DOWN: "move_down"}
 
+## 1 juega perfecto; menos, se equivoca y tarda como una persona.
+var skill := 1.0
 var _wait := 0.0
 var _holding := false
 var _hold_frames := 0
@@ -23,14 +28,20 @@ func solve(bar: RepairBar, delta: float) -> void:
 	_wait -= delta
 	if _wait > 0.0:
 		return
-	_wait = PRESS_SECONDS
+	_wait = PRESS_SECONDS / skill
+	if randf() > skill and randf() < BLUNDER_RATE:
+		tap(BLUNDERS[randi() % BLUNDERS.size()])
+		return
 	var action := bar._action
 	if action is CipherAction or action is TypingAction:
 		type_char(action.command[action.typed])
 	elif action is ScrewsAction:
 		tap(ScrewsAction.ACTIONS[action.done % ScrewsAction.ACTIONS.size()])
 	elif action is PullAction:
-		_hold_if(action.tension < 0.6)
+		var wanted: bool = action.tension < 0.6
+		if wanted != action._holding:
+			_holding = wanted
+			send("attack", wanted)
 	elif action is WiresAction:
 		tap("slot_%d" % (action.order[action.done] + 1))
 	elif action is PortsAction:

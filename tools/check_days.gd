@@ -104,7 +104,7 @@ func _ready() -> void:
 	GameState.reputation = 0.0
 	TicketManager.resolve(TicketManager.current_target())
 	await frames(2)
-	check("aciertos valen mas", GameState.reputation > 0.45 * 1.2, GameState.reputation)
+	check("aciertos valen mas", GameState.reputation > 10.0 * WorkdayManager.reputation_pace * 1.2, GameState.reputation)
 
 	# Día 3: caída de Desarrollo con tickets forzados.
 	WorkdayManager.day = 3

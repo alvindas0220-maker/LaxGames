@@ -28,6 +28,8 @@ var repairing := false
 var skip_minigame := false
 ## Segundos que llevó resolver el último ticket.
 var last_solve_seconds := 0.0
+## Quién pidió el último ticket cerrado, resuelto o perdido.
+var last_requester := ""
 var _limit := 0.0
 var _served := {}
 
@@ -153,7 +155,7 @@ func resolve(target_id: String) -> bool:
 		return false
 	var ticket := active
 	last_solve_seconds = _limit - time_left
-	var reward: float = ticket.reputation * float(_rules(ticket)["reputation_scale"]) * WorkdayManager.reputation_pace * Factions.reward_scale(ticket.requester_id) * DayEvents.mod("reward", 1.0)
+	var reward: float = ticket.reputation * float(_rules(ticket)["reputation_scale"]) * WorkdayManager.reputation_pace * Factions.reward_scale(ticket.requester_id) * DayEvents.mod("reward", 1.0) * Upgrades.reward_scale() * Incidents.reward_scale(ticket.requester_id)
 	_close(ticket)
 	GameState.notice.emit("%s (+%.1f%%)" % [ticket.done_text, reward])
 	GameState.add_reputation(reward)
@@ -207,6 +209,7 @@ func _rules(ticket: TicketData) -> Dictionary:
 
 
 func _close(ticket: TicketData) -> void:
+	last_requester = ticket.requester_id
 	mark_served(ticket.requester_id)
 	active = null
 	ticket_closed.emit()

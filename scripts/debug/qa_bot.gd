@@ -4,7 +4,8 @@ extends Node
 ## Durante la partida: F12 lo activa o desactiva.
 ## Desde consola:      godot --path . --fixed-fps 60 -- --qa-bot --qa-days=5
 ## Opciones: --qa-seed=N, --qa-max-seconds=N, --qa-report=RUTA, --qa-random (elige
-## opciones al azar en vez de las que dan pistas).
+## opciones al azar en vez de las que dan pistas), --qa-skill=0.7 (juega como una
+## persona: falla y tarda más; 1 es perfecto).
 ## Informe por defecto en user://qa_report.txt. Solo existe en compilaciones de depuración.
 
 const CONFIRM_GAP := 0.5
@@ -54,6 +55,9 @@ var _lost := 0
 var _expired := 0
 var _days_done := 0
 var _fired := 0
+var _purchases := 0
+var _incidents := 0
+var _incidents_clean := 0
 var _clues := 0
 var _solve_times: Array[float] = []
 var _kinds := {}
@@ -193,11 +197,25 @@ func _enter_room(room: Node) -> void:
 func _play_night(night: NightMenu) -> void:
 	if _confirm_wait > 0.0:
 		return
+	_shop()
 	if night.done_tonight == 0 and not night.offers.is_empty() and GameState.stress < 60.0:
 		night._choice = 0
 	else:
 		night._choice = night.offers.size() + 1
 	_confirm("ui_accept")
+
+
+## Compra la mejora más barata que pueda pagar, guardando para los gastos de mañana.
+func _shop() -> void:
+	var cheapest: Dictionary = {}
+	for entry: Dictionary in Upgrades.catalog:
+		if not Upgrades.is_maxed(entry) and (cheapest.is_empty() or Upgrades.price_of(entry) < Upgrades.price_of(cheapest)):
+			cheapest = entry
+	if not cheapest.is_empty() and GameState.money - Upgrades.price_of(cheapest) >= WorkdayManager.expenses() * 2:
+		var price := Upgrades.price_of(cheapest)
+		if Upgrades.buy(cheapest):
+			_purchases += 1
+			log.note("Compra %s por $%d" % [cheapest["name"], price])
 
 
 ## Elige respuesta: prefiere las que dan pistas o relajan; con --qa-random, al azar.
@@ -367,6 +385,12 @@ func _connect_signals() -> void:
 		log.note("Ticket caducado en cola"))
 	WorkdayManager.day_ended.connect(_on_day_ended)
 	GameState.fired.connect(_on_fired)
+	Incidents.started.connect(func(ids: Array) -> void:
+		_incidents += 1
+		log.note("Incidente crítico con %d averías" % ids.size()))
+	Incidents.resolved.connect(func(clean: bool) -> void:
+		_incidents_clean += 1 if clean else 0
+		log.note("Incidente cerrado %s" % ("limpio" if clean else "con pérdidas")))
 	StoryDirector.clue_found.connect(func(id: String) -> void:
 		_clues += 1
 		log.note("Pista: %s" % id))
@@ -390,7 +414,7 @@ func _on_day_ended(summary: Dictionary) -> void:
 	_days_done += 1
 	log.note("Jornada %d: nota %s, %d/%d tickets, perdidos %d, precisión %d%%, estrés %d%% (pico %d%%), reputación %.1f%%, $%d" % [
 		_days_done, summary["grade"], summary["tickets"], summary["quota"], summary["lost"], summary["accuracy"], summary["stress"], summary["stress_peak"], summary["reputation"], summary["money"],
-	])
+	] + (", deuda $%d" % summary["debt"] if summary["debt"] > 0 else ""))
 	if _days_done >= _max_days:
 		_finish.call_deferred()
 
@@ -427,6 +451,9 @@ func _write_report() -> void:
 		"Tickets: aceptados %d, resueltos %d, perdidos %d, caducados %d" % [_accepted, _solved, _lost, _expired],
 		"Tiempo medio por ticket: %.1f s" % average,
 		"Despidos: %d" % _fired,
+		"Habilidad del bot: %.2f" % _solver.skill,
+		"Incidentes: %d, sin pérdidas %d" % [_incidents, _incidents_clean],
+		"Compras: %d, dinero final $%d" % [_purchases, GameState.money],
 		"Pistas: %d, acto %d" % [_clues, StoryDirector.act],
 		"Reputación: %.1f%%, puesto: %s" % [GameState.reputation, GameState.stage_title()],
 		"Atascos de ruta: %d" % (_walker.stuck_count if _walker != null else 0),
@@ -458,6 +485,8 @@ func _read_arguments(args: PackedStringArray) -> void:
 			_max_seconds = arg.get_slice("=", 1).to_float()
 		elif arg.begins_with("--qa-report="):
 			log.path = arg.get_slice("=", 1)
+		elif arg.begins_with("--qa-skill="):
+			_solver.skill = clampf(arg.get_slice("=", 1).to_float(), 0.3, 1.0)
 		elif arg == "--qa-random":
 			_random_choices = true
 	seed(_rng.seed)

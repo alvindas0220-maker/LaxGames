@@ -57,7 +57,8 @@ func _process(_delta: float) -> void:
 func _draw() -> void:
 	if not TicketQueue.pending.has(npc_id):
 		return
-	var color := MARK_URGENT if TicketQueue.urgency(npc_id) > URGENT_FROM else MARK_CALM
+	var urgent := TicketQueue.urgency(npc_id) > URGENT_FROM or Incidents.is_critical(npc_id)
+	var color := MARK_URGENT if urgent else MARK_CALM
 	var top := MARK_TOP - (Time.get_ticks_msec() / 250 % 2)
 	draw_rect(Rect2(-2, top, 4, 10), MARK_INK)
 	draw_rect(Rect2(-1, top + 1, 2, 5), color)

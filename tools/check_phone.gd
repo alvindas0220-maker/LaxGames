@@ -129,14 +129,14 @@ func _ready() -> void:
 	check("compra mejora", Upgrades.level_of("zapatos") == 1 and GameState.money == 1000 - Upgrades.catalog[0]["prices"][0], GameState.money)
 	await tick(2)
 	await shot("res://.godot/phone_shop.png")
-	check("mas velocidad", is_equal_approx(Upgrades.speed_scale(), 1.1), Upgrades.speed_scale())
+	check("mas velocidad", is_equal_approx(Upgrades.speed_scale(), 1.0 + float(shoes["value"])), Upgrades.speed_scale())
 	Upgrades._levels["zapatos"] = shoes["prices"].size()
 	check("tope de nivel", Upgrades.is_maxed(shoes) and not Upgrades.buy(shoes))
 	Upgrades.reset()
 	Upgrades._levels["meditacion"] = 1
 	GameState.stress = 0.0
 	GameState.add_stress(10.0)
-	check("resistencia al estres", is_equal_approx(GameState.stress, 9.2), GameState.stress)
+	check("resistencia al estres", is_equal_approx(GameState.stress, 10.0 * (1.0 - float(Upgrades.catalog[1]["value"]))), GameState.stress)
 	GameState.stress = 0.0
 	Upgrades.reset()
 	await tab_key()
@@ -204,7 +204,7 @@ func _ready() -> void:
 	await tick(3)
 	check("metricas", summary[0]["tool_errors"] == 2 and is_equal_approx(summary[0]["accuracy"], 80.0) and summary[0]["lost"] == 1, summary[0]["grade"])
 	check("calificacion", summary[0]["grade"] == "A", DayStats.score(5))
-	check("cobra el sueldo", GameState.money == money + WorkdayManager.salary(), GameState.money)
+	check("cobra el sueldo y paga gastos", GameState.money == money + WorkdayManager.salary() - WorkdayManager.expenses(), GameState.money)
 	var report: Label = room.get_node("DaySummary").get_node("%SummaryLabel")
 	check("informe en pantalla", report.text.contains("Calificación A") and report.text.contains("Precisión 80%") and report.text.contains("ahorros"), report.text)
 	await shot("res://.godot/report.png")

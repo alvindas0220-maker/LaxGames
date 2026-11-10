@@ -24,6 +24,8 @@ var _lunch_announced := false
 var _config := {}
 var _reputation_at_start := 0.0
 var _warned_this_week := false
+## Lo que faltó para pagar los gastos de anoche.
+var debt := 0
 
 
 func _ready() -> void:
@@ -57,6 +59,7 @@ func start_day() -> void:
 	lunch_taken = false
 	_lunch_announced = false
 	DayEvents.start_day()
+	Incidents.start_day()
 	DayStats.reset()
 	TicketQueue.start_day()
 
@@ -97,7 +100,18 @@ func max_pending() -> int:
 
 ## Estrés por segundo que suma cada ticket en espera.
 func queue_stress() -> float:
-	return float(_config["queue_stress"])
+	return difficulty("queue_stress")
+
+
+## Valor de la curva de dificultad para la semana actual; tras la última, se mantiene.
+func difficulty(key: String) -> float:
+	var weeks: Array = _config["weeks"]
+	return float(weeks[mini(week(), weeks.size() - 1)][key])
+
+
+## Gastos de vida del día según el puesto, menos lo que ahorren las mejoras.
+func expenses() -> int:
+	return maxi(0, int(_chapter().get("expenses", 0)) - Upgrades.expense_saving())
 
 
 func event_pace() -> float:
@@ -136,7 +150,11 @@ func next_day() -> void:
 	var rest_bonus := Friends.rest_bonus()
 	GameState.add_stress(-float(_config["overnight_rest"]) - rest_bonus)
 	ToolBelt.add_coffee(int(_config["daily_coffee"]) + Upgrades.daily_coffee())
+	if debt > 0:
+		GameState.add_stress(float(_config["debt_stress"]))
 	morning_note = "La soledad pesa: llevas días sin hablar con nadie." if Friends.is_lonely() else ""
+	if debt > 0:
+		morning_note += " No llegaste a pagar los gastos: debes $%d y te quita el sueño." % debt
 	if (day - 1) % int(_config["days_per_week"]) == 0:
 		if not _warned_this_week and GameState.warnings > 0:
 			GameState.remove_warning()
@@ -156,6 +174,8 @@ func new_game() -> void:
 	StoryDirector.reset()
 	DayEvents.reset()
 	Overheard.reset()
+	Incidents.reset()
+	debt = 0
 	running = false
 	clock = 0.0
 	day = 1
@@ -189,7 +209,10 @@ func _end_day() -> void:
 	if GameState.warnings >= GameState.MAX_WARNINGS:
 		return
 	var extra := maxi(closed_today - quota(), 0) * int(_config["extra_ticket_pay"])
-	GameState.add_money(salary() + extra)
+	var costs := expenses()
+	var balance := GameState.money + salary() + extra - costs
+	debt = maxi(-balance, 0)
+	GameState.add_money(salary() + extra - costs)
 	day_ended.emit({
 		"social": Friends.social_today,
 		"grade": DayStats.grade(quota()),
@@ -200,6 +223,8 @@ func _end_day() -> void:
 		"stress_peak": DayStats.stress_peak,
 		"salary": salary(),
 		"extra": extra,
+		"expenses": costs,
+		"debt": debt,
 		"money": GameState.money,
 		"label": label(),
 		"phase": phase(),

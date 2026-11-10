@@ -5,6 +5,9 @@ signal changed
 signal ticket_added(npc_id: String)
 signal ticket_expired
 
+## Último NPC cuyo ticket caducó en la cola.
+var last_expired := ""
+
 const FIRST_TICKET_DELAY := 3.0
 ## Margen de espera respecto al plazo del ticket.
 const WAIT_SCALE := 1.2
@@ -27,7 +30,10 @@ func _process(delta: float) -> void:
 	if _timer <= 0.0:
 		_timer = WorkdayManager.spawn_interval()
 		_spawn()
-	GameState.add_stress(pending.size() * WorkdayManager.queue_stress() * delta)
+	var weight := 0.0
+	for npc_id: String in pending:
+		weight += Incidents.queue_stress_scale(npc_id)
+	GameState.add_stress(weight * WorkdayManager.queue_stress() * delta)
 	for npc_id: String in pending.keys():
 		pending[npc_id]["wait"] -= delta
 		if pending[npc_id]["wait"] <= 0.0:
@@ -57,7 +63,7 @@ func add_ticket(ticket_id: String) -> bool:
 func _enqueue(npc_id: String, ticket: TicketData) -> bool:
 	if ticket == null or pending.has(npc_id) or (TicketManager.active != null and TicketManager.active.requester_id == npc_id):
 		return false
-	var limit: float = ticket.time_limit * float(NpcDatabase.rules_of(npc_id)["time_scale"]) * WAIT_SCALE * Upgrades.patience_scale() * Factions.wait_scale(npc_id)
+	var limit: float = ticket.time_limit * float(NpcDatabase.rules_of(npc_id)["time_scale"]) * WAIT_SCALE * Upgrades.patience_scale() * Factions.wait_scale(npc_id) * WorkdayManager.difficulty("wait") * Incidents.wait_scale(npc_id)
 	pending[npc_id] = {"ticket": ticket, "wait": limit, "limit": limit}
 	ticket_added.emit(npc_id)
 	changed.emit()
@@ -99,6 +105,7 @@ func _spawn() -> void:
 
 func _expire(npc_id: String) -> void:
 	pending.erase(npc_id)
+	last_expired = npc_id
 	ticket_expired.emit()
 	TicketManager.mark_served(npc_id)
 	GameState.add_stress(EXPIRE_STRESS)

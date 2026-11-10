@@ -56,7 +56,7 @@ func _ready() -> void:
 	check("jornada en HUD", day_label.text.contains("0/5"), day_label.text)
 
 	await close_ticket("ana")
-	check("reputacion con ritmo", is_equal_approx(GameState.reputation, 0.45), GameState.reputation)
+	check("reputacion con ritmo", is_equal_approx(GameState.reputation, 10.0 * WorkdayManager.reputation_pace), GameState.reputation)
 	check("jornada sigue", not get_tree().paused and WorkdayManager.closed_today == 1)
 	for i in 5:
 		await close_ticket("bruno")

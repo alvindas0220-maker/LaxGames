@@ -7,7 +7,7 @@ const TABS := ["Estado", "Tickets", "Trabajo", "Tienda", "Caso", "Amigos"]
 const SHOP_TAB := 3
 const CASE_TAB := 4
 const FRIENDS_TAB := 5
-const PRIORITY_ORDER := {"Crítica": 0, "Alta": 1, "Normal": 2, "Baja": 3}
+const PRIORITY_ORDER := {"CRÍTICO": -1, "Crítica": 0, "Alta": 1, "Normal": 2, "Baja": 3}
 const REFRESH_SECONDS := 0.25
 const CLOSED_X := 8.0
 const OPEN_X := -168.0
@@ -133,7 +133,7 @@ func sorted_tickets() -> Array:
 			"priority": TicketManager.priority(), "seconds": TicketManager.time_left, "active": true})
 	for npc_id: String in TicketQueue.pending:
 		var entry: Dictionary = TicketQueue.pending[npc_id]
-		var priority := str(NpcDatabase.rules_of(npc_id)["priority"])
+		var priority := "CRÍTICO" if Incidents.is_critical(npc_id) else str(NpcDatabase.rules_of(npc_id)["priority"])
 		rows.append({"rank": PRIORITY_ORDER.get(priority, 9), "urgency": TicketQueue.urgency(npc_id), "ticket": entry["ticket"],
 			"priority": priority, "seconds": entry["wait"], "active": false})
 	rows.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
@@ -187,8 +187,8 @@ func _show_tickets() -> void:
 func _show_work() -> void:
 	var quota := WorkdayManager.quota()
 	var theme := "Hoy: %s\n" % DayEvents.title() if not DayEvents.title().is_empty() else ""
-	_text.text = theme + "Cuota: %d de %d\nPerdidos hoy: %d\nPrecisión: %d%%\nFalta para ascenso: %s\nSueldo diario: $%d\nAhorros: $%d\n\nTeclas: 1 Kit  2 Café\n3 USB  4 Tester  Espacio: usar" % [
-		WorkdayManager.closed_today, quota, DayStats.lost, DayStats.accuracy(), _next_promotion(), WorkdayManager.salary(), GameState.money,
+	_text.text = theme + "Cuota: %d de %d\nPerdidos hoy: %d\nPrecisión: %d%%\nFalta para ascenso: %s\nSueldo: $%d  Gastos: $%d\nAhorros: $%d\n\nTeclas: 1 Kit  2 Café\n3 USB  4 Tester  Espacio: usar" % [
+		WorkdayManager.closed_today, quota, DayStats.lost, DayStats.accuracy(), _next_promotion(), WorkdayManager.salary(), WorkdayManager.expenses(), GameState.money,
 	]
 
 

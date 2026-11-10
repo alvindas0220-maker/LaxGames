@@ -1,9 +1,11 @@
 {
 	"upgrades": [
-		{"id": "zapatos", "name": "Zapatos cómodos", "text": "Caminas un 10% más rápido.", "effect": "speed", "value": 0.1, "prices": [120, 240, 420]},
-		{"id": "meditacion", "name": "App de meditación", "text": "El estrés sube un 8% menos.", "effect": "stress", "value": 0.08, "prices": [150, 300, 500]},
-		{"id": "kit_pro", "name": "Herramientas pro", "text": "Zona verde un 15% más ancha.", "effect": "zone", "value": 0.15, "prices": [140, 280, 460]},
-		{"id": "termo", "name": "Termo de café", "text": "Un café más cada mañana.", "effect": "coffee", "value": 1, "prices": [180, 360]},
-		{"id": "agenda", "name": "Agenda digital", "text": "La gente espera un 12% más.", "effect": "patience", "value": 0.12, "prices": [160, 320, 520]}
+		{"id": "zapatos", "name": "Zapatos cómodos", "text": "Caminas un 12% más rápido.", "effect": "speed", "value": 0.12, "prices": [300, 650, 1100]},
+		{"id": "meditacion", "name": "App de meditación", "text": "El estrés sube un 10% menos.", "effect": "stress", "value": 0.1, "prices": [350, 750, 1250]},
+		{"id": "kit_pro", "name": "Herramientas pro", "text": "Zona verde un 18% más ancha.", "effect": "zone", "value": 0.18, "prices": [300, 700, 1150]},
+		{"id": "termo", "name": "Termo de café", "text": "Un café más cada mañana.", "effect": "coffee", "value": 1, "prices": [400, 850]},
+		{"id": "agenda", "name": "Agenda digital", "text": "La gente espera un 15% más.", "effect": "patience", "value": 0.15, "prices": [350, 750, 1250]},
+		{"id": "bicicleta", "name": "Bicicleta", "text": "Gastas $15 menos al día en transporte.", "effect": "expenses", "value": 15, "prices": [250]},
+		{"id": "mentor", "name": "Mentoría", "text": "Cada ticket da un 10% más de reputación.", "effect": "reward", "value": 0.1, "prices": [500, 1100]}
 	]
 }
