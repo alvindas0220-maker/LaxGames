@@ -53,7 +53,12 @@ func _process(_delta: float) -> void:
 	var node: Dictionary = _story["decisions"][_pending_decision]
 	_pending_decision = ""
 	AudioDirector.play("stinger")
-	EventDirector.event_started.emit(node)
+	var stage := get_tree().get_first_node_in_group("story_scene") as StoryScene
+	if node.has("scene") and stage != null:
+		stage.finished.connect(func() -> void: EventDirector.event_started.emit(node), CONNECT_ONE_SHOT)
+		stage.play(node["scene"])
+	else:
+		EventDirector.event_started.emit(node)
 
 
 func clue_catalog() -> Dictionary:
@@ -132,6 +137,21 @@ func advance_act() -> void:
 	_warned_cap = false
 	story_changed.emit()
 	_check_act()
+
+
+func epilogue_data() -> Dictionary:
+	return _story.get("epilogue", {})
+
+
+## El NPC sigue en la oficina según lo que hayas decidido.
+func is_present(npc_id: String) -> bool:
+	var gone: Dictionary = _story.get("presence", {}).get(npc_id, {})
+	if not enabled or gone.is_empty():
+		return true
+	for flag: String in gone.get("flags", []):
+		if flags.has(flag):
+			return false
+	return true
 
 
 func ending_text() -> String:

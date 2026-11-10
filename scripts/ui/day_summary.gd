@@ -1,6 +1,8 @@
 extends CanvasLayer
 ## Resumen al acabar la jornada, y pantalla final al llegar al 200 %.
 
+const EPILOGUE := "res://scenes/ui/epilogue.tscn"
+
 var _finished := false
 var _opened_at := 0
 
@@ -19,8 +21,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	get_viewport().set_input_as_handled()
 	get_tree().paused = false
 	if _finished:
-		WorkdayManager.new_game()
-		get_tree().change_scene_to_file(ProjectSettings.get_setting("application/run/main_scene"))
+		get_tree().change_scene_to_file(EPILOGUE)
 	else:
 		_panel.hide()
 		get_tree().paused = true

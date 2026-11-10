@@ -136,6 +136,9 @@ func _process(delta: float) -> void:
 		"IntroCutscene":
 			_watch("intro")
 			_confirm("ui_accept")
+		"Epilogue":
+			_watch("epilogo")
+			_confirm("ui_accept")
 		"Office":
 			_play_office(scene, delta)
 		_:
@@ -166,7 +169,10 @@ func _play_office(room: Node, delta: float) -> void:
 	if not _kind_started.is_empty():
 		_close_minigame()
 	_solver.reset()
-	if room.get_node("GameOver/Panel").visible:
+	if room.get_node("StoryScene/Panel").visible:
+		_watch("escena")
+		_confirm("ui_accept")
+	elif room.get_node("GameOver/Panel").visible:
 		_watch("despido")
 		_confirm("ui_accept")
 	elif room.get_node("DaySummary/Panel").visible:

@@ -356,7 +356,7 @@ func _initialize() -> void:
 	hud.world_layer = world_layer
 	var over: Node = (load("res://scenes/ui/game_over.tscn") as PackedScene).instantiate(PackedScene.GEN_EDIT_STATE_INSTANCE)
 	add_owned(root_node, over, root_node)
-	for path: String in ["res://scenes/ui/repair_bar.tscn", "res://scenes/ui/event_panel.tscn", "res://scenes/ui/day_summary.tscn", "res://scenes/ui/night_menu.tscn", "res://scenes/ui/phone.tscn", "res://scenes/ui/episode_card.tscn", "res://scenes/ui/pause_menu.tscn"]:
+	for path: String in ["res://scenes/ui/repair_bar.tscn", "res://scenes/ui/event_panel.tscn", "res://scenes/ui/day_summary.tscn", "res://scenes/ui/night_menu.tscn", "res://scenes/ui/phone.tscn", "res://scenes/ui/episode_card.tscn", "res://scenes/ui/pause_menu.tscn", "res://scenes/ui/story_scene.tscn"]:
 		add_owned(root_node, (load(path) as PackedScene).instantiate(PackedScene.GEN_EDIT_STATE_INSTANCE), root_node)
 
 	var packed := PackedScene.new()

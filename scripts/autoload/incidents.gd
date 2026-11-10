@@ -51,7 +51,7 @@ func start_day() -> void:
 func trigger() -> bool:
 	var busy := TicketManager.active.requester_id if TicketManager.active != null else ""
 	var free: Array = NpcDatabase.ids().filter(func(id: String) -> bool:
-		return id != busy and not TicketQueue.pending.has(id) and TicketManager.next_for(id) != null)
+		return id != busy and not TicketQueue.pending.has(id) and StoryDirector.is_present(id) and TicketManager.next_for(id) != null)
 	free.shuffle()
 	var chosen: Array = []
 	for npc_id: String in free.slice(0, rng.randi_range(SIZE_MIN, SIZE_MAX)):

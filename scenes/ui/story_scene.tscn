@@ -1,0 +1,100 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/story_scene.gd" id="1_scene"]
+[ext_resource type="FontFile" path="res://assets/fonts/hud_pixel.fnt" id="2_font"]
+[ext_resource type="Texture2D" path="res://assets/sprites/ui/hud_atlas.png" id="3_atlas"]
+
+[sub_resource type="Theme" id="Theme_scene"]
+default_font = ExtResource("2_font")
+default_font_size = 8
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_box"]
+content_margin_left = 8.0
+content_margin_top = 5.0
+content_margin_right = 8.0
+content_margin_bottom = 5.0
+texture = ExtResource("3_atlas")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+region_rect = Rect2(0, 10, 9, 9)
+
+[node name="StoryScene" type="CanvasLayer"]
+process_mode = 3
+layer = 11
+script = ExtResource("1_scene")
+
+[node name="Panel" type="Control" parent="."]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_scene")
+
+[node name="SceneBack" type="TextureRect" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BarTop" type="ColorRect" parent="Panel"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 14.0
+grow_horizontal = 2
+color = Color(0.03, 0.02, 0.05, 1)
+
+[node name="SceneLeft" type="TextureRect" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 40.0
+offset_top = 96.0
+offset_right = 80.0
+offset_bottom = 136.0
+scale = Vector2(2, 2)
+
+[node name="SceneRight" type="TextureRect" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 264.0
+offset_top = 96.0
+offset_right = 304.0
+offset_bottom = 136.0
+scale = Vector2(2, 2)
+flip_h = true
+
+[node name="Box" type="PanelContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -50.0
+offset_right = -8.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxTexture_box")
+
+[node name="Rows" type="VBoxContainer" parent="Panel/Box"]
+layout_mode = 2
+theme_override_constants/separation = 1
+
+[node name="SceneSpeaker" type="Label" parent="Panel/Box/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.97, 0.82, 0.28, 1)
+
+[node name="SceneText" type="Label" parent="Panel/Box/Rows"]
+unique_name_in_owner = true
+layout_mode = 2
+autowrap_mode = 2

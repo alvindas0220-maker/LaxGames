@@ -61,7 +61,7 @@ func add_ticket(ticket_id: String) -> bool:
 
 
 func _enqueue(npc_id: String, ticket: TicketData) -> bool:
-	if ticket == null or pending.has(npc_id) or (TicketManager.active != null and TicketManager.active.requester_id == npc_id):
+	if ticket == null or pending.has(npc_id) or not StoryDirector.is_present(npc_id) or (TicketManager.active != null and TicketManager.active.requester_id == npc_id):
 		return false
 	var limit: float = ticket.time_limit * float(NpcDatabase.rules_of(npc_id)["time_scale"]) * WAIT_SCALE * Upgrades.patience_scale() * Factions.wait_scale(npc_id) * WorkdayManager.difficulty("wait") * Incidents.wait_scale(npc_id)
 	pending[npc_id] = {"ticket": ticket, "wait": limit, "limit": limit}
@@ -98,7 +98,7 @@ func _spawn() -> void:
 		return
 	var busy := TicketManager.active.requester_id if TicketManager.active != null else ""
 	var free := NpcDatabase.ids().filter(func(id: String) -> bool:
-		return id != busy and not pending.has(id) and TicketManager.next_for(id) != null)
+		return id != busy and not pending.has(id) and StoryDirector.is_present(id) and TicketManager.next_for(id) != null)
 	if not free.is_empty():
 		add(free[rng.randi_range(0, free.size() - 1)])
 

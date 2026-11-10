@@ -150,6 +150,7 @@ func _ready() -> void:
 	check("la decision espera a la carrera", not panel.visible and StoryDirector.act == 1, GameState.reputation)
 	GameState.add_reputation(59.9)
 	await frames(4)
+	await skip_scene()
 	check("decision del acto", panel.visible and room.get_node("EventPanel")._event["id"] == "decision_acto1", panel.visible)
 	await shot("res://.godot/story_decision.png")
 	await get_tree().create_timer(0.45, true, false, true).timeout
@@ -174,6 +175,7 @@ func _ready() -> void:
 	for id: String in ["script_lucia", "ruido_tomas", "laptop_hugo"]:
 		StoryDirector.discover(id)
 	await frames(4)
+	await skip_scene()
 	EventDirector.choose(room.get_node("EventPanel")._event, 0)
 	room.get_node("EventPanel/Panel").hide()
 	get_tree().paused = false
@@ -183,6 +185,7 @@ func _ready() -> void:
 	for id: String in ["disco_ducto", "huella_fantasma", "oferta_ines", "cafe_carla"]:
 		StoryDirector.discover(id)
 	await frames(4)
+	await skip_scene()
 	EventDirector.choose(room.get_node("EventPanel")._event, 0)
 	room.get_node("EventPanel/Panel").hide()
 	get_tree().paused = false
@@ -283,3 +286,14 @@ func _ready() -> void:
 	WorkdayManager.day = 1
 	print("fallos: ", fails)
 	get_tree().quit(1 if fails > 0 else 0)
+
+
+## Pasa la escena que precede a cada decisión de la trama.
+func skip_scene() -> void:
+	var stage: StoryScene = get_tree().current_scene.get_node("StoryScene")
+	check("escena antes de decidir", stage.is_playing())
+	while stage.is_playing():
+		stage._text.visible_characters = stage._text.text.length()
+		stage._next()
+	await frames(3)
+

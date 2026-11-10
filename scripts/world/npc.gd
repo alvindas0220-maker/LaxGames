@@ -21,6 +21,11 @@ const MARK_INK := Color8(26, 20, 32)
 const MARK_CALM := Color8(248, 216, 120)
 const MARK_URGENT := Color8(232, 72, 60)
 const URGENT_FROM := 0.66
+const TRIP_PATIENCE := 2.5
+const EMOTE_RANGE := 44.0
+const EMOTE_SECONDS := 1.6
+const HEART := Color8(232, 72, 110)
+const CLOUD := Color8(110, 110, 130)
 
 @export var npc_id := ""
 ## Puntos que recorre en bucle; vacío si solo pasea junto a su puesto.
@@ -34,12 +39,23 @@ var _timer := 0.0
 var _anim := 0.0
 var _waypoint := 0
 var _still := false
+## Puesto original; _home cambia mientras está en la cafetería.
+var _origin := Vector2.ZERO
+var _trip := PackedVector2Array()
+var _trip_stuck := 0.0
+var _emote_left := 0.0
+var _player_near := false
 
 @onready var _sprite: Sprite2D = $Sprite2D
 
 
 func _ready() -> void:
 	_home = position
+	_origin = position
+	if not StoryDirector.is_present(npc_id):
+		remove_from_group("npcs")
+		queue_free()
+		return
 	_look = int(NpcDatabase.get_npc(npc_id).get("sprite_frame", 0))
 	_still = bool(NpcDatabase.get_npc(npc_id).get("still", false))
 	_timer = randf_range(0.5, 3.0)
@@ -50,12 +66,13 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	if TicketQueue.pending.has(npc_id):
+	if TicketQueue.pending.has(npc_id) or _emote_left > 0.0:
 		queue_redraw()
 
 
 func _draw() -> void:
 	if not TicketQueue.pending.has(npc_id):
+		_draw_emote()
 		return
 	var urgent := TicketQueue.urgency(npc_id) > URGENT_FROM or Incidents.is_critical(npc_id)
 	var color := MARK_URGENT if urgent else MARK_CALM
@@ -67,6 +84,10 @@ func _draw() -> void:
 
 func _physics_process(delta: float) -> void:
 	_timer -= delta
+	_update_emote(delta)
+	if not _trip.is_empty():
+		_walk_trip(delta)
+		return
 	if _still:
 		return
 	if not route.is_empty():
@@ -82,6 +103,65 @@ func _physics_process(delta: float) -> void:
 	_show_frame(WALK_COLS[int(_anim / STEP_TIME) % WALK_COLS.size()])
 	if _timer <= 0.0 or get_slide_collision_count() > 0 or position.distance_to(_home) > WANDER_RADIUS:
 		_rest(randf_range(1.5, 5.0))
+
+
+## Sigue los horarios de la oficina: los fijos y los de ronda se quedan en lo suyo.
+func follows_routine() -> bool:
+	return not _still and route.is_empty() and is_inside_tree()
+
+
+## Camina hasta un punto por la ruta de la oficina y se queda por allí.
+func go_to(point: Vector2) -> void:
+	var life := get_tree().get_first_node_in_group("office_life") as OfficeLife
+	if life == null:
+		return
+	_trip = life.route(global_position, point)
+	_home = point - get_parent().global_position
+	_trip_stuck = 0.0
+
+
+func go_home() -> void:
+	go_to(get_parent().global_position + _origin)
+
+
+func _walk_trip(delta: float) -> void:
+	var target := _trip[0]
+	if global_position.distance_to(target) <= 3.0:
+		_trip.remove_at(0)
+		if _trip.is_empty():
+			_rest(randf_range(1.0, 3.0))
+		return
+	var offset := target - global_position
+	_direction = Vector2(signf(offset.x), 0.0) if absf(offset.x) > 2.0 else Vector2(0.0, signf(offset.y))
+	_row = _row_for(_direction)
+	var before := global_position
+	velocity = _direction * PATROL_SPEED
+	move_and_slide()
+	_anim += delta
+	_show_frame(WALK_COLS[int(_anim / STEP_TIME) % WALK_COLS.size()])
+	# Si alguien le bloquea mucho rato, da un paso al siguiente punto.
+	_trip_stuck = 0.0 if global_position.distance_to(before) > 0.2 else _trip_stuck + delta
+	if _trip_stuck > TRIP_PATIENCE:
+		global_position = target
+		_trip_stuck = 0.0
+
+
+## Gesto breve al acercarte: corazón si te aprecia, nube si te tiene manía.
+func _update_emote(delta: float) -> void:
+	_emote_left = maxf(_emote_left - delta, 0.0)
+	var player := get_tree().get_first_node_in_group("player") as Node2D
+	var near := player != null and player.global_position.distance_to(global_position) < EMOTE_RANGE
+	if near and not _player_near and emote() != 0:
+		_emote_left = EMOTE_SECONDS
+		queue_redraw()
+	_player_near = near
+
+
+## 1 si te aprecia, -1 si no te soporta, 0 si le das igual.
+func emote() -> int:
+	if Friends.tier_index(npc_id) >= 2 or Factions.attitude(npc_id) > 0:
+		return 1
+	return -1 if Factions.attitude(npc_id) < 0 else 0
 
 
 func interact() -> void:
@@ -167,3 +247,20 @@ func _row_for(offset: Vector2) -> int:
 
 func _show_frame(col: int) -> void:
 	_sprite.frame = _look * FRAMES_PER_LOOK + _row * COLS + col
+
+
+func _draw_emote() -> void:
+	if _emote_left <= 0.0:
+		return
+	var top := MARK_TOP + 2.0
+	draw_rect(Rect2(-3, top - 1, 7, 6), MARK_INK)
+	if emote() > 0:
+		draw_rect(Rect2(-2, top, 2, 2), HEART)
+		draw_rect(Rect2(1, top, 2, 2), HEART)
+		draw_rect(Rect2(-2, top + 2, 5, 1), HEART)
+		draw_rect(Rect2(-1, top + 3, 3, 1), HEART)
+	else:
+		draw_rect(Rect2(-2, top + 1, 5, 2), CLOUD)
+		draw_rect(Rect2(-1, top, 3, 1), CLOUD)
+		draw_rect(Rect2(-1, top + 3, 1, 1), Color8(110, 170, 240))
+		draw_rect(Rect2(2, top + 3, 1, 1), Color8(110, 170, 240))

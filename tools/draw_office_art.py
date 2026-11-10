@@ -19,6 +19,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import draw_hero_pixels as hero
 import draw_portraits
+import draw_scenes
 import draw_ui_font
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -787,4 +788,5 @@ if __name__ == "__main__":
     phone_art()
     night_room()
     title_screen()
+    draw_scenes.main()
     print("arte de oficina generado")
