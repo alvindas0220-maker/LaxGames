@@ -31,6 +31,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _on_fired() -> void:
 	_strict = GameState.fired_for_cause
+	SaveGame.delete()
 	if _strict:
 		CareerProfile.fired_for_cause()
 		_label.text = FOR_CAUSE_TEXT % [GameState.slip_line, CareerProfile.player_name]

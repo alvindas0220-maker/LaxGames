@@ -51,7 +51,7 @@ func _ready() -> void:
 	TicketManager.skip_minigame = true
 	EventDirector.enabled = false
 	WorkdayManager.reputation_pace = 1.0
-	check("escena principal", ProjectSettings.get_setting("application/run/main_scene") == "res://scenes/ui/name_entry.tscn")
+	check("escena principal", ProjectSettings.get_setting("application/run/main_scene") == "res://scenes/ui/main_menu.tscn")
 	await get_tree().process_frame
 	var intro: Node = (load("res://scenes/ui/intro_cutscene.tscn") as PackedScene).instantiate()
 	get_tree().root.add_child(intro)

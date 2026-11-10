@@ -145,3 +145,14 @@ func reset() -> void:
 	night = false
 	fired_for_cause = false
 	slip_line = ""
+
+
+func save_state() -> Dictionary:
+	return {"warnings": warnings, "reputation": reputation, "stress": stress, "money": money}
+
+
+func load_state(data: Dictionary) -> void:
+	warnings = int(data["warnings"])
+	reputation = float(data["reputation"])
+	stress = float(data["stress"])
+	money = int(data["money"])

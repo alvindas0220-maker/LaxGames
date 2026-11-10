@@ -37,6 +37,8 @@ func _ready() -> void:
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(DATA_PATH))
 	_lines = parsed["lines"] if parsed is Dictionary else []
 	AudioDirector.play_music()
+	for player: AudioStreamPlayer in [_sfx, _blip, $Ambience]:
+		player.bus = Settings.SFX_BUS
 	_opened_at = Time.get_ticks_msec()
 	var hero: TextureRect = $Hero
 	if hero.texture is AtlasTexture:

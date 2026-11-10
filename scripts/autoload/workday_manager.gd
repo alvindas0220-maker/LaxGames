@@ -239,3 +239,15 @@ func _end_day() -> void:
 		"brief": StoryDirector.ending_text() if GameState.reputation >= GameState.MAX_REPUTATION and not StoryDirector.ending_text().is_empty() else chapter_brief(),
 		"finished": GameState.reputation >= GameState.MAX_REPUTATION,
 	})
+
+
+func save_state() -> Dictionary:
+	return {"day": day, "debt": debt, "warned_week": _warned_this_week, "reputation_start": _reputation_at_start, "morning_note": morning_note}
+
+
+func load_state(data: Dictionary) -> void:
+	day = int(data["day"])
+	debt = int(data["debt"])
+	_warned_this_week = bool(data["warned_week"])
+	_reputation_at_start = float(data["reputation_start"])
+	morning_note = str(data["morning_note"])

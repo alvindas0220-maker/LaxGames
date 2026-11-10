@@ -1,0 +1,61 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/pause_menu.gd" id="1_pause"]
+[ext_resource type="FontFile" path="res://assets/fonts/hud_pixel.fnt" id="2_font"]
+[ext_resource type="PackedScene" path="res://scenes/ui/options_panel.tscn" id="3_options"]
+
+[sub_resource type="Theme" id="Theme_pause"]
+default_font = ExtResource("2_font")
+default_font_size = 8
+
+[node name="PauseMenu" type="CanvasLayer"]
+process_mode = 3
+layer = 13
+script = ExtResource("1_pause")
+
+[node name="Panel" type="ColorRect" parent="."]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_pause")
+color = Color(0.05, 0.04, 0.09, 0.85)
+
+[node name="PauseList" type="Label" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -50.0
+offset_right = 80.0
+offset_bottom = 30.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PauseInfo" type="Label" parent="Panel"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = 40.0
+offset_right = 150.0
+offset_bottom = 70.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.5, 0.88, 0.5, 1)
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="PauseOptions" parent="Panel" instance=ExtResource("3_options")]
+unique_name_in_owner = true
+layout_mode = 1

@@ -125,6 +125,11 @@ func _process(delta: float) -> void:
 	if scene == null:
 		return
 	match scene.name:
+		"MainMenu":
+			_watch("menu")
+			if _confirm_wait <= 0.0:
+				scene.select_id("nueva")
+				_confirm("ui_accept")
 		"NameEntry":
 			_watch("alta")
 			_play_name_entry(scene)

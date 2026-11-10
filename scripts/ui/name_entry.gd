@@ -101,6 +101,7 @@ func finish() -> void:
 		return
 	_leaving = true
 	CareerProfile.register_character(gender, chosen)
+	SaveGame.delete()
 	WorkdayManager.new_game()
 	get_tree().change_scene_to_file(NEXT_SCENE)
 

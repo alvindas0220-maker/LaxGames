@@ -287,3 +287,20 @@ func _check_act() -> void:
 	if GameState.reputation >= float(entry["ready"]) and not _decided.has(entry["decision"]):
 		_decided[entry["decision"]] = true
 		_pending_decision = entry["decision"]
+
+
+func save_state() -> Dictionary:
+	return {
+		"act": act, "clues": clues.keys(), "flags": flags.keys(), "ending": ending,
+		"seen": _seen.keys(), "episodes": _episodes_seen.keys(), "decided": _decided.keys(),
+	}
+
+
+func load_state(data: Dictionary) -> void:
+	act = int(data["act"])
+	ending = str(data["ending"])
+	for pair: Array in [[clues, "clues"], [flags, "flags"], [_seen, "seen"], [_episodes_seen, "episodes"], [_decided, "decided"]]:
+		pair[0].clear()
+		for id: String in data[pair[1]]:
+			pair[0][id] = true
+	story_changed.emit()

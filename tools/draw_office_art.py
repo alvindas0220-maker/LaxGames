@@ -650,6 +650,40 @@ def night_room():
     hero.write_png(ROOT / "assets/sprites/ui/night_room.png", room)
 
 
+def title_screen():
+    """Fondo del menú: edificio de LaxCorp al anochecer con ventanas encendidas."""
+    image = canvas(384, 216)
+    for y in range(216):
+        t = y / 215
+        top, bottom = (24, 18, 46), (128, 60, 74)
+        color = tuple(int(top[i] + (bottom[i] - top[i]) * t) for i in range(3))
+        for x in range(384):
+            dither = (x + y) % 2 == 0 and (y % 9) < 1
+            image[y][x] = color + (255,) if not dither else tuple(max(0, c - 8) for c in color) + (255,)
+    rng = random.Random(9)
+    for _ in range(40):
+        image[rng.randrange(0, 90)][rng.randrange(0, 384)] = rgb("f4f4f8")
+    for i, (x, w, h) in enumerate(((0, 40, 70), (36, 34, 96), (70, 30, 60), (300, 36, 88), (334, 50, 66))):
+        rect(image, x, 216 - h, w, h, rgb("1c1830"))
+        for wy in range(216 - h + 6, 212, 8):
+            for wx in range(x + 4, x + w - 4, 7):
+                if rng.random() < 0.45:
+                    rect(image, wx, wy, 3, 4, rgb("e8c84a"))
+    rect(image, 200, 40, 90, 176, INK)
+    rect(image, 202, 42, 86, 174, rgb("2c3048"))
+    rect(image, 202, 42, 86, 3, rgb("3c4466"))
+    for wy in range(54, 210, 11):
+        for wx in range(208, 282, 12):
+            lit = rng.random() < 0.6
+            rect(image, wx, wy, 8, 6, rgb("6ec8f0") if lit else rgb("1c2240"))
+            if lit:
+                rect(image, wx, wy, 8, 1, rgb("c8ecfc"))
+    rect(image, 228, 30, 34, 12, INK)
+    rect(image, 230, 32, 30, 8, rgb("e8b048"))
+    rect(image, 0, 206, 384, 10, rgb("14121e"))
+    hero.write_png(ROOT / "assets/sprites/ui/title_bg.png", image)
+
+
 def stress_fill():
     """Relleno de la barra de estrés, del mismo tamaño que el de reputación."""
     fill = canvas(38, 3, rgb("d84038"))
@@ -752,4 +786,5 @@ if __name__ == "__main__":
     glow()
     phone_art()
     night_room()
+    title_screen()
     print("arte de oficina generado")

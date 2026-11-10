@@ -167,6 +167,6 @@ func _ready() -> void:
 	await get_tree().create_timer(0.45, true, false, true).timeout
 	await send("ui_accept")
 	await frames(12)
-	check("partida nueva", get_tree().current_scene.name == "NameEntry" and GameState.reputation == 0 and WorkdayManager.day == 1, get_tree().current_scene.name)
+	check("partida nueva", get_tree().current_scene.name == "MainMenu" and GameState.reputation == 0 and WorkdayManager.day == 1, get_tree().current_scene.name)
 	print("fallos: ", fails)
 	get_tree().quit(1 if fails > 0 else 0)

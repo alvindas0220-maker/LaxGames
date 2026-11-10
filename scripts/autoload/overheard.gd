@@ -58,3 +58,13 @@ func _next_line() -> void:
 	var line: Array = _queue.pop_front()
 	_left = LINE_SECONDS
 	DialogueManager.overheard(line[0], line[1])
+
+
+func save_state() -> Dictionary:
+	return {"seen": _seen.keys()}
+
+
+func load_state(data: Dictionary) -> void:
+	_seen.clear()
+	for id: String in data["seen"]:
+		_seen[id] = true

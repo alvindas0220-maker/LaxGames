@@ -213,3 +213,13 @@ func _close(ticket: TicketData) -> void:
 	mark_served(ticket.requester_id)
 	active = null
 	ticket_closed.emit()
+
+
+func save_state() -> Dictionary:
+	return {"served": _served}
+
+
+func load_state(data: Dictionary) -> void:
+	_served.clear()
+	for npc_id: String in data["served"]:
+		_served[npc_id] = int(data["served"][npc_id])

@@ -19,4 +19,5 @@ func _ready() -> void:
 	if WorkdayManager.day == 1:
 		GameState.notice.emit("Ana te busca en Helpdesk: habla con ella (E). Un \"!\" marca a quien espera ayuda. Tab abre tu celular.")
 	else:
-		GameState.notice.emit("%s. %s %s" % [WorkdayManager.label(), WorkdayManager.chapter_brief(), WorkdayManager.morning_note])
+		var saved := " Partida guardada." if SaveGame.has_save() else ""
+		GameState.notice.emit("%s. %s %s%s" % [WorkdayManager.label(), WorkdayManager.chapter_brief(), WorkdayManager.morning_note, saved])

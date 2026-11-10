@@ -82,6 +82,7 @@ func sleep() -> void:
 	_panel.hide()
 	get_tree().paused = false
 	WorkdayManager.next_day()
+	SaveGame.save_game()
 	get_tree().reload_current_scene()
 
 

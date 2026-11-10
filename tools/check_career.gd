@@ -219,8 +219,8 @@ func _ready() -> void:
 	await get_tree().create_timer(0.45, true, false, true).timeout
 	await press("ui_accept")
 	await tick(12)
-	check("empieza de cero", get_tree().current_scene.name == "NameEntry" and GameState.reputation == 0.0 and ToolBelt.coffee == 3 and not GameState.fired_for_cause, get_tree().current_scene)
-	check("conserva el nombre", get_tree().current_scene.get_node("%NameInput").text == "CHECO")
+	check("empieza de cero", get_tree().current_scene.name == "MainMenu" and GameState.reputation == 0.0 and ToolBelt.coffee == 3 and not GameState.fired_for_cause, get_tree().current_scene)
+	check("conserva el nombre", CareerProfile.player_name == "CHECO")
 
 	# Vistas para revisar el mapa.
 	room = (load("res://scenes/world/office.tscn") as PackedScene).instantiate()

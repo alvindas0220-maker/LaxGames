@@ -69,3 +69,13 @@ func reset() -> void:
 	for faction: String in NAMES:
 		standing[faction] = 0
 	changed.emit()
+
+
+func save_state() -> Dictionary:
+	return {"standing": standing}
+
+
+func load_state(data: Dictionary) -> void:
+	for faction: String in data["standing"]:
+		standing[faction] = int(data["standing"][faction])
+	changed.emit()

@@ -78,3 +78,14 @@ func _total(effect: String) -> float:
 		if entry["effect"] == effect:
 			total += float(entry["value"]) * level_of(entry["id"])
 	return total
+
+
+func save_state() -> Dictionary:
+	return {"levels": _levels}
+
+
+func load_state(data: Dictionary) -> void:
+	_levels.clear()
+	for id: String in data["levels"]:
+		_levels[id] = int(data["levels"][id])
+	changed.emit()

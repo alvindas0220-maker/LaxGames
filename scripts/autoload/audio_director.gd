@@ -25,6 +25,8 @@ func _ready() -> void:
 	track.loop_mode = AudioStreamWAV.LOOP_FORWARD
 	track.loop_end = roundi(track.get_length() * track.mix_rate)
 	_music.stream = track
+	_music.bus = Settings.MUSIC_BUS
+	_sfx.bus = Settings.SFX_BUS
 	_music.volume_db = MUSIC_DB
 	_sfx.volume_db = SFX_DB
 	add_child(_music)

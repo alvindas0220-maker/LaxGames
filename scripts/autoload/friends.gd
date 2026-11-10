@@ -107,3 +107,15 @@ func reset() -> void:
 	social_today = 0
 	_lonely_days = 0
 	changed.emit()
+
+
+func save_state() -> Dictionary:
+	return {"points": points, "lonely_days": _lonely_days}
+
+
+func load_state(data: Dictionary) -> void:
+	points.clear()
+	for npc_id: String in data["points"]:
+		points[npc_id] = int(data["points"][npc_id])
+	_lonely_days = int(data["lonely_days"])
+	changed.emit()

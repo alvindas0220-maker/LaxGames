@@ -29,6 +29,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _on_day_ended(summary: Dictionary) -> void:
 	_finished = summary["finished"]
+	if _finished:
+		SaveGame.delete()
 	var header: String = "FIN DE LA HISTORIA" if _finished else "FIN DE LA JORNADA"
 	var action: String = "Pulsa Enter para una partida nueva" if _finished else "Pulsa Enter para pasar la noche"
 	var lines := PackedStringArray([

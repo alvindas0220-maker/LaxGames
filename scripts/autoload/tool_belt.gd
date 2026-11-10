@@ -89,3 +89,13 @@ func _run_diagnostic() -> void:
 		GameState.notice.emit("Diagnóstico USB: no hay ningún ticket activo.")
 	else:
 		GameState.notice.emit("Diagnóstico USB: %s en %s. Usa %s." % [TicketManager.current_fault().get("name", ""), TARGET_PLACES[TicketManager.current_target()], tool_label(TicketManager.current_tool())])
+
+
+func save_state() -> Dictionary:
+	return {"coffee": coffee, "free_coffee_day": free_coffee_day}
+
+
+func load_state(data: Dictionary) -> void:
+	coffee = int(data["coffee"])
+	free_coffee_day = int(data["free_coffee_day"])
+	changed.emit()

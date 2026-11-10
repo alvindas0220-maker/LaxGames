@@ -11,12 +11,13 @@ config_version=5
 [application]
 
 config/name="LaxGames"
-run/main_scene="res://scenes/ui/name_entry.tscn"
+run/main_scene="res://scenes/ui/main_menu.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 config/icon="res://icon.svg"
 
 [autoload]
 
+Settings="*res://scripts/autoload/settings.gd"
 CareerProfile="*res://scripts/autoload/career_profile.gd"
 Upgrades="*res://scripts/autoload/upgrades.gd"
 GameState="*res://scripts/autoload/game_state.gd"
@@ -34,6 +35,7 @@ DayEvents="*res://scripts/autoload/day_events.gd"
 Incidents="*res://scripts/autoload/incidents.gd"
 Overheard="*res://scripts/autoload/overheard.gd"
 StoryDirector="*res://scripts/autoload/story_director.gd"
+SaveGame="*res://scripts/autoload/save_game.gd"
 QaBot="*res://scripts/debug/qa_bot.gd"
 AudioDirector="*res://scripts/autoload/audio_director.gd"
 
